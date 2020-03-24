@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="luke.launcher" version="1.0.11" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="IntentShim">
+        <param name="android-package" value="com.darryncampbell.cordova.plugin.intent.IntentShim" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Info">
+        <param name="android-package" value="com.bar.info.Info" />
+    </feature>
+    <feature name="startApp">
+        <param name="android-package" value="com.lampa.startapp.startApp" />
+    </feature>
+    <feature name="NativeSettings">
+        <param name="android-package" value="com.phonegap.plugins.nativesettings.NativeSettings" />
+    </feature>
+    <feature name="AppVersion">
+        <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
+    </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
+    <feature name="IntentList">
+        <param name="android-package" value="com.nickdenry.intentList.IntentList" />
+    </feature>
+    <feature name="NativeStorage">
+        <param name="android-package" value="NativeStorage" />
+    </feature>
+    <feature name="NavigationBar">
+        <param name="android-package" value="com.viniciusfagundes.cordova.plugin.navigationbar.NavigationBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="wallpaper">
+        <param name="android-package" value="fc.fcstudio.wallpaper" />
+    </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Toast">
+        <param name="android-package" value="nl.xservices.plugins.Toast" />
+    </feature>
+    <feature name="NotificationListener">
+        <param name="android-package" value="net.coconauts.notificationListener.NotificationCommands" />
+    </feature>
+    <feature name="Diagnostic">
+        <param name="android-package" value="cordova.plugins.Diagnostic" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_External_Storage">
+        <param name="android-package" value="cordova.plugins.Diagnostic_External_Storage" />
+        <param name="onload" value="true" />
+    </feature>
+    <name>LukeLauncher</name>
+    <description>
+        A category based launcher. 
+    </description>
+    <author email="info@lukelauncher.de" href="https://lukelauncher.de/">
+        Lukas Soekefeld
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+        <activity android:configChanges="orientation|keyboardHidden|screenSize" android:excludeFromRecents="true" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan" />
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
+            <action android:name="com.android.launcher.action.UNINSTALL_SHORTCUT" />
+        </intent-filter>
+    </edit-config>
+    <hook src="clean_build.sh" type="before_build" />
+    <hook src="clean_compile.sh" type="before_compile" />
+    <icon src="logo_small.png" />
+    <config-file android:excludeFromRecents="true" android:launchMode="singleTask" parent="./application/activity" target="AndroidManifest.xml">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
+            <action android:name="com.android.launcher.action.UNINSTALL_SHORTCUT" />
+            <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT" />
+        </intent-filter>
+    </config-file>
+    <config-file android:excludeFromRecents="true" parent="/manifest" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+        <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+        <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    </config-file>
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="AndroidLaunchMode" value="singleTask" />
+    <preference name="cordova.plugins.diagnostic.modules" value="EXTERNAL_STORAGE" />
+    <preference name="SplashScreen" value="none" />
+</widget>

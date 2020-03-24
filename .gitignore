@@ -1,0 +1,18 @@
+#All Bin Files
+
+*.class
+*.so
+*.o
+*.log
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+android.keystore
+release-signing.properties

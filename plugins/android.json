@@ -1,0 +1,62 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "com-darryncampbell-cordova-plugin-intent": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "com.bar.info": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "com.lampa.startapp": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-open-native-settings": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-app-version": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-intent-list": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-nativestorage": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-navigationbar-color": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-proguard": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-wallpaper": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-x-toast": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova.plugins.diagnostic": {
+      "ANDROID_SUPPORT_VERSION": "28.+",
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "net.coconauts.notification-listener": {
+      "PACKAGE_NAME": "luke.launcher"
+    }
+  },
+  "dependent_plugins": {}
+}

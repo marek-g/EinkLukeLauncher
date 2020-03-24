@@ -1,0 +1,17 @@
+LukeLauncher ist ein schneller, minimalistischer, kategorien basiert Startbildschirm.
+
+-------------------------------------------------
+<b>LukeLauncher – Eigenschaften</b>
+-------------------------------------------------
+
+• Apps werden in Kategorien verwaltet
+• Für linkshänder und rechtshänder geeignet
+• Notifications werden unterstützt
+• Unterstützt Tablets (Horizontale und vertikale Ausrichtung möglich)
+• Schnelle Suchfunktion
+• Iconpacks können genutzt werden
+• Mehrsprachig (Englisch und Deutsch)
+… und viel mehr!
+
+<b>Website:</b>
+https://lukelauncher.de

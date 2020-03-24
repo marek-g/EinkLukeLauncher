@@ -1,0 +1,1 @@
+cordova.define("net.coconauts.notification-listener.NotificationListener",function(require,exports,module){"use strict";module.exports={listen:function(success,failure){cordova.exec(success,failure,"NotificationListener","listen",[])}}});

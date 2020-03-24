@@ -1,0 +1,55 @@
+{
+  "_from": "com-darryncampbell-cordova-plugin-intent",
+  "_id": "com-darryncampbell-cordova-plugin-intent@1.1.8",
+  "_inBundle": false,
+  "_integrity": "sha512-gEEBCjiycuoK28DofmaNkxYtOre6czLnNvMYFssH2ycHeY5ickm0SBfVTB+GPtXCeUkxAmxANnJn2p4SX8QcWw==",
+  "_location": "/com-darryncampbell-cordova-plugin-intent",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "com-darryncampbell-cordova-plugin-intent",
+    "name": "com-darryncampbell-cordova-plugin-intent",
+    "escapedName": "com-darryncampbell-cordova-plugin-intent",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/com-darryncampbell-cordova-plugin-intent/-/com-darryncampbell-cordova-plugin-intent-1.1.8.tgz",
+  "_shasum": "f965951b38d88c2da5c512ed89cb30871e1f878f",
+  "_spec": "com-darryncampbell-cordova-plugin-intent",
+  "_where": "/home/luke/Android_launcher/LukeLauncher",
+  "author": {
+    "name": "Darryn Campbell"
+  },
+  "bugs": {
+    "url": "https://github.com/darryncampbell/darryncampbell-cordova-plugin-intent/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "com-darryncampbell-cordova-plugin-intent",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "General purpose intent shim layer for cordova appliations on Android.  Handles various techniques for sending and receiving intents.",
+  "homepage": "https://github.com/darryncampbell/darryncampbell-cordova-plugin-intent#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "Intent"
+  ],
+  "license": "MIT",
+  "main": "intentShim.js",
+  "name": "com-darryncampbell-cordova-plugin-intent",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darryncampbell/darryncampbell-cordova-plugin-intent.git"
+  },
+  "version": "1.1.8"
+}

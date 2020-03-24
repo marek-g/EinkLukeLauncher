@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ac497f63-5d8d-4ac7-a5ba-e75df78ffb80" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>====</find>
+      <find>settings_statusbar_text</find>
+      <find>let</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>===</replace>
+      <replace>==</replace>
+      <replace>var</replace>
+    </replaceStrings>
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="ProjectId" id="1VAPvE92WEwtSKarPZcXuZD7s4H" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/js" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.jscs" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.jscs" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.jscs" value="" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ac497f63-5d8d-4ac7-a5ba-e75df78ffb80" name="Default Changelist" comment="" />
+      <created>1563194450931</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1563194450931</updated>
+      <workItem from="1563194455821" duration="3439000" />
+      <workItem from="1564056678141" duration="235000" />
+      <workItem from="1564562437309" duration="700000" />
+      <workItem from="1576693162838" duration="560000" />
+      <workItem from="1576693750050" duration="175000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="276" y="19" width="804" height="667" key="#Closure_Linter" timestamp="1576693622558">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="276" y="19" width="804" height="667" key="#Closure_Linter/0.0.1366.768@0.0.1366.768" timestamp="1576693622558" />
+    <state x="274" y="1" width="804" height="667" key="#JSCS" timestamp="1576693627870">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="274" y="1" width="804" height="667" key="#JSCS/0.0.1366.768@0.0.1366.768" timestamp="1576693627870" />
+    <state x="276" y="19" width="804" height="667" key="#JSHint" timestamp="1576693505097">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="276" y="19" width="804" height="667" key="#JSHint/0.0.1366.768@0.0.1366.768" timestamp="1576693505097" />
+    <state x="276" y="19" width="804" height="667" key="#JSLint" timestamp="1576693893173">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="276" y="19" width="804" height="667" key="#JSLint/0.0.1366.768@0.0.1366.768" timestamp="1576693893173" />
+    <state x="410" y="105" width="528" height="424" key="#com.intellij.ide.scriptingContext.ui.PerFileMappingsDialogWrapper" timestamp="1576693707246">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="410" y="105" width="528" height="424" key="#com.intellij.ide.scriptingContext.ui.PerFileMappingsDialogWrapper/0.0.1366.768@0.0.1366.768" timestamp="1576693707246" />
+    <state x="455" y="57" width="428" height="474" key="FileChooserDialogImpl" timestamp="1576693705102">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="455" y="57" width="428" height="474" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1576693705102" />
+    <state x="185" y="-7" key="SettingsEditor" timestamp="1576693723463">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="185" y="-7" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1576693723463" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/js/mein.js</url>
+          <line>4415</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

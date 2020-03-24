@@ -1,0 +1,46 @@
+{
+  "_from": "git+https://github.com/coconauts/NotificationListener-cordova.git",
+  "_id": "net.coconauts.notification-listener@0.0.1",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/net.coconauts.notification-listener",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/coconauts/NotificationListener-cordova",
+    "rawSpec": "https://github.com/coconauts/NotificationListener-cordova",
+    "saveSpec": "git+https://github.com/coconauts/NotificationListener-cordova.git",
+    "fetchSpec": "https://github.com/coconauts/NotificationListener-cordova.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/coconauts/NotificationListener-cordova.git#a785d7e184f04f1b9f1f4e758fed5513f0afe9ad",
+  "_spec": "https://github.com/coconauts/NotificationListener-cordova",
+  "_where": "/home/luke/Android_launcher/LukeLauncher",
+  "bundleDependencies": false,
+  "cordova_name": "Notification-listener",
+  "deprecated": false,
+  "description": "Notification listener Plugin for Android",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.1.0"
+    }
+  ],
+  "issue": "https://github.com/coconauts/NotificationListener-cordova/issues",
+  "keywords": [
+    "notification",
+    "listener",
+    "android"
+  ],
+  "license": "Apache 2.0",
+  "name": "net.coconauts.notification-listener",
+  "platforms": [
+    "android"
+  ],
+  "repo": "https://github.com/coconauts/NotificationListener-cordova",
+  "version": "0.0.1"
+}

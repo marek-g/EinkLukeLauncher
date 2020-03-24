@@ -1,0 +1,1 @@
+cordova.define("cordova-open-native-settings.Settings",function(require,exports,module){function NativeSettings(){}NativeSettings.open=function(setting,onsucess,onfail){var settings="string"==typeof setting||setting instanceof String?[setting]:setting;cordova.exec(onsucess,onfail,"NativeSettings","open",settings)},module.exports=NativeSettings});

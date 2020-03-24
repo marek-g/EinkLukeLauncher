@@ -1,0 +1,23 @@
+{
+    "alwaysRun": false,
+    "recursiveFolderSearch": true,
+    "foldersToProcess": [
+        "js",
+        "css",
+        "plugins",
+        "cordova-js-src",
+        ""
+    ],
+    "uglifyJsOptions": {
+        "compress": {
+            "drop_console": true
+        },
+        "mangle": false,
+        "output": {
+            "code": true
+        }
+    },
+    "cleanCssOptions": {
+        "specialComments": "all"
+    }
+}

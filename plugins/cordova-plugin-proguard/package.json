@@ -1,0 +1,56 @@
+{
+  "_from": "cordova-plugin-proguard",
+  "_id": "cordova-plugin-proguard@2.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-9pdDB4ON1HMmAfxGBZhg4PEaf1FN0a4L+OJtUPZlFz6P8O2J3KkqTF9axWH8sRJf5HXAJZT6qwOFNvldyEz2KA==",
+  "_location": "/cordova-plugin-proguard",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-proguard",
+    "name": "cordova-plugin-proguard",
+    "escapedName": "cordova-plugin-proguard",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-proguard/-/cordova-plugin-proguard-2.0.1.tgz",
+  "_shasum": "dfc5f44cd5abfa67ce4bbe99958b8e1147180eb6",
+  "_spec": "cordova-plugin-proguard",
+  "_where": "/home/luke/Android_launcher/LukeLauncher",
+  "author": {
+    "name": "Aleksandr Filatov",
+    "email": "greybax@gmail.com",
+    "url": "https://alfilatov.com"
+  },
+  "bugs": {
+    "url": "https://github.com/greybax/cordova-plugin-proguard/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Cordova plugin for ProGuard",
+  "homepage": "https://github.com/greybax/cordova-plugin-proguard#readme",
+  "keywords": [
+    "proguard",
+    "android",
+    "optimize",
+    "shrink",
+    "minify",
+    "obfuscate",
+    "tool",
+    "cordova",
+    "plugin"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-proguard",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greybax/cordova-plugin-proguard.git"
+  },
+  "version": "2.0.1"
+}

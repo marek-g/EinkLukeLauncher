@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.bar.info"
+        version="0.7.0">
+
+  <name>Info</name>
+
+  <engines>
+    <engine name="cordova" version=">=3.4.0"/>
+  </engines>
+
+  <asset src="www/info.js" target="js/info.js"/>
+
+  <js-module src="www/info.js" name="Info">
+    <clobbers target="androidinfo" />
+  </js-module>
+
+  <platform name="android">
+  <!--<framework src="build.gradle" custom="true" type="gradleReference" />-->
+    
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="Info">
+        <param name="android-package" value="com.bar.info.Info"/>
+      </feature>
+    </config-file>
+
+    <source-file src="src/android/Info.java" target-dir="src/com/bar/info/"/>
+  </platform>
+</plugin>

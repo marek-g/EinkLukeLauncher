@@ -1,0 +1,47 @@
+{
+  "_from": "",
+  "_id": "cordova-plugin-info@0.1.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-info",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "",
+  "_spec": "",
+  "_where": "/home/luke/Android_launcher/LukeLauncher",
+  "author": {
+    "name": "Lukas Sökefeld"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-info",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "A status/navar info plugin",
+  "homepage": "",
+  "keywords": [
+    "cordova",
+    "plugin",
+    "info"
+  ],
+  "license": "Apache-2",
+  "name": "cordova-plugin-info",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "version": "0.1.0"
+}

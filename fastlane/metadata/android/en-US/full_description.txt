@@ -1,0 +1,17 @@
+LukeLauncher is a fast, minimal, categorie based home screen replacement.
+
+-------------------------------------------------
+<b>LukeLauncher – Features</b>
+-------------------------------------------------
+
+• Apps are managed in categories
+• Suitable for left and right handers
+• Notifications are supported
+• Supports Tablets (Horizontal and vertical alignment possible)
+• Quick search function
+• Iconpacks can be used
+• Multilingual (English and German)
+… and much much more!
+
+<b>Website:</b>
+https://lukelauncher.de

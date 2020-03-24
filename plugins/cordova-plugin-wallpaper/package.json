@@ -1,0 +1,62 @@
+{
+  "_from": "cordova-plugin-wallpaper",
+  "_id": "cordova-plugin-wallpaper@0.1.1",
+  "_inBundle": false,
+  "_integrity": "sha1-XO8grdQ465pnkOmHz3ld6vlrnF8=",
+  "_location": "/cordova-plugin-wallpaper",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-wallpaper",
+    "name": "cordova-plugin-wallpaper",
+    "escapedName": "cordova-plugin-wallpaper",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-wallpaper/-/cordova-plugin-wallpaper-0.1.1.tgz",
+  "_shasum": "5cef20add438eb9a6790e987cf795deaf96b9c5f",
+  "_spec": "cordova-plugin-wallpaper",
+  "_where": "/home/luke/Android_launcher/LukeLauncher",
+  "author": {
+    "name": "Fernando Arce",
+    "url": "https://github.com/fbsanches"
+  },
+  "bugs": {
+    "url": "https://github.com/fbsanches/cordova-plugin-wallpaper/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "flyingPotat0e",
+      "url": "https://github.com/flyingPotat0e"
+    }
+  ],
+  "cordova": {
+    "id": "cordova-plugin-wallpaper",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova Set Wallpaper Plugin",
+  "homepage": "https://github.com/fbsanches/cordova-plugin-wallpaper#readme",
+  "keywords": [
+    "cordova",
+    "wallpaper",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-wallpaper",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fbsanches/cordova-plugin-wallpaper.git"
+  },
+  "version": "0.1.1"
+}

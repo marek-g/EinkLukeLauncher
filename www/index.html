@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="">
+	
+<head>
+	<meta charset="UTF-8" />
+
+	<title>LukeLauncher</title>
+    <meta name="msapplication-tap-highlight" content="no">
+	<meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+
+	<script src="cordova.js"></script>
+	
+	<script src="js/libs/vanilla-picker.min.js"></script>
+	<script src="js/libs/swipe.js"></script>
+	<!--<script src="js/libs/swiper.min.js"></script>-->
+	
+	<script src="js/libs/redips-drag-min.js"></script>	
+	<script src="js/libs/dayjs.min.js"></script>
+	<script src="js/libs/dayjs_de.js"></script>
+	<script src="js/libs/dayjs_en.js"></script>
+	
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<link rel="stylesheet" href="css/main.css" >
+	
+</head>
+
+
+<body>
+	
+	
+	<div id="loading_div">
+	
+		<img alt="Logo 1" id="load_img1" src="icons/l1.png">
+		<img alt="Logo Text" id="logo_text" src="icons/logo_text.png">
+		<img alt="Logo 2" id="load_img2" src="icons/l2.png">
+		
+	</div>
+	
+	
+	
+	<div id="swiper_container" class="swiper-container">
+
+	<div class="swiper-wrapper">
+			<div id="app_drawer" class="swiper-slide">
+
+				<div id="header_blank">
+				</div>
+
+			<div id="header">
+				<div id="Cat_name">
+					<h3 id="Cat_name_text">&nbsp;</h3>
+				</div>
+
+			<div id="search_input">
+				<input id="sif" type="text" placeholder="Suche..."  oninput="sif_input();" >
+			</div>
+
+			<div id="ms">
+					<img id="searchicon" alt="Search Icon" class="ms_icon" src="icons/search.png"  >
+					<img id="menudialogicon" alt="Menu Icon" class="ms_icon" src="icons/menu.png"  >
+			</div>
+		</div>
+
+		<div id="dropdm_popup">			
+				<ul id="dropmul" >
+					<li id="appoderalphalielement" onclick="oderappalpha();" class="mse"><a id="app_order_li" >Sortieren A-Z</a></li>
+					
+					<li id="allowappmovelielement" onclick="allow_app_move();" class="mse"><a id="app_move_li" >Apps verschieben</a></li>
+					<li id="showhiddenappslielement" onclick="show_all_hidden_apps();" class="mse" ><a id="hide_app_li" >Versteckte Apps anzeigen</a></li>
+					<li onclick="show_settings()"  class="mse"><a id="settings_li">Einstellungen</a></li>
+				</ul>
+		</div>
+			
+		<div id="appsettings_ba"></div>
+		
+		<div id="icon_dialog">
+				<h1 id="header_icon_source_dialog" class="header_icon_source" >Icon Quelle</h1>
+				
+				<hr>
+				<button id="btn_orginal_icon" class="app_setting_button btnquelle" >Orginal</button>
+				<button id="btn_gallery_icon" class="app_setting_button btnquelle" >Aus Gallery</button>
+				<button id="btn_symbol_icon" class="app_setting_button btnquelle" >Aus Symbolpaket</button>	
+		</div>
+		
+		<div id="select_iconpack_dialog" >
+				
+				<div id="iconpackselecthb2">
+					<h1 id="header_select_icon_pack"  class="header_icon_source" >Iconpack wählen</h1>
+				</div>
+				<div id="iconpack_list"></div>
+		</div>
+		
+		
+		<div id="all_icons_dialog">
+				
+				<div id="selecticondivheader2">
+					<h1 id="header_select_icon_from_iconpack" class="header_icon_source" >Icon wählen</h1>
+					<input type="text" id="searchiconinpack_input" name="searchiconinpack"  placeholder="Suche..." oninput="search_for_icon()" >				 
+				</div>
+				
+				<div id="allicons_list">
+					<table id="table_iconpackicons_list">	
+					</table>
+				</div>
+		</div>
+		
+		
+		<div id="icon_dialog_bg"></div>
+	
+			
+			
+		<div id="appsettings">
+				<img id="s_app_icon" alt="App Icon" src="#">
+
+				<img id="s_app_icon_edit" alt="App Icon start edit" src="icons/6.png">
+				
+				
+				<p id="s_app_name" >App Name</p>
+
+				<h1 id="s_app_start_name">App Settings</h1>
+
+				<button id="rnb" class="app_setting_button" onclick="edit_input()" >Umbennen</button>
+				
+				<button id="btn_start_app" class="app_setting_button" >Starten</button>
+
+				<button id ="btn_homescreen" class="app_setting_button"  >Startbildschirm hinzufügen</button>
+
+				<button id="btn_app_aus" class="app_setting_button">App ausblenden</button>
+
+				<button id="btn_app_uninstall" class="app_setting_button" >Deinstallieren</button>
+		</div>
+
+		<div id="app_ba">
+		</div>
+
+		<div id="alpha">
+			<table id="searchtable">
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="right"></div>
+
+		<div id="redips-drag">
+
+				<div id="scrollable" onscroll="scrolling()" >
+
+				<table id="table_current_apps" class="apptable">
+
+				</table>
+
+				<table id="table_apps_cat1" class="apptable">
+	
+				</table>
+
+				<table id="table_apps_cat2" class="apptable">
+
+				</table>
+
+				<table id="table_apps_cat3" class="apptable">
+
+				</table>
+
+				
+				<table id="table_apps_cat4" class="apptable">
+	
+				</table>
+
+				<table id="table_apps_cat5" class="apptable">
+		
+				</table>
+
+				<table id="table_apps_cat6" class="apptable">
+
+				</table>
+				
+
+			</div>
+
+
+			<div id="cat_bg"></div>
+
+
+			<table id="cat">				
+			</table>
+
+		</div>
+
+		</div>
+
+			<div id="homescreen" class="swiper-slide">
+
+				<div id="homescreen_out_clock">
+					<div id="middle">
+					<div id="homescreen_clock">
+						<div id="homescreen_clock_green">
+							<h4 id="homescreen_clock_text_b" onclick="start_clock_app();" >13</h4>
+							<h4 id="homescreen_clock_text" onclick="start_clock_app();" > :37</h4>
+							<h2 id="homescreen_datum_text" onclick="start_date_app();" >03.11.1993</h2>
+							<h4 id="homescreen_alarm_text" ></h4>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<table id="del_homescreen">
+					<tr>
+						<td class="redips-trash">
+							<h3 id="removehomescreentext" >Von Homscreen entfernen</h3>	
+						</td>
+					</tr>
+				</table>
+
+
+			<div id="home_screen_div"  >
+
+				<table id="table_homescreen" >
+					<tbody>
+					</tbody>
+				</table>
+
+			</div>
+
+			</div>
+		
+		</div>
+	</div>
+		
+	<div id="allsettings">
+
+				<div class="all_settings_fixed_header" >
+					
+					<table class="allsettings_header_table" >
+					  <tr>						
+						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Icon Setting" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="settings_text_header" class="settings_text_header_class">Alle Einstellungen</h2>
+							</td>
+					  </tr>
+	  
+					</table>
+				
+				</div>
+				
+				<div id="allsettings_scroll" >
+
+					<table id="allsettings_table">
+					  <tr>
+						<th ><img class="icon_settings" alt="Lang" src="icons/lang.png"></th>
+						<td>
+							<h3 id="settings_lang" class="settings_text_big" onclick="show_settings_lang();" ><b>Sprache</b></h3>
+							<h4 class="settings_text_small" id="settings_current_lang" onclick="show_settings_lang();" >Deutsch</h4>
+						</td>
+
+					  </tr>
+
+					  <tr>
+						<th><img class="icon_settings" alt="Appdrawer" src="icons/appdrawer.png"></th>
+						<td>
+							<h3 id="settings_app_drawer" class="settings_text_big" onclick="open_appdrawer_settings();" ><b>Appdrawer Settings</b></h3>
+						</td>
+
+					  </tr>
+					  <tr>
+						<th><img class="icon_settings" alt="Homescreen" src="icons/homescreen.png"></th>
+						<td>
+							<h3 id="settings_homescreen" class="settings_text_big" onclick="open_homescreen_settings();" ><b>Homescreen Settings</b></h3>
+						</td>
+		
+					  </tr>
+					  <tr>
+						<th><img class="icon_settings" alt="Bar" src="icons/bar.png"></th>
+						<td>
+							<h3 id="settings_statusbar" class="settings_text_big" ><b>Show Statusbar</b></h3>
+							<input id="statusbarstate" type="checkbox" class="toggle_new"  onchange='change_statusbar(this)'>
+						</td>
+					  </tr>
+					  <tr>
+						<th><img class="icon_settings" alt="Navbar" src="icons/navbar.png"></th>
+						<td>
+							<h3 id="settings_navbar" class="settings_text_big" onclick="open_navtrans_settings()"><b>Transparent Navigationbar</b></h3>
+							<h4 class="settings_text_small" id="currentnavbarstate">keine</h4>
+						</td>	
+					  </tr>
+						
+						  	
+					   <tr>
+						<th><img class="icon_settings" alt="Iconpack" src="icons/app_set.png"></th>
+						<td>
+							<h3 id="settings_global_icon_pack_text" class="settings_text_big" onclick="open_global_iconpack()"><b>Icon Pack</b></h3>
+							<h4 class="settings_text_small" id="current_global_iconpack">Standard</h4>
+						</td>	
+					  </tr>
+					  
+					  	  					  
+					  <tr>
+						<th><img class="icon_settings" alt="Size" src="icons/size.png"></th>
+						<td>
+							<h3 id="settings_font_size" class="settings_text_big" onclick="open_font_settings();" ><b>Schriftgröße</b></h3>
+						</td>
+					  </tr> 
+					  
+					  
+					  <tr>
+						<th><img class="icon_settings" alt="Extra" src="icons/more.png"></th>
+						<td>
+							<h3 id="settings_extra_header" class="settings_text_big" onclick="open_extra_settings();" ><b>Extra</b></h3>	
+						</td>
+					  </tr> 
+					  
+				 	  	 					  					   			  
+					</table>
+				
+				</div>
+				
+		</div>
+
+	<div id="settings_ba">
+		
+	</div>
+
+
+	<div id="settings_info" class="third_settings">
+				<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2  class="settings_text_header_class" >Info</h2>
+							</td>
+					  </tr>
+					</table>	
+				</div>
+					
+			<div class="scrollable_third_setting" >
+					
+			<table class="allsettings_header_table" >	
+			<tr>	
+				<th>
+				</th>
+				
+				<td>
+					<h3 id="settings_info_text1" class="settings_text_normal" ><b>Created by Lukas Sökefeld</b></h3>
+					<h3 id="settings_info_text2" class="settings_text_normal" ><b>Version: 1.0</b></h3>
+					<h3 id="settings_info_text3" class="settings_text_small" ><b>More Informations:</b></h3>
+					<h3 id="settings_info_text" class="settings_text_small" onclick="open_lukelauncher_website();" ><b>www.lukelauncher.de</b></h3>
+				</td>
+					
+			</tr>	
+		</table>
+		
+		</div>
+	</div>
+	
+	
+	
+	<div id="settings_lang_div" class="second_settings">
+				<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_lang" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+				</div>
+					
+			<div class="scrollable_second_setting" >
+					
+			<table class="allsettings_header_table" >	
+				
+			<tr>	
+				<th>
+				</th>
+				
+				<td>
+			 <div class="radio_form">
+				 <br>
+					<form>
+						<label class="container_radio">
+							<input id="lang_input_ger" type="radio" name="langmode" value="ger" onchange="Lang_mode_change(this);"> <b id="modal_lang_ger"  class="settings_text_normal" >Deutsch</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<label class="container_radio">
+							<input id="lang_input_eng" type="radio" name="langmode" value="eng" onchange="Lang_mode_change(this);"> <b id="modal_lang_eng" class="settings_text_normal" >Englisch</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+					</form>
+					<br>
+				</div>
+				</td>
+					
+			</tr>	
+		</table>
+		
+		</div>
+	</div>
+	
+	
+	
+	<div id="progress_dialog_bg"></div>	
+	
+	<div id="progress_dialog">
+			<h1 id="header_progress_dialog" class="header_icon_source" style="color:black" >Wende an...</h1>
+	</div>
+		
+		
+	<div id="settings_seticonpack_div" class="second_settings">
+		<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="header_iconpack_choose" class="settings_text_header_class">Iconpack wählen:</h2>
+							</td>
+					  </tr>
+					</table>	
+			</div>		
+			<br>
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr class="searchapptable_tr">	
+				<th>
+				</th>
+				<td>	
+					<div id="iconpack_select_list"></div>
+					<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+	
+		
+	
+				
+	<div id="settings_appdrawer_div" class="second_settings">
+	
+			<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_app_drawer_settings" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+			</div>
+		
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+				
+			<tr>
+					<th><img class="icon_settings" alt="Color" src="icons/color.png"></th>
+					<td>
+							<h3 id="settings_text_color" class="settings_text_big" onclick="show_modal_select_text_color();" ><b>Schrift Farbe</b></h3> 
+							<div id="text_color_pre"  onclick="show_modal_select_text_color();" ><b>&nbsp;</b></div>
+							<br>
+					</td>
+			</tr>
+					
+					
+			<tr>	
+					<th><img class="icon_settings" alt="Categories" src="icons/cat.png"></th>
+					<td>
+						<h3 id="settings_cat" class="settings_text_big" onclick="open_cat_settings();" ><b>App Kategorien</b></h3>
+					</td>
+			</tr> 
+					  
+			<tr>	
+					<th><img class="icon_settings" alt="Alingment" src="icons/align.png"></th>
+					<td>
+						<h3 id="settings_appdrawer_align" class="settings_text_big" onclick="open_align_settings();" ><b>Ausrichtung</b></h3>
+						<h4 class="settings_text_small" id="align_mode" >&nbsp;</h4>
+					</td>
+			 </tr> 
+			 		  
+
+			<tr>	
+					<th><img class="icon_settings" alt="Swipe" src="icons/swipe.png"></th>
+					<td>
+						<h3 id="settings_appdrawer_swipe" class="settings_text_big" onclick="open_swipe_settings();" ><b>Geste</b></h3>
+						<h4 class="settings_text_small" id="swipe_mode" >&nbsp;</h4>
+					</td>
+			 </tr> 
+			 
+			 					  
+			<tr>	
+					<th><img class="icon_settings" alt="Readability" src="icons/read.png"></th>
+					<td>
+						<h3 id="settings_read" class="settings_text_big" onclick="open_read_settings();" ><b>Lesbarkeit</b></h3>
+						<h4 class="settings_text_small" id="read_mode" >&nbsp;</h4>
+					</td>
+			 </tr> 
+			
+			<tr>	
+					<th><img class="icon_settings" alt="IconSize" src="icons/size.png"></th>
+					<td>
+						<h3 id="settings_appdrawericonsize" class="settings_text_big" onclick="open_appdrawersize_settings();" ><b>Icon Größe</b></h3>
+						<h4 class="settings_text_small" id="appdrawericonsize_mode" >&nbsp;</h4>
+					</td>
+			 </tr>  		
+			 		
+			<tr>	
+				<th>
+				</th>
+				<td>
+					<h3 id="settings_icon_type" class="settings_text_normal" ><b>Icons Schwarz/Weiß</b></h3>
+					<input id="blackwhite" type="checkbox" class="toggle_new"  onchange='change_icon_bw(this);' >
+				</td>
+			</tr>
+			<tr>
+				<th>
+				</th>
+				<td>
+					<h3 id="settings_appdrawer_vertical" class="settings_text_normal" ><b>Spalten Vertikal:</b></h3>
+					<input class="slider" type="range" id="range_app_drawer_vertical" name="volume" min="2" max="5" oninput="app_drawer_change_vertical();" >
+					<br>
+				</td>
+			</tr>
+			<tr>
+				<th>
+				</th>
+				<td>
+					<h3 id="settings_appdrawer_hori" class="settings_text_normal" ><b>Spalten Horizontal:</b></h3>
+					<input class="slider" type="range" id="range_app_drawer_horizontal" name="volume" min="2" max="5" oninput="app_drawer_change_horizontal();" >
+					<br>
+				</td>
+			</tr>
+			
+					    
+			</table>
+		</div>
+			  
+	</div>
+	
+	
+	
+		
+		<div id="askresort_dialog">
+				
+			<h2 id="modal_header_askquestion_settings" class="settings_text_big" style="color:black;text-align: center;white-space: normal">Achtung die bestehende App-Ortung wird verworfen!</h2>
+			
+			<br>
+			
+			<button id="btn_resort_start" class="app_setting_button btnquelle" onclick="start_resort()" >Sortieren</button>
+			<button id="btn_resort_abort" class="app_setting_button btnquelle" onclick="abort_resoort_ask()" >Abbrechen</button>
+			
+		</div>
+	
+		
+		<div id="askresort_dialog_bg"></div>
+		
+	
+		<div id="askimport_dialog">
+	
+			<h2 id="modal_header_askimport_settings" class="settings_text_big" style="color:black;text-align: center;white-space: normal">Achtung die bestehenden Einstellungen werden überschrieben</h2>
+			
+			<br>
+			
+			<button id="btn_import_start" class="app_setting_button btnquelle" onclick="start_import()" >Importieren</button>
+			<button id="btn_import_abort" class="app_setting_button btnquelle" onclick="abort_import()" >Abbrechen</button>
+			
+		</div>
+	
+		
+		<div id="askimport_dialog_bg"></div>
+		
+		
+	
+		<div id="settings_extra_div" class="second_settings">
+	
+			<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_extra_settings" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+			</div>
+		
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+					
+				<tr>
+					<th><img class="icon_settings" alt="Update" src="icons/update.png"></th>
+					<td>
+						<h3 id="settings_update_app_list" class="settings_text_big" onclick="update_app_list();" ><b>Update App List</b></h3>	
+					</td>
+				 </tr> 
+				
+				<tr>
+					<th><img class="icon_settings" alt="Update" src="icons/cat.png"></th>
+					<td>
+						<h3 id="settings_resortapplist" class="settings_text_big" onclick="open_resort();" ><b>Resort App List</b></h3>	
+					</td>
+				 </tr> 
+				 
+				
+				<tr>
+					<th><img class="icon_settings" alt="Update" src="icons/export.png"></th>
+					<td>
+						<h3 id="settings_export" class="settings_text_big" onclick="export_all();" ><b>Export Settings</b></h3>	
+					</td>
+				</tr> 
+				  	  	  
+				  	  	  
+				<tr>
+					<th><img class="icon_settings" alt="Update" src="icons/import.png"></th>
+					<td>
+						<h3 id="settings_import" class="settings_text_big" onclick="import_all();" ><b>Import Settings</b></h3>	
+					</td>
+				</tr> 
+				
+				
+				<tr>
+					<th><img class="icon_settings" alt="Wallpaper" src="icons/wallpaper.png"></th>
+					<td>
+						<h3 id="settings_bg" class="settings_text_big" onclick="force_update_wallpaper();"><b>Hintergrund</b></h3>
+					</td>
+
+				</tr>
+					  
+				<tr>
+					<th><img class="icon_settings" alt="Info" src="icons/info.png"></th>
+					<td>
+						<h3 id="settings_show_info" class="settings_text_big" onclick="open_info_settings();" ><b>Info</b></h3>	
+					</td>
+				</tr> 
+					    
+			</table>
+		</div>
+			  
+	</div>
+	
+	
+	
+	
+	
+	
+			
+	<div id="asknotifi_dialog_bg"></div>
+		
+	
+	<div id="asknotifi_dialog">
+				
+		<h2 id="modal_header_notifi_allow" class="settings_text_big" style="color:black;text-align: center;white-space: normal">Bitte LukeLauncher erlauben</h2>
+			
+		<br>
+			
+		<button id="btn_notifi_allow" class="app_setting_button btnquelle" onclick="home_notifi_ok();" >OK</button>
+			
+	</div>
+	
+	
+	
+	
+	
+	<div id="homescreen_div" class="second_settings" >
+		
+				<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_homescreen_settings" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+			</div>	
+			<div class="scrollable_second_setting" >	
+				<table class="allsettings_header_table" >	
+					
+					
+					 <tr>
+						<th><img class="icon_settings" alt="Time" src="icons/time.png"></th>
+						<td>
+							<h3  id="settings_homescreen_day_time" class="settings_text_big" onclick="open_clock_settings();"><b>Uhrzeit/Datum auf Homescreen</b></h3>
+							<h4 class="settings_text_small" id="clockmode">&nbsp;</h4>
+						</td>
+
+					  </tr>
+					  
+					  <tr>
+						<th><img class="icon_settings" alt="Set App" src="icons/app_set.png"></th>
+						<td>
+								<h3  id="settings_clock_app" class="settings_text_big" onclick="show_clock_dialog();"><b>Auswahl Uhr App</b></h3>
+								<h4 class="settings_text_small" id="selected_clock_app">-</h4>
+						</td>
+					  </tr>
+					  
+					  <tr>
+						<th><img class="icon_settings" alt="Set App" src="icons/app_set.png"></th>
+						<td>				
+							<h3  id="settings_date_app" class="settings_text_big" onclick="show_date_dialog();"><b>Auswahl Datums App</b></h3>
+							<h4 class="settings_text_small" id="selected_date_app">-</h4>
+						</td>
+					  </tr>
+					  
+
+		
+					   <tr>
+						<th><img class="icon_settings" alt="Color" src="icons/color.png"></th>
+						<td>
+								<h3 id="settings_homescreen_color" class="settings_text_big" onclick="show_modal_select_homescreen_color();" ><b>Schrift Farbe</b></h3>
+								 <div id="text_color_pre_homescreen"  onclick="show_modal_select_homescreen_color();" > <b> &nbsp;</b></div>
+								 <br>
+						</td>
+					  </tr>
+					  
+					  	
+					<tr>	
+						<th>
+						</th>
+					<td>
+						<h3 id="settings_icon_type_homescreeen" class="settings_text_normal" ><b>Icons Schwarz/Weiß Homescreen</b></h3>
+						<input id="blackwhitehome" type="checkbox"   class="toggle_new"  onchange='change_icon_bw_home(this)'  >
+					</td>
+					</tr>
+					<tr>	
+						<th>
+						</th>
+					<td>
+						<h3 id="settings_homescreeen_notification" class="settings_text_normal" ><b>Homescreen Notification</b></h3>
+						<input id="homescreeennotification" type="checkbox"   class="toggle_new"  onchange='change_home_notifi(this)'>
+					</td>
+					</tr>
+					<tr>	
+						<th>
+						</th>
+					<td>
+						<h3 id="settings_homescreen_zeilen" class="settings_text_normal" ><b>Zeilen:</b></h3>
+						<input class="slider" type="range" id="range_homescreen_zeilen" name="volume" min="3" max="8" oninput="homscreen_change_zeilen();" >
+						<br>
+					</td>
+					</tr>
+					<tr>	
+						<th>
+						</th>
+					<td>
+						<h3 id="settings_homescreen_spalten" class="settings_text_normal" ><b>Spalten:</b></h3>
+						<input class="slider" type="range" id="range_homescreen_spalten" name="volume" min="3" max="8" oninput="homescreen_change_spalten();" >
+						<br>
+					</td>
+					</tr>
+					<tr>	
+						<th>
+						</th>
+					<td>
+						<h3 id="settings_homescreen_icons" class="settings_text_normal"><b>Startbildschirm Icons</b></h3>
+						<div class="radio_form">
+							<form>
+									<label class="container_radio">
+										<input id="startpmn" type="radio" name="startpm" value="n" onchange="startpage_change(this);"><b id="modal_homescreen_icon_k" class="settings_text_normal" >Keine</b>
+										<span class="checkmark"></span>
+									</label>
+									<br>
+									<label class="container_radio">
+										<input id="startpmr" type="radio" name="startpm" value="r" onchange="startpage_change(this);"><b id="modal_homescreen_icon_r" class="settings_text_normal" >Raster</b>
+										<span class="checkmark"></span>
+									</label>
+									<br>
+							</form>
+						</div>
+					</td>
+					</table>
+					
+			</div>
+		</div>
+
+								
+	<div id="settings_setclockapp_div" class="third_settings">
+		<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_clock" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+			</div>		
+			<br>
+			<input type="text" id="searchappselecclock" name="appclock" class="searchapp_input" oninput="searchappselecclock_input();">
+			<br>
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr class="searchapptable_tr">	
+				<th>
+				</th>
+				<td>	
+						<div id="clock_app_list"></div>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<div id="settings_setdateapp_div" class="third_settings">
+		<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_date" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+			</div>		
+			<br>
+			<input type="text" id="searchappselecdate" name="appdate" class="searchapp_input" oninput="searchappselecdate_input();">
+			<br>
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr  class="searchapptable_tr">	
+				<th>
+				</th>
+				<td>	
+						<div id="date_app_list"></div>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+	
+	
+
+	<div id="settings_navtrans_div" class="second_settings">
+
+		<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_text_navbar" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>
+			
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+			<td>		
+				<div class="radio_form">
+					
+							<br>
+							<form>
+								<label class="container_radio">
+									<input id="transnavmode0" type="radio" name="transnavmode" value="0" onchange="transnav_mode_change(this);"><b id="modal_trans_0" class="settings_text_normal" >Keine</b>
+									<span class="checkmark"></span>
+								</label>
+								<br>
+								<label class="container_radio">
+									<input id="transnavmode1" type="radio" name="transnavmode" value="1" onchange="transnav_mode_change(this);"><b id="modal_trans_2s" class="settings_text_normal" >Komplett</b>
+									<span class="checkmark"></span>
+								</label>
+							</form>	
+							<br>	
+									
+				</div>
+			</td>
+			</tr>
+			<tr id="pad_top_input_tr">	
+				<th>
+				</th>
+				<td>
+						<h3 id="pad_top_input" class="settings_text_normal" >Abstand zum oberem Bildschirm</h3>
+						<input class="slider" type="range" id="padding_top_input_field" name="volume" min="0" max="100">
+						<br>
+				</td>
+			</tr>
+			<tr id="padding_bottom_input_tr">	
+				<th>
+				</th>
+			<td>
+						<h3 id="padding_bottom_input" class="settings_text_normal" >Abstand zum unteren Bildschirm</h3>
+						<input class="slider" type="range" id="padding_input_field" name="volume" min="0" max="100">
+						<br>
+			</td>
+			</tr>
+			
+			<tr id="padding_bottom_zero_tr">	
+				<th>
+				</th>
+			<td>
+						<h3 id="padding_bottom_input_set_zero" class="settings_text_normal" >Abstand zum unteren Bildschirm Horizontal auf 0</h3>
+						<input id="bottomzerobutton" type="checkbox" class="toggle_new"  onchange='change_bottomzero(this)'>
+						<br>
+			</td>
+			</tr>
+			
+			
+		</table>
+			
+			</div>
+		</div>		
+	
+	
+	<div id="settings_colortext_div" class="third_settings">
+			<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_text_color" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+				<td>
+				<br>
+				<div id="select_color"> </div>
+				<br>
+				
+				<div id="pre_color">&nbsp;</div>
+				
+				<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<div id="settings_colorhomescreen_div" class="third_settings">
+			<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_text_colorhomescreen" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>				  
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+				<td>
+	
+					<br>
+					<div id="select_color_homescreen"></div>
+
+					  <br>
+					  <div id="pre_color_homescreen">&nbsp;</div>
+					  <br> 
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<div id="settings_read_div" class="third_settings">
+		
+		<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_read" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+		</div>
+
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+				<td>
+					<br>
+					<input class="slider" type="range" id="range_read" name="volume" min="0" max="100" oninput="read_change();" >
+					<br>
+					<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+
+
+	<div id="settings_appdrawericonsize_div" class="third_settings">
+		
+		<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_appdrawericonsize" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+		</div>
+
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+				<td>
+					<br>
+					<input class="slider" type="range" id="appdrawericonsize_read" min="1" max="10" oninput="appdrawericonsize_change();" >
+					<br>
+					<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+
+
+	<div id="all_icons_cat_dialog">
+				
+			<div id="selecticondivheader1">
+				<h1 id="header_searchiconinpack_cat" class="header_icon_source" >Icon wählen</h1>
+				<input type="text" id="searchiconinpack_cat_input" name="searchiconinpack"  placeholder="Suche..." oninput="search_for_icon_cat()" >				 
+			</div>
+				
+			<div id="allicons_cat_list">
+				<table id="table_iconpackicons_cat_list">	
+				</table>
+			</div>
+	</div>
+		
+		
+	<div id="icon_dialog_cat_bg"></div>
+	<div id="icon_dialog_cat">
+			<h1 id="header_icon_source_cat" class="header_icon_source" >Icon Quelle</h1>
+			<hr>
+			<button id="btn_orginal_cat_icon" class="app_setting_button btnquelle" >Orginal</button>
+			<button id="btn_gallery_cat_icon" class="app_setting_button btnquelle" >Aus Gallery</button>
+			<button id="btn_symbol_cat_icon" class="app_setting_button btnquelle" >Aus Symbolpaket</button>	
+	</div>
+	
+	
+	<div id="select_iconpack_cat_dialog" >
+				
+			<div id="iconpackselecthb1">
+				<h1 id="header_icon_select_pack_cat" class="header_icon_source" >Iconpack wählen</h1>
+			</div>
+			<div id="iconpack_cat_list"></div>
+	</div>
+		
+				
+				
+	
+	<div id="settings_align_div" class="third_settings">
+				<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_align" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+				</div>
+					
+			<div class="scrollable_second_setting" >
+					
+			<table class="allsettings_header_table" >	
+				
+			<tr>	
+				<th>
+				</th>
+				
+				<td>
+			 <div class="radio_form">
+				 <br>
+					<form>
+						<label class="container_radio">
+							<input id="input_align_r" type="radio" name="alignmode" value="r" onchange="align_mode_change(this);"> <b id="modal_alignr" class="settings_text_normal" >Rechts</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<label class="container_radio">
+							<input id="input_align_l" type="radio" name="alignmode" value="l" onchange="align_mode_change(this);"> <b id="modal_alignl"  class="settings_text_normal" >Links</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+					</form>
+					<br>
+				</div>
+				</td>
+					
+			</tr>	
+		</table>
+		
+		</div>
+	</div>
+	
+	
+	
+	<div id="settings_swipe_div" class="third_settings">
+				<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_swipe" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+				</div>
+					
+			<div class="scrollable_second_setting" >
+					
+			<table class="allsettings_header_table" >	
+				
+			<tr>	
+				<th>
+				</th>
+				
+				<td>
+			 <div class="radio_form">
+				 <br>
+					<form>
+						<label class="container_radio">
+							<input id="input_swipe_r" type="radio" name="swipemode" value="r" onchange="swipe_mode_change(this);"> <b id="modal_swiper" class="settings_text_normal" >Rechts</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<label class="container_radio">
+							<input id="input_swipe_l" type="radio" name="swipemode" value="l" onchange="swipe_mode_change(this);"> <b id="modal_swipel"  class="settings_text_normal" >Links</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+					</form>
+					<br>
+				</div>
+				</td>
+					
+			</tr>	
+		</table>
+		
+		</div>
+	</div>
+	
+					
+				
+	<div id="settings_cat_div" class="third_settings">	
+		<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_catdis" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>
+			
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >	
+				
+			<tr>	
+				<th>
+				</th>
+			<td>		
+				<b id="modal_header_cat_icon_size" class="settings_text_normal" >Icon Größe</b>
+				<br>
+				<input class="slider" type="range" id="iconside_range" name="volume" min="1" max="10" oninput="caticonsize_change()" >			
+			</td>
+			</tr>
+							
+			<tr>	
+				<th>
+				</th>
+			<td>		
+				
+				<form>
+					<br>
+					<label class="container_radio">
+						<input id="catdisp0" type="radio" name="catmode" value="1" onchange="catdis_mode_change(this);"><b id="cat_dis_0" class="settings_text_normal" >Default</b>
+						<span class="checkmark"></span>
+					</label>
+					<br>
+					<label class="container_radio">
+						<input id="catdisp1" type="radio" name="catmode" value="0" onchange="catdis_mode_change(this);"><b id="cat_dis_1" class="settings_text_normal" >Anpassen</b>
+						<span class="checkmark"></span>
+					</label>
+					<br>
+				</form>	
+							
+			</td>
+			</tr>
+			<tr id="cat_custom_table_tr" >	
+				<th>
+				</th>
+			<td>
+						<div id="cat_custom_table_div">
+						
+							<table id="cat_custom_table" >
+							</table>
+							<br>
+							<button id="add_new_cat_button" class="app_setting_button" >Neue Kategorie hinzufügen</button>
+								
+						</div>				
+			</td>
+			</tr>
+		
+		</table>
+
+		</div>
+	</div>
+	
+	
+	<div id="settings_fontsize_div" class="second_settings">
+			<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_fontsize" class="settings_text_header_class">FontSize</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>
+		<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+			<td>		
+				<h4 id="text_font_cat" class="settings_text_normal" >Kategorien Title:</h4>
+					<input class="slider" type="range" id="range_font_cat" name="volume" min="0" max="100" oninput="font_cat_change();">
+				<br>
+				<br>
+			</td>
+			</tr>
+			<tr>	
+				<th>
+				</th>
+			<td>
+			
+			<h4 id="text_font_appnames" class="settings_text_normal" >App Names:</h4>
+				<input class="slider" type="range" id="range_font_app" name="volume" min="0" max="100" oninput="font_app_change();" >
+			<br>
+			<br>
+			</td>
+			</tr>
+			<tr>	
+				<th>
+				</th>
+			<td>
+			<h4 id="text_font_homescreen" class="settings_text_normal" >Homescreen Clock:</h4>
+				<input class="slider" type="range" id="range_font_homescreen" name="volume" min="0" max="100" oninput="font_home_change();" >
+			<br>
+			<br>
+			</td>
+			</tr>
+		</table>
+
+		</div>
+	</div>
+
+
+	<div id="settings_clock_div" class="third_settings">
+	
+		<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_clock_settings" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+			</table>
+			</div>
+			
+		<br>
+		<div class="scrollable_second_setting" >
+			
+		<div id="clock_settings_lables_div"> 
+			
+		  <div class="clock_settings_lables" >
+			  <div class="clock_settings_lables_div_pad">
+				<b id="modal_clock_show" class="settings_text_normal" >Uhrzeit anzeigen</b>
+				<br>
+				<input id="tg_clock" class="toggle_new" type="checkbox" onchange="tg_clock()">
+			  </div>
+			  
+		  </div>
+
+		  <div id="tg_bg_lable" class="clock_settings_lables" >
+			  <hr>
+			  <div class="clock_settings_lables_div_pad">
+				<b id="modal_border_show" class="settings_text_normal"  >Hintergund</b>
+				<br>
+				<input id="tg_back_tg" onchange="tg_clock_bg()"  class="toggle_new" type="checkbox">
+				</div>
+			<hr>
+		  </div>
+		  
+		<div id="tg_sek_lable" class="clock_settings_lables" >
+				<div class="clock_settings_lables_div_pad">
+				<b id="modal_sec_show" class="settings_text_normal" >Sekunden anzeigen</b>
+				 <br>
+				<input id="tg_sek_tg" onchange="tg_clock_sec()" class="toggle_new" type="checkbox">
+				</div>
+				<hr>
+		  </div>
+
+
+		  <div id="tg_bhour_lable" class="clock_settings_lables" >
+				<div class="clock_settings_lables_div_pad">
+				<b id="modal_hour_show" class="settings_text_normal"  >Stunden dick</b>
+				 <br>
+				<input id="tg_bhour_tg" onchange="tg_clock_hour()" class="toggle_new" type="checkbox">
+				</div>
+				<hr>
+		  </div>
+		  
+		  <div id="tg_alarmclock_lable" class="clock_settings_lables" >
+				<div class="clock_settings_lables_div_pad">
+				<b id="modal_alarm_clock" class="settings_text_normal"  >Alarm anzeigen</b>
+				 <br>
+				<input id="tg_clock_tg" onchange="tg_alarm_clock()" class="toggle_new" type="checkbox">
+				</div>
+				<hr>
+		  </div>
+		  
+		  
+			<div id="tg_date_lable" class="clock_settings_lables" >
+				<div class="clock_settings_lables_div_pad">
+					
+				<b id="modal_date_show" class="settings_text_normal" >Datum</b>
+				 <br>
+				<input id="tg_date_tg" class="toggle_new" type="checkbox" onchange="select_datum_format()">
+				<br>
+	
+				<div id="datum_formats_radio" >
+					<form>
+						<br>
+						<label class="container_radio">
+							<input id="datum_1" type="radio" name="datum" value="1" onchange="datum_change(this);"><b id="modal_date_1" class="settings_text_normal">23.01.2020</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_2" type="radio" name="datum" value="2" onchange="datum_change(this);"><b id="modal_date_2" class="settings_text_normal">23.01.20</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_3" type="radio" name="datum" value="3" onchange="datum_change(this);"><b id="modal_date_3" class="settings_text_normal">23.01</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_4" type="radio" name="datum" value="4" onchange="datum_change(this);"><b id="modal_date_4" class="settings_text_normal">23. Januar</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_5" type="radio" name="datum" value="5" onchange="datum_change(this);"><b  id="modal_date_5" class="settings_text_normal">Donnerstag, 23. Januar</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_6" type="radio" name="datum" value="6" onchange="datum_change(this);"><b  id="modal_date_6" class="settings_text_normal">Do, 23.01</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_7" type="radio" name="datum" value="7" onchange="datum_change(this);"><b  id="modal_date_7" class="settings_text_normal">Do, 23.01.20</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_8" type="radio" name="datum" value="8" onchange="datum_change(this);"><b  id="modal_date_8" class="settings_text_normal">01.23.2020 (M.D)</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_9" type="radio" name="datum" value="9" onchange="datum_change(this);"><b  id="modal_date_9" class="settings_text_normal">01.23.20 (M.D)</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<br>
+						<label class="container_radio">
+							<input id="datum_10" type="radio" name="datum" value="10" onchange="datum_change(this);"><b  id="modal_date_10" class="settings_text_normal">01.23 (M.D)</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>	
+						<br>	
+						<label class="container_radio">
+							<input id="datum_11" type="radio" name="datum" value="11" onchange="datum_change(this);"><b  id="modal_date_11" class="settings_text_normal">Do, 01.23 (M.D)</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>	
+						<br>	
+						<label class="container_radio">
+							<input id="datum_12" type="radio" name="datum" value="12" onchange="datum_change(this);"><b  id="modal_date_12" class="settings_text_normal">Do, 01.23.20 (M.D)</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>	
+						<br>																		
+					</form>
+	
+			  </div>
+			  </div>
+			</div>
+			<br>
+		</div>
+			  
+	</div>
+	</div>	
+
+<!-- For Debug in the Webbrowser -->
+<script>
+	var debug = 0;
+	var loading_finished = 0; //Set to 1 after all saved apps are loaded...
+	
+	//Global
+	var nav_pad_tmp = -1;
+	var status_pad_tmp = -1;
+
+</script>
+
+<script src="js/main.js"></script>
+<script src="js/guess_cat.js"></script>
+<script src="js/translate.js"></script>
+
+<script>
+
+
+
+document.addEventListener("deviceready",ready_function, false);
+
+function onBackKeyDown() 
+{
+	"use strict";
+	back_function();
+}
+        
+//Replace all in string...        
+String.prototype.replaceAll = function(search, replacement)
+{
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+function ready_function() 
+{				
+	"use strict";
+					
+
+
+	window.plugins.intentShim.getIntent(function(short_cut_info)
+	{
+		//Wait for finished loading
+		setTimeout(function() 
+		{
+			 set_shortcut_after_loading(short_cut_info)
+		},100);
+		
+			function set_shortcut_after_loading(short_cut_info)
+			{	
+				if(loading_finished==0) //Still loading...
+				{
+					setTimeout(function() 
+					{
+						set_shortcut_after_loading(short_cut_info)
+					},200);
+					return;
+				}
+		
+				
+				var short_cut_info_array = short_cut_info.split("|!!|");
+				
+				var package_name = short_cut_info_array[0];
+				var disp_name = short_cut_info_array[1];
+				var icon = short_cut_info_array[2];
+				var shortcut_id = short_cut_info_array[3];
+				var user_id = short_cut_info_array[4];
+
+
+			
+
+				//Add the virtualapp					
+				if( icon == "blank") //There must be an Error
+				{
+					return;
+				}
+					
+				//package_name = sanitize_input(package_name);
+					
+				var new_package_name = "virtualapp_" + package_name + "!!.!!" + shortcut_id + "!!.!!" + user_id;   //+ package_name + "!.!" + url;
+					
+				//Check if app exists...
+				if(check_if_app_exists(new_package_name) == true)
+				{
+					//Link is already present...
+					return;
+				}
+					
+				var cat = guess_cat(disp_name,new_package_name);
+					
+				var tmp_app = new App(new_package_name,disp_name,icon,cat);
+				all_apps.unshift(tmp_app);
+					
+				update_app_divs();
+				set_app_list(all_apps);
+				new_font_size_adjust();
+
+		
+				if(cat==2)
+				{	
+					if(current_kat != 2)
+					{
+						cat_2_new.push(tmp_app.start_name);
+						set_new_cat(2);
+					}
+				}
+				else
+				{
+					if(current_kat != 1)
+					{
+						cat_1_new.push(tmp_app.start_name);
+						set_new_cat(1);	
+					}
+				}
+				
+				
+				set_app_drawer_black_white();
+		}
+	
+	}		
+
+, function fail(){} );
+
+						
+	var firstbr = window.plugins.intentShim.registerBroadcastReceiver(
+	{
+			filterActions:
+			[
+				'android.intent.action.PACKAGE_ADDED',
+				'android.intent.action.PACKAGE_REMOVED'
+			],
+			filterDataSchemes:
+			[
+				'package'
+			]
+	},function(){});
+
+
+	var secondbr = window.plugins.intentShim.registerBroadcastReceiver(
+	{
+	  filterActions: 
+	  [
+		'luke.launcher.ACTION', //  Scans
+		'com.android.launcher.action.INSTALL_SHORTCUT', //  Messages from service
+	  ],
+	  filterCategories: 
+	  [
+		'com.android.intent.category.DEFAULT'
+	  ]
+	},
+	function(intent)
+	{
+		force_update_applist = 0; //Workaround for the new app installed bug
+		
+		var shortcut = ""+intent;
+		var array_s = shortcut.split("|,|");	 
+		var package_name = array_s[0];
+		package_name = package_name.replace("ComponentInfo{", "");
+		package_name = package_name.replace("}", "");
+		var disp_name = array_s[1];
+		var url = array_s[2];
+		var icon = array_s[3];        
+			
+
+		if( url == "blank") //There must be an Error
+		{
+			setTimeout(function() 
+			{
+				compare_apps_with_installed_apps();
+				update_app_divs();
+				new_font_size_adjust();
+				
+			}, 150);
+			return;
+		}
+			
+		if( url == "icon") //There must be an Error
+		{
+			return;
+		}
+			
+		url = sanitize_input(url);
+		package_name = sanitize_input(package_name);
+			
+		var new_package_name = "virtualapp_" + package_name + "!.!" + url;
+			
+		//Check if app exists...
+		if(check_if_app_exists(new_package_name) == true)
+		{
+			//Link is already present...
+			return;
+		}
+			
+		var cat = guess_cat(disp_name,new_package_name);
+			
+		var tmp_app = new App(new_package_name,disp_name,icon,cat);
+		all_apps.unshift(tmp_app);
+			
+		update_app_divs();
+		set_app_list(all_apps);
+		new_font_size_adjust();
+
+		if(cat==2)
+		{	
+			if(current_kat != 2)
+			{
+				cat_2_new.push(tmp_app.start_name);
+				set_new_cat(2);
+			}
+		}
+		else
+		{
+			if(current_kat != 1)
+			{
+				cat_1_new.push(tmp_app.start_name);
+				set_new_cat(1);	
+			}
+		}
+		
+		set_app_drawer_black_white();
+			
+		return;		
+	});
+
+
+		window.plugins.intentShim.onIntent(function (intent) //HomeScreen Button Press
+		{
+
+
+		   
+		  if(  window.getComputedStyle(document.getElementById("settings_ba")).display == "block" ) //Hide Dropdown menu
+		  {
+			  back_function();
+			  return;
+		  }
+		
+		
+		   if (app_move_mode == 1)
+		   { 
+			   app_move_mode = 0;
+			   if( current_view == "appdrawer")
+			   {
+				   document.getElementById("scrollable").style.display = 'block';
+				   init_swiper(0);
+							
+				   document.getElementById("scrollable").style.border = "solid";
+				   document.getElementById("scrollable").style.borderColor = "red";
+				   document.getElementById("scrollable").style.borderWidth = "0vw";
+
+				   update_app_position();
+				   update_app_divs();
+				   store_apps(apps_to_string(all_apps));
+			   }
+			   else
+			   {
+					document.getElementById("app_drawer").style.display = "block";
+					document.getElementById("table_homescreen").style.border = "solid";
+					document.getElementById("table_homescreen").style.borderColor = "red";
+					document.getElementById("table_homescreen").style.borderWidth = "0vh";
+					
+					update_app_position();
+					update_app_divs(); //Update all divs - also the homescreen div
+					init_swiper(1);
+					store_apps(apps_to_string(all_apps));
+				  }
+			}
+		
+			if(mySwiper!=null)
+			{
+				if (current_view == "appdrawer" )
+				{
+					//To Show the homescreen agian
+					if(swipe_mode=="r")
+					{
+						//mySwiper.slideNext();
+						if(mySwiper!= null){mySwiper.scroll(1, true);}
+					}
+					else
+					{
+						if(mySwiper!= null){mySwiper.scroll(0, true);}
+						//mySwiper.slidePrev();
+					}
+				}
+			}
+		});
+
+
+		notificationListener.listen(function(n)
+		{
+	 
+			if (homescreen_nofitications == "1") 
+			{
+				
+				 if(n.clear==true)
+				 {
+					 
+					 if(  (n.key).toLowerCase().indexOf("@") == -1  )
+					 {
+						if(n.action=="del")
+						{
+							del_badges(n.package);
+						}
+						else
+						{
+							new_badges(n.package);
+						}
+					}
+				 }
+			 
+			}
+			 
+		   }, function(e)
+		   {
+			 //alert("Notification Error " + e);
+		   });
+		   
+		
+		
+		cordova.plugins.diagnostic.requestExternalStorageAuthorization(function(status)
+		{
+		if(status == cordova.plugins.diagnostic.permissionStatus.GRANTED)
+		{
+			var successinfo = function(message) 
+			{
+				var array_s = "";
+				array_s = message.split(",");
+						
+				nav_pad_tmp = "";
+				status_pad_tmp = "";
+						
+				nav_pad_tmp = array_s[0]; 
+				status_pad_tmp = array_s[1]; 
+
+				if(nav_pad_tmp<0)
+				{
+					nav_pad_tmp = "-1";
+				}
+						
+				if(status_pad_tmp<0)
+				{
+					status_pad_tmp = "-1";
+				}
+											
+				if(nav_pad_tmp == ""){nav_pad_tmp = "-1";}
+						
+				if(status_pad_tmp == ""){status_pad_tmp = "-1";}			
+				
+	
+				init_luke_launcher();
+			};
+			
+			var failinfo = function(message) {};
+			androidinfo.getall("getall", successinfo, failinfo);
+		}		
+		else
+		{
+			location.reload(); 
+		}
+	}, 
+	function(error){});
+
+	 
+}
+
+document.addEventListener("backbutton", onBackKeyDown, false);
+
+
+ 
+if(debug == 1)
+{
+	//Temporär!!!!!!!!!
+	window.onload = function () 
+	{	
+		init_luke_launcher();	
+	};
+}
+
+    
+</script>
+
+</body>
+</html>
+
+

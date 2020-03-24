@@ -1,0 +1,56 @@
+{
+  "_from": "cordova-plugin-intent-list",
+  "_id": "cordova-plugin-intent-list@0.0.6",
+  "_inBundle": false,
+  "_integrity": "sha512-N5Zo/uv+oYtSFuGcJK1DarxskxnAM1JDKzeoVvCzTjLFc4XHtfZsnKGUWfxe5cLIZRH68EjUcFLzZAKRHJqlnw==",
+  "_location": "/cordova-plugin-intent-list",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-intent-list",
+    "name": "cordova-plugin-intent-list",
+    "escapedName": "cordova-plugin-intent-list",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-intent-list/-/cordova-plugin-intent-list-0.0.6.tgz",
+  "_shasum": "7fef662f72d558db15811a695e99b3ab93f71bb9",
+  "_spec": "cordova-plugin-intent-list",
+  "_where": "/home/luke/Android_launcher/LukeLauncher",
+  "author": {
+    "name": "Nick Denry"
+  },
+  "bugs": {
+    "url": "https://github.com/nick-denry/cordova-plugin-intent-list/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-intent-list",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "![Version](https://img.shields.io/npm/v/cordova-plugin-intent-list/latest.svg) ![Downloads](https://img.shields.io/npm/dt/cordova-plugin-intent-list.svg) [![Platforms](https://img.shields.io/badge/platforms-Android-lightgrey.svg)](https://github.com/jnick-denry/cordova-plugin-intent-list) ![License](https://img.shields.io/npm/l/cordova-plugin-intent-list.svg) <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6MZ5YRYEDSVSQ&source=url\" title=\"Donate once-off to this project using Paypal\">         <img src=\"https://img.shields.io/badge/paypal-donate-yellow.svg\" alt=\"PayPayl donate button\" />     </a>",
+  "homepage": "https://github.com/nick-denry/cordova-plugin-intent-list#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "application-list",
+    "installed-apps",
+    "intent"
+  ],
+  "license": "Apache 2.0",
+  "name": "cordova-plugin-intent-list",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick-denry/cordova-plugin-intent-list.git"
+  },
+  "version": "0.0.6"
+}

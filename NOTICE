@@ -1,0 +1,52 @@
+LukeLauncher
+Copyright 2020, Lukas Sökefeld
+
+Images used:
+
+appdrawer.png:		https://www.iconfinder.com/icons/211671/grid_icon
+homescreen.png:		https://www.iconfinder.com/icons/183566/home_icon
+wallpaper.png:		https://www.iconfinder.com/icons/211677/image_icon
+back.png:			https://www.iconfinder.com/icons/1063891/arrow_arrow_left_back_previous_icon
+time.png:			https://www.iconfinder.com/icons/2123964/app_essential_time_ui_icon
+size.png:			https://www.iconfinder.com/icons/825446/font_magnifying_glass_search_searchicons_text_icon
+update.png:			https://www.iconfinder.com/icons/4201253/arrow_refresh_repeat_sync_update_icon
+lang.png:			https://www.iconfinder.com/icons/4201258/country_flag_interface_national_pin_icon
+navbar.png:			https://www.iconfinder.com/icons/2202238/dots_more_navigation_option_three_icon
+color.png:			https://www.iconfinder.com/icons/896673/brush_coat_color_grunge_paint_purdy_wall_icon
+read.png:			https://www.iconfinder.com/icons/1041639/light_saturation_icon
+app_set.png:		https://www.iconfinder.com/icons/2123951/app_essential_input_ui_icon
+bar.png:			https://www.iconfinder.com/icons/2123971/app_arrow_essential_smartphone_ui_up_icon
+menu.png:			https://www.iconfinder.com/icons/309052/menu_list_formating_icon
+search.png:			https://www.iconfinder.com/icons/2093656/look_seach_search_see_icon
+info.png			https://www.iconfinder.com/icons/1608941/info_icon
+cat.png				https://www.iconfinder.com/icons/298815/list_unordered_icon
+trash.png			https://www.iconfinder.com/icons/103224/trash_icon
+more.png			https://www.iconfinder.com/icons/3669292/add_ic_playlist_icon
+export.png			https://www.iconfinder.com/icons/3209285/export_out_send_share_upload_icon
+import.png			https://www.iconfinder.com/icons/3209322/download_import_in_keep_save_icon
+align.png			https://www.iconfinder.com/icons/326701/align_left_sort_icon
+swipe.png			https://www.iconfinder.com/icons/314191/finger_one_tap_icon
+new.png:			https://www.iconfinder.com/icons/183198/plus_icon
+new_bad.png:		https://www.iconfinder.com/icons/183316/add_plus_icon
+new_cat.png:		https://www.iconfinder.com/icons/183316/add_plus_icon
+1.png:				https://www.iconfinder.com/icons/2639908/chat_icon
+2.png:				https://www.iconfinder.com/icons/216560/world_icon
+3.png:				https://www.iconfinder.com/icons/1564523/gallery_image_photo_pic_picture_icon
+4.png:				https://www.iconfinder.com/icons/2316002/computer_fun_games_joystick_icon
+5.png:				https://www.iconfinder.com/icons/1167984/edit_pen_pencil_tool_write_icon
+6.png:				https://www.iconfinder.com/icons/3838430/engine_gear_setting_icon
+0_bad.png:			selfmade
+app.png:			selfmade
+l1.png:				selfmade
+l2.png:				selfmade
+logo_text.png:		selfmade
+logo_small.png:		selfmade
+
+Libraries used:
+
+dayjs.min.js:			https://github.com/iamkun/dayjs
+dayjs_de.js:			https://github.com/iamkun/dayjs
+dayjs_en.js:			https://github.com/iamkun/dayjs
+redips-drag-min.js:		https://www.redips.net/javascript/drag-and-drop-table-content/
+swipe.js:				https://github.com/joe223/tiny-swiper
+vanilla-picker.min.js:	https://github.com/Sphinxxxx/vanilla-picker
