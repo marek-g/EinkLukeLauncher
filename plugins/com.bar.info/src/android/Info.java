@@ -550,6 +550,8 @@ public class Info extends CordovaPlugin
     
     
     
+    
+    
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
 
@@ -562,7 +564,7 @@ public class Info extends CordovaPlugin
 			
 			if(hasNavBar(context) == true)
 			{
-				navbarsize = getNavigationBarSize(context).y;	
+				navbarsize = 48;//Not accurate...getNavigationBarSize(context).y;	
 			}
 			else
 			{
@@ -571,22 +573,18 @@ public class Info extends CordovaPlugin
 			
 			
 						
-			int statusBarHeight = 0;
+			int statusBarHeight = 24;
+			/* 
+			 *Not accurate... 
 			int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
 			
 			if (resourceId > 0) 
 			{
 				statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
 			}
-						
-			navbarsize = navbarsize - statusBarHeight;
-			
-			if(navbarsize<0)
-			{
-				navbarsize = 0;
-			}
-			
-			String message = ""+navbarsize+","+(statusBarHeight/2);
+			*/
+		
+			String message = ""+navbarsize+","+statusBarHeight;
 			
             callbackContext.success(message);
             return true;

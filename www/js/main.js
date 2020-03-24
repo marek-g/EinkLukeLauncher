@@ -7621,12 +7621,12 @@ function load_settings()
 {
 	"use strict";	
 
-	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||40||30||100||3-4||5-5||1||5||null||default||l||r||10||1";
+	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1";
 	
 	//If German is avalible
 	if (navigator.language.indexOf("de") > -1)
 	{
-		 defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||de||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||40||30||100||3-4||5-5||1||5||null||default||l||r||10||1";
+		 defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||de||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1";
 	}
 		 
 	try 
