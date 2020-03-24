@@ -7623,7 +7623,12 @@ function load_settings()
 
 	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||40||30||100||3-4||5-5||1||5||null||default||l||r||10||1";
 	
-	
+	//If German is avalible
+	if (navigator.language.indexOf("de") > -1)
+	{
+		 defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||de||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||40||30||100||3-4||5-5||1||5||null||default||l||r||10||1";
+	}
+		 
 	try 
 	{
 
@@ -8022,6 +8027,7 @@ function uninstall()
 		applay_settings(get_current_settings());
 		store_apps(apps_to_string(all_apps));
 		
+		
 	}
 	else //Normal App
 	{
@@ -8076,7 +8082,6 @@ function onResume()
 		{
 			if(sucess != -1) //Old Android Version...
 			{
-				//alert("Da: "+ sucess );
 				if(sucess != current_wallpaper_id)
 				{
 					current_wallpaper_id = sucess;

@@ -1564,16 +1564,22 @@ function ready_function()
 					//Link is already present...
 					return;
 				}
+				
 					
 				var cat = guess_cat(disp_name,new_package_name);
 					
 				var tmp_app = new App(new_package_name,disp_name,icon,cat);
+				
 				all_apps.unshift(tmp_app);
-					
+						
+				set_app_list(all_apps);	
+				
 				update_app_divs();
-				set_app_list(all_apps);
+				
 				new_font_size_adjust();
 
+
+				
 		
 				if(cat==2)
 				{	
@@ -1790,7 +1796,6 @@ function ready_function()
 			 
 		   }, function(e)
 		   {
-			 //alert("Notification Error " + e);
 		   });
 		   
 		
@@ -1847,6 +1852,7 @@ document.addEventListener("backbutton", onBackKeyDown, false);
  
 if(debug == 1)
 {
+	alert("Running in Debug Mode!");
 	//Temporär!!!!!!!!!
 	window.onload = function () 
 	{	

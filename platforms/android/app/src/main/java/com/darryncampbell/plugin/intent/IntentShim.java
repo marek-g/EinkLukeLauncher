@@ -121,7 +121,14 @@ import static android.os.Environment.getExternalStorageState;
 
 import android.content.pm.LauncherApps;
 import android.content.pm.ShortcutInfo;
+import android.app.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
+import android.graphics.Point;
 
+
+import android.graphics.Matrix;
 
 public class IntentShim extends CordovaPlugin {
 
@@ -159,6 +166,24 @@ public class IntentShim extends CordovaPlugin {
 
 
 
+	 /*
+	  Scale a bitmap to a give Size
+	  Inspired by: https://stackoverflow.com/questions/4837715/how-to-resize-a-bitmap-in-android
+	 */
+     public Bitmap scaleBitmap(Bitmap bmp, int newHeight, int newWidth)
+     {
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap newBitmap = Bitmap.createBitmap(bmp, 0, 0, width, height, matrix, false);
+        return newBitmap ;
+    }
+    
+    
+    
 
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException
     {
@@ -391,6 +416,8 @@ public class IntentShim extends CordovaPlugin {
              try 
 			 {							 
 				Bitmap bitmap = (Bitmap) drawableToBitmap(launcherApps.getShortcutIconDrawable(si, 0) ) ;
+				bitmap = scaleBitmap(bitmap,512,512);
+				
 				File file;
 				path = "/data/data/luke.launcher/appicons/";
 				// Create a file to save the image
@@ -826,6 +853,9 @@ public class IntentShim extends CordovaPlugin {
                 try 
 				{
 					Bitmap bitmap = (Bitmap) intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
+					
+					bitmap = scaleBitmap(bitmap,512,512);
+					
 					File file;
 					path = "/data/data/luke.launcher/appicons/";
 					// Create a file to save the image

@@ -181,9 +181,6 @@ public class Info extends CordovaPlugin
 	public HashMap current_hash_map = null;
 	public String current_icon_pack = "";
 	
-
-
-
 	//https://github.com/giantss/cordova-plugin-ImagePicker/blob/master/src/android/module/view/SystemBarTintManager.java
 	
 	private boolean hasNavBar(Context context)
