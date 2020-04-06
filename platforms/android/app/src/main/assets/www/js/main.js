@@ -73,6 +73,7 @@ var cat_array = [];
 
 var force_update_applist = 1;   
 
+var new_indicator_width = -1;
 
 var startx = 0;
 var starty = 0;
@@ -83,6 +84,9 @@ var padding_top_input_time_tmp = 0;	 //Temp Var Preview padding top
 var padding_bottom_input_time_tmp = 0;	 //Temp Var Preview padding top
 
 var should_wait_loadscreen = 1; //Show longer loading screen...
+
+var update_search_div_speed_up; //Avoid Redraws - used by update_search_div()
+var update_search_div_speed_up_zeilen = 0; //Avoid Redraws - used by update_search_div()
 
 var current_wallpaper_id = -1; //Android 24(7.0) or higher...
 
@@ -127,6 +131,7 @@ var still_in_settings = 0; //If an event occures, while the settings are applied
 var pickerFixed1 = null; //Color picker for the app font color
 var pickerFixed2 = null; //Color picker for the homescreen color
 
+var fontSize_getComputedStyle_speedup = -1;//Reduce redraws...
 
 var move_x = 0;	//Movement when touched
 var move_y = 0; //Movement when touched
@@ -148,21 +153,24 @@ var new_icon_height = "512";
 function applay_cats(in_cat_list_arary)
 {
 	"use strict";
+	
 	cat_anz = in_cat_list_arary.length+1;
 	var table_cats = document.getElementById("cat");
 	for(var i = table_cats.rows.length - 1; i >= 0; i--)
 	{
 		table_cats.deleteRow(i);
 	}
-	
+
 	var full_string = "";
 	for(var i2 = 1; i2 < cat_anz; i2++)
 	{		
-		var icon = in_cat_list_arary[i2-1][0];
-		var new_row = table_cats.insertRow(-1);			
-		full_string = "<td ontouchstart='open_categorie( document.getElementById("+i2+") );' id='"+i2+"' class='redips-trash'><div id='div_"+i2+"_item' class='cat_item'><img id='"+i2+"_png' src='"+icon+"'></div>";	
+		var icon = in_cat_list_arary[i2-1][0];		
+		full_string = "<td ontouchstart='open_categorie( document.getElementById("+i2+") );' id='"+i2+"' class='redips-trash'><div id='div_"+i2+"_item' class='cat_item'><img id='"+i2+"_png' src='"+icon+"'></div></td>";	
+
+		var new_row = table_cats.insertRow(-1);	
 		new_row.innerHTML='<tr class="child">'+full_string+'</tr>'; 
 	}
+	
 	
 	//Select the active one..
 	if(current_kat>0)
@@ -201,6 +209,7 @@ function applay_cats(in_cat_list_arary)
 		{
 		}
 	}	
+	
 }
 
 
@@ -219,8 +228,6 @@ function long_touch_check(in_x, in_y)
 	"use strict";
     if (type_of_touch == 1) 
     { 
-	
-		
 		var dist_x = in_x - mySwiper.config.currentX; //mySwiper.touches.currentX
 		var dist_y = in_y - mySwiper.config.currentY; //mySwiper.touches.currentY
 		if(dist_x<0){dist_x = dist_x*-1;}
@@ -343,11 +350,8 @@ function getAllElementsFromPoint(x, y)
 function vhTOpx(value)
 {
 	"use strict";
-	var	 win = window;
-	var  doc = document;
-	var  e = doc.documentElement;
-	var  g = doc.getElementsByTagName('body')[0];
-	var  y = win.innerHeight|| e.clientHeight|| g.clientHeight;
+	var  e = document.documentElement;
+	var  y =  e.clientHeight;//win.innerHeight|| e.clientHeight|| g.clientHeight;
 	return (y*value)/100;
 }
 
@@ -357,11 +361,8 @@ function vhTOpx(value)
 function vwTOpx(value) 
 {
 	"use strict";
-	var	 win = window;
-	var  doc = document;
-	var  e = doc.documentElement;
-	var  g = doc.getElementsByTagName('body')[0];
-	var  x = win.innerWidth || e.clientWidth || g.clientWidth;
+	var  e = document.documentElement;
+	var  x = e.clientWidth;
     var result = (x * value) / 100;
     return result;
 }
@@ -372,11 +373,8 @@ function vwTOpx(value)
 function pxTOvw(value)
 {
 	"use strict";
-	var	 win = window;
-	var  doc = document;
-	var  e = doc.documentElement;
-	var  g = doc.getElementsByTagName('body')[0];
-    var  x = win.innerWidth || e.clientWidth || g.clientWidth;
+	var  e = document.documentElement;
+    var  x = e.clientWidth;//win.innerWidth || e.clientWidth || g.clientWidth;
     return (100 * value) / x;
 }
 
@@ -386,11 +384,8 @@ function pxTOvw(value)
 function pxTOvh(value)
 {
 	"use strict";
-	var	 win = window;
-	var  doc = document;
-	var  e = doc.documentElement;
-	var  g = doc.getElementsByTagName('body')[0];
-    var  y = win.innerHeight || e.clientHeight || g.clientHeight;
+	var  e = document.documentElement;
+    var  y = e.clientHeight;//win.innerHeight || e.clientHeight || g.clientHeight;
     return (100 * value) / y;
 }
 
@@ -426,6 +421,7 @@ function tg_clock()
 		document.getElementById("tg_date_lable").style.display = 'block';
 		document.getElementById("datum_formats_radio").style.display = 'block';
 		document.getElementById("tg_bg_lable").style.display = 'block';
+		document.getElementById("tg_alarmclock_lable").style.display = 'block';
         select_datum_format();
     } 
     else
@@ -435,6 +431,7 @@ function tg_clock()
         document.getElementById("tg_bhour_lable").style.display = "none";
         document.getElementById("tg_date_lable").style.display = "none";
         document.getElementById("datum_formats_radio").style.display = "none";
+        document.getElementById("tg_alarmclock_lable").style.display = "none";
         clock = "0";
     }
 }
@@ -501,6 +498,9 @@ function update_clock_settings()
 	}
 	
 	clock = bold_hours + "-" + show_seconds + "-" + date_f + "-" + color_f + "-" + background_clock + "-" + show_alarm;
+	
+	//ReInit ticken
+	ticken();
 }
 
 
@@ -563,9 +563,8 @@ function select_datum_format()
 }
 
 
-
 //Function for applayin changes clock Settings
-function apply_clock_settings() 
+function update_homescreen_clock_position() 
 {
 	"use strict";
 	if( clock=="" || clock == "0")
@@ -694,6 +693,7 @@ function apply_clock_settings()
 		homescreen_tmp_vis = 0;
 	}
 
+
 }
 
 //Used to swap app_drawer and homescreen
@@ -744,8 +744,12 @@ function init_swiper(start)
 	    speed:150,
 		initialSlide: start,
 		polyfill: false,
-		passiveListeners:true
+		passiveListeners:true,
+		
+		excludeElements: [document.getElementById("cat")],
 		});
+		
+		
 	}
 	
 	if(start == 1 && swipe_mode=="r") //Start 0 is the Appdrawer -> 1 starts at the Homescreen
@@ -760,8 +764,11 @@ function init_swiper(start)
 	    speed:150,
 		initialSlide: start,
 		polyfill: false,
-	    passiveListeners:true
+	    passiveListeners:true,
+	    
+	    excludeElements: [document.getElementById("cat")],
 		});
+		
 	}
 
 	if(swipe_mode=="l")
@@ -776,8 +783,11 @@ function init_swiper(start)
 	    speed:150,
 		initialSlide: 1,
 		polyfill: false,
-		passiveListeners: true
+		passiveListeners: true,
+		
+		excludeElements: [document.getElementById("cat")],
 		});
+
 
 		//mySwiper.addSlide(1,document.getElementById("app_drawer"));
 		//mySwiper.addSlide(0,document.getElementById("homescreen"));	
@@ -980,7 +990,7 @@ function back_function()
 
 		setTimeout(function()
 		{
-			apply_clock_settings();
+			update_homescreen_clock_position();
 		},3700);
 
 		setTimeout(function()
@@ -1040,7 +1050,7 @@ function back_function()
 		
 		setTimeout(function()
 		{
-			apply_clock_settings();
+			update_homescreen_clock_position();
 		},3700);
 
 		setTimeout(function()
@@ -1116,9 +1126,18 @@ function back_function()
 //For Updateing the clock on the homescreen
 // Function is called every second
 var old_date = "";
+var ticken_timer_obj = null;
 function ticken()
 {
 	"use strict";
+	try
+	{
+		clearInterval(ticken_timer_obj);
+	}
+	catch (error)
+	{
+	}
+	
     if (clock != "0") //Showthe clock
     {
         tmp_date_counter = tmp_date_counter + 1;
@@ -1179,67 +1198,56 @@ function ticken()
             zeit =  ":"+minuten + ":" + sekunden;
         }
 
-		if(tmp_date_counter==1)
-		{
-		
-	        var datum_f = "";
-	        if (datum == "0")
-	        {
-	            datum_f = "";
-	        }
 	
-		
-	        if (datum == "1"){ datum_f = dayjs().locale('de').format('DD.MM.YYYY');}
-			if (datum == "2"){ datum_f = dayjs().locale('de').format('DD.MM.YY');}
-			if (datum == "3"){ datum_f = dayjs().locale('de').format('DD.MM');}
-			if (datum == "8"){ datum_f = dayjs().locale('de').format('MM.DD.YYYY');}
-			if (datum == "9"){ datum_f = dayjs().locale('de').format('MM.DD.YY');}
-			if (datum == "10"){ datum_f = dayjs().locale('de').format('MM.DD');}
+	    var datum_f = "";
+	    if (datum == "0")
+	    {
+			datum_f = "";
+	    }
+	
+	    if (datum == "1"){ datum_f = dayjs().locale('de').format('DD.MM.YYYY');}
+		if (datum == "2"){ datum_f = dayjs().locale('de').format('DD.MM.YY');}
+		if (datum == "3"){ datum_f = dayjs().locale('de').format('DD.MM');}
+		if (datum == "8"){ datum_f = dayjs().locale('de').format('MM.DD.YYYY');}
+		if (datum == "9"){ datum_f = dayjs().locale('de').format('MM.DD.YY');}
+		if (datum == "10"){ datum_f = dayjs().locale('de').format('MM.DD');}
 			
 
-	        if(lang == "eng")
-			{				
-				if (datum == "4"){datum_f = dayjs().locale('en').format('D. MMMM'); }
-				if (datum == "5"){datum_f = dayjs().locale('en').format('dddd, D. MMMM'); }
-				if (datum == "6"){datum_f = dayjs().locale('en').format('dd, DD.MM.YY'); }
-				if (datum == "7"){datum_f = dayjs().locale('en').format('dd, DD.MM'); }
-				if (datum == "11"){datum_f = dayjs().locale('en').format('dd, MM.DD'); }
-				if (datum == "12"){datum_f = dayjs().locale('en').format('dd, MM.DD.YY'); }
-			}
-			else
-			{
-				if (datum == "4"){datum_f = dayjs().locale('de').format('D. MMMM'); }
-				if (datum == "5"){datum_f = dayjs().locale('de').format('dddd, D. MMMM'); }
-				if (datum == "6"){datum_f = dayjs().locale('de').format('dd, DD.MM.YY'); }
-				if (datum == "7"){datum_f = dayjs().locale('de').format('dd, DD.MM'); }
-				if (datum == "11"){datum_f = dayjs().locale('de').format('dd, MM.DD'); }
-				if (datum == "12"){datum_f = dayjs().locale('de').format('dd, MM.DD.YY'); }
-			}
-	
-	
-			if(datum_f ==""){ tmp_date_counter=0;}
-				
-			
-			try
-			{
-				hdt.textContent = datum_f;
-			}
-			catch (e){}
-			
-			if(datum_f != old_date && old_date != "" )
-			{
-				resize();
-			}
-			
-			old_date = datum_f;
-			
+	    if(lang == "eng")
+		{				
+			if (datum == "4"){datum_f = dayjs().locale('en').format('D. MMMM'); }
+			if (datum == "5"){datum_f = dayjs().locale('en').format('dddd, D. MMMM'); }
+			if (datum == "6"){datum_f = dayjs().locale('en').format('dd, DD.MM.YY'); }
+			if (datum == "7"){datum_f = dayjs().locale('en').format('dd, DD.MM'); }
+			if (datum == "11"){datum_f = dayjs().locale('en').format('dd, MM.DD'); }
+			if (datum == "12"){datum_f = dayjs().locale('en').format('dd, MM.DD.YY'); }
 		}
-		
-		if(tmp_date_counter>3) 
+		else
 		{
-			tmp_date_counter = 0;
+			if (datum == "4"){datum_f = dayjs().locale('de').format('D. MMMM'); }
+			if (datum == "5"){datum_f = dayjs().locale('de').format('dddd, D. MMMM'); }
+			if (datum == "6"){datum_f = dayjs().locale('de').format('dd, DD.MM.YY'); }
+			if (datum == "7"){datum_f = dayjs().locale('de').format('dd, DD.MM'); }
+			if (datum == "11"){datum_f = dayjs().locale('de').format('dd, MM.DD'); }
+			if (datum == "12"){datum_f = dayjs().locale('de').format('dd, MM.DD.YY'); }
 		}
 	
+	
+		if(datum_f ==""){ tmp_date_counter=0;}
+				
+		try
+		{
+			hdt.textContent = datum_f;
+		}
+		catch (e){}
+			
+		if(datum_f != old_date && old_date != "" )
+		{
+			resize();
+		}
+			
+		old_date = datum_f;
+			
 		try
 		{
 			hct.textContent = zeit;
@@ -1266,8 +1274,21 @@ function ticken()
         
     }
 
-    window.setTimeout(ticken, 1000); //Wait one second for the next calls
+	if(show_seconds == 0)
+	{
+		var current_date = new Date();
+		var future_date = new Date(current_date.getFullYear(),current_date.getMonth(),current_date.getDate(),current_date.getHours(),current_date.getMinutes() + 1 , 0, 0);
+		var time_diff = (future_date - current_date);
+		var time_diff = time_diff + 10;//Add a small extra buffer
+		ticken_timer_obj = window.setTimeout(ticken, time_diff); //Wait one second for the next calls
+	}
+	else
+	{
+		ticken_timer_obj = window.setTimeout(ticken, 1000); //Wait one second for the next calls
+	}
 }
+
+
 
 
 
@@ -1302,6 +1323,7 @@ function check_in_range(in_val,min_range,max_range)
 function applay_settings(in_string) 
 {
 	"use strict";
+
 	still_in_settings = 1; //To prevent erros when an other event occurs
 	
 	try
@@ -1621,9 +1643,9 @@ function applay_settings(in_string)
 	}
 	
 	applay_lang();
-
 	applay_cats(cat_array);
 	
+
 	//Update the Cat Display Table
 	var table_id = document.getElementById("cat_custom_table");
 	for(var i = table_id.rows.length - 1; i >= 0; i--){table_id.deleteRow(i);}
@@ -1771,7 +1793,6 @@ function applay_settings(in_string)
         }
         
         
-		
         if (array_s[2] == "1"){document.getElementById("datum_1").checked = true;}
         if (array_s[2] == "2"){document.getElementById("datum_2").checked = true;}
         if (array_s[2] == "3"){document.getElementById("datum_3").checked = true;}
@@ -1938,7 +1959,6 @@ function applay_settings(in_string)
 		}
 	}
 	
-	
 	document.getElementById('padding_input_field').value = nav_bar_padding;
 	document.getElementById("pad_top_input").textContent = text_pad_top_input+": "+status_bar_padding;
 	document.getElementById("padding_bottom_input").textContent = text_pad_bottom_input+": "+nav_bar_padding;
@@ -1990,6 +2010,7 @@ function applay_settings(in_string)
 		}
 	}	
 	
+	
 	//Date App
 	if( date_app == "" || date_app == undefined)
 	{
@@ -2040,6 +2061,7 @@ function applay_settings(in_string)
     appdrawer_horizontal = array_s[1];
 
 	
+	
 	if(global_icon_pack == "default")
 	{
 		document.getElementById("current_global_iconpack").textContent = default_string;
@@ -2072,6 +2094,8 @@ function applay_settings(in_string)
     }
     catch(error) {}
     
+
+    
     document.getElementById("settings_homescreen_zeilen").textContent =  text_homescreen_zeilen + ": "+array_s[0]; 
     document.getElementById("settings_homescreen_spalten").textContent =  text_homescreen_spalten + ": "+array_s[1]; 
     
@@ -2080,9 +2104,9 @@ function applay_settings(in_string)
         
     zeilen_homescreen = array_s[0];
     spalten_homescreen = array_s[1];	 
-		
-	update_next_alarm();
 	
+	
+	update_next_alarm();
 	resize();
 			
 	//At least the settings should be stored on the android devices
@@ -2238,7 +2262,7 @@ function start_import()
 			
 			//First applay the settings...
 			applay_settings(new_settings);
-			apply_clock_settings();
+			update_homescreen_clock_position();
 
 			all_apps = string_to_apps(new_apps);
 			update_app_divs();
@@ -2557,6 +2581,13 @@ function catdis_mode_change(in_c)
 	if(still_in_settings == 1){return;}	
     var new_cat_dis = document.querySelector('input[name="catmode"]:checked').value;
 	default_cats = new_cat_dis;
+	
+
+	if( default_cats == 0)
+	{
+		toast_notification(warn_sort_cat_string,"short","bottom");
+	}
+	
     applay_settings(get_current_settings());
 }
 
@@ -3102,6 +3133,7 @@ function adjust_delfromhomescreen_div()
 function update_homescreen() 
 {
 	"use strict";	
+	
     var table_id = document.getElementById("table_homescreen");
 	for(var i = table_id.rows.length - 1; i >= 0; i--)
 	{
@@ -3273,7 +3305,7 @@ function update_homescreen()
 
     }
 
-
+	
 	document.getElementById("del_homescreen").style.display = "none"; 
 	
 	if (startpage == "n") 
@@ -3302,6 +3334,10 @@ function update_homescreen()
 	set_homescreen_black_white();
 
 	
+
+	
+	
+	
 	if(nav_bar_state=="0")
 	{
 		set_homescreen_padding(0,0);
@@ -3322,9 +3358,12 @@ function update_homescreen()
 		{
 			set_homescreen_padding(status_bar_padding,nav_bar_padding);
 		}
+	
 		set_trans();
+	
 	}
 
+	
 	
 }
 
@@ -3620,7 +3659,7 @@ function end_app_settings()
 function open_categorie(in_obj)//,type)
 {
 	"use strict";
-	
+
 	var dropdm_popup_obj = document.getElementById("dropdm_popup");
 	
     if(  window.getComputedStyle(dropdm_popup_obj).display == "block" ) //Hide Dropdown menu
@@ -3648,14 +3687,16 @@ function open_categorie(in_obj)//,type)
 	
     end_search();
     
+    
 	var table_id = document.getElementById("cat");
-	
+
 	var tds = table_id.getElementsByTagName("tr");
 	for (var i=0; i<tds.length; i++)
 	{
 		if(i==current_kat-1)
 		{
-			tds[i].classList.remove("active_right");		
+			tds[i].classList.remove("active_right");	
+			break;
 		}
 	}
 	
@@ -3670,18 +3711,24 @@ function open_categorie(in_obj)//,type)
    	var elem_r = document.getElementById("right");
    	var cat = 1;
 
-	elem_r.style.top = cat_h + in_obj.offsetTop+"px";
-	elem_r.style.height = in_obj.offsetHeight+"px";
+	//elem_r.style.top = cat_h + in_obj.offsetTop+"px";
+	//elem_r.style.height = in_obj.offsetHeight+"px";
 	cat = in_obj.id;
-		
+			
+	if(new_indicator_width == -1) //Reduce repaints
+	{		
+		new_indicator_width = (document.getElementById("1_png").offsetWidth/100)*15;
+    }
+    //elem_r.style.width = new_indicator_width+"px";
+    
+    elem_r.style.cssText +=';'+"top:"+ (cat_h + in_obj.offsetTop)+"px;height:"+in_obj.offsetHeight+"px;width:"+new_indicator_width+"px";
+    
+   
 	if(cat < 0 || cat == "" || cat == null)
 	{
 		cat = 1;
 	}
-	
-    var new_indicator_width = (document.getElementById("1_png").offsetWidth/100)*15;
-    elem_r.style.width = new_indicator_width+"px";
-    
+	    
     if(cat == 1)
     {
 		if(cat_1_new.length > 0 && cat_1_new.length < 4 )
@@ -3788,10 +3835,21 @@ function open_categorie(in_obj)//,type)
 	}
 	catch( error ){}
 	
-	document.getElementById("header").style.display = 'block';
-    document.getElementById("header_blank").style.display = 'block';
-	document.getElementById("table_current_apps").style.display = 'none';
-
+	if(document.getElementById("header").style.display != "block")
+	{
+		document.getElementById("header").style.display = 'block';
+	}
+	
+	if(document.getElementById("header_blank").style.display != "block")
+	{
+		document.getElementById("header_blank").style.display = 'block';
+	}
+	
+	if(document.getElementById("table_current_apps").style.display != 'none')
+	{
+		document.getElementById("table_current_apps").style.display = 'none';
+	}
+	
 	var app_setting_was_visible = 0;
 
     end_app_settings();
@@ -3815,13 +3873,21 @@ function open_categorie(in_obj)//,type)
 			{
 				try
 				{
-					document.getElementById("table_apps_cat"+i).style.left = "-100vw";
+					if(document.getElementById("table_apps_cat"+i).style.left != "-100vw")
+					{
+						
+						try
+						{
+							document.getElementById("table_apps_cat"+i).style.left = "-100vw";
+						}
+						catch (e) {}
+					}
 				}
 				catch (e) {}
 			}
 		}
 	}
-	else
+	else //Just at startup
 	{
 		for(var i=2;i<cat_anz;i++)
 		{
@@ -3842,27 +3908,39 @@ function open_categorie(in_obj)//,type)
 function check_b_in_all(in_b)
 {
 	"use strict";	
-    in_b = in_b.toLowerCase();
     var back = false;
     for(var i = 0; i<all_apps.length; i++)
     {
         var cc = all_apps[i].name;
 		
-		
         if(all_apps[i].start_name != "nope")
         {
-			cc = cc.toLowerCase();
-		  
-			cc = cc.replace("ä","a");
-			cc = cc.replace("ü","u");
-			cc = cc.replace("ö","o");
-			cc = cc.replace("ẞ","s");
-				
+
 			cc = cc.charAt(0);
-			if (cc.toLowerCase() == in_b)
+			
+			if (cc == in_b)
 			{
 				back = true;
 				break;
+			}
+			else
+			{
+				cc = cc.toLowerCase();
+				
+				//German Umlaute
+				cc = cc.replace("ä","a");
+				cc = cc.replace("ü","u");
+				cc = cc.replace("ö","o");
+				cc = cc.replace("ẞ","s");
+				cc = cc.replace("$","s");
+				cc = cc.replace("ẞ","s");	
+
+				cc = cc.charAt(0);
+				if (cc == in_b)
+				{
+					back = true;
+					break;
+				}
 			}
         
 		}
@@ -3882,22 +3960,29 @@ function get_all_start()
     for (var i = 0; i < 36; i = i + 1) 
     {
 
+		var ok = false;
         if (i < 10)
         {
-            var current_b = '' + i;
-
+            var current_b = i;
+			ok = check_b_in_all(current_b);
+			if (ok == true)
+			{
+				back.push(current_b);
+			}
         }
         else 
         {
-            var current_b = '' + String.fromCharCode(55 + i);
+            var current_b_big =  String.fromCharCode(55 + i);
+            var current_b_small = String.fromCharCode(87 + i);
+            ok = check_b_in_all(current_b_small);
+            if (ok == true)
+			{
+				back.push(current_b_big);
+			}
         }
-
-        var ok = check_b_in_all(current_b);
-        if (ok == true)
-        {
-            back.push(current_b);
-        }
+        
     }
+   
     return back;
 }
 
@@ -4063,6 +4148,7 @@ function open_app_settings(in_element)
 		inner_html = "<div>" +  in_element.parentElement.innerHTML + "</div>";
 	}
 
+	//Get element propertys
 	var regex1 = /src="(.*?)"/;
 	var regex2 = /start_name="(.*?)"/;
 	var regex3 = /\">(.*?)<\/div>/;		  
@@ -4106,6 +4192,7 @@ function open_app_settings(in_element)
 	
 	if(swipe_mode=="l")
 	{
+		//Support for swiperjs
 		//mySwiper.addSlide(0,document.getElementById("app_drawer"));
 		//mySwiper.addSlide(1,document.getElementById("homescreen"));
 		
@@ -4114,7 +4201,6 @@ function open_app_settings(in_element)
 	
 	mySwiper.destroy();
 	
-
     document.getElementById("s_app_name").textContent = disp_name;
     var s_app_start_name_obj = document.getElementById("s_app_start_name");
     s_app_start_name_obj.textContent = start_name;
@@ -4231,10 +4317,8 @@ function apps_by_cat(in_array, in_cat)
 function set_current_apps(in_array,in_table)
 {
 	"use strict";	
-    in_table = in_table.replace("#","");
-    
-   
-    
+	//in_table = in_table.replace("#","");
+ 
     //Clear Table
     var table_id = document.getElementById(in_table);
    
@@ -4256,12 +4340,10 @@ function set_current_apps(in_array,in_table)
 		table_id.deleteRow(i);
 	}
 
-
 	var temp_array_rows = [];
 	var cc = 0;
 	for(var i = 0; i<in_array.length; i++)
 	{
-
         var name = in_array[i].name;
         var icon = in_array[i].icon;
         var cat =  in_array[i].cat;
@@ -4304,7 +4386,6 @@ function set_current_apps(in_array,in_table)
     }
     
     
-    
     if(temp_array_rows.length > 0)
     {
 		var full_string = "";
@@ -4327,7 +4408,6 @@ function set_current_apps(in_array,in_table)
 		var new_row = table_id.insertRow(-1);
 		new_row.innerHTML='<tr class="child">'+full_string+'</tr>'; 
 	}
-	
 	
 	
 	var all_tds = table_id.getElementsByTagName("td");
@@ -4392,7 +4472,6 @@ function menu_icon_click()
 
 		 }	
 		 
-
 		 if(show_hidden == 1)
 		 {
 			 document.getElementById("showhiddenappslielement").style.display = "none";
@@ -4478,7 +4557,12 @@ function show_search_letter(in_element)
 {
 	"use strict";	
 	searching = 1;	
-	document.getElementById("scrollable").style.display = "block";	
+	
+	if(document.getElementById("scrollable").style.display  != "block")
+	{
+		document.getElementById("scrollable").style.display = "block";	
+	}
+	
 	document.getElementById("table_apps_cat"+current_kat).style.left = "-100vw";
 
 	var in_letter = in_element.textContent;
@@ -4508,10 +4592,11 @@ function show_search_letter(in_element)
 			}
         }
     }
-		
-   set_current_apps(result_apps_array,"table_current_apps");
-   set_app_drawer_black_white();
-
+			
+	set_current_apps(result_apps_array,"table_current_apps");
+   
+	set_app_drawer_black_white();
+	
 	document.getElementById("table_current_apps").style.display = "block";
 	document.getElementById("alpha").style.display = "none";
 	document.getElementById("header").style.display = "block";
@@ -4648,7 +4733,6 @@ function update_app_position()
 			regex2 = /start_name="(.*?)"/;
 			regex3 = /\">(.*?)<\/div>/;
 		}
-				
 							
 		var r=0;
 		var row=null;
@@ -4712,7 +4796,18 @@ function update_app_position()
 function show_settings() 
 {
 	"use strict";	
+	
 	end_appmove_appdrawer();
+	
+	//First show the new Frame..
+	
+	document.getElementById("settings_ba").style.display = 'block';
+	document.getElementById("allsettings").style.display = 'flex';
+		
+	mySwiper.destroy();
+	document.getElementById("swiper_container").style.display = 'none';
+		
+		
 	
     if(  window.getComputedStyle(document.getElementById("dropdm_popup")).display == "block" ) //Hide Dropdown menu
     {
@@ -4755,16 +4850,14 @@ function show_settings()
 		
 	if(swipe_mode=="l")
 	{
+		//Support for swiperjs
 		//mySwiper.addSlide(0,document.getElementById("app_drawer"));
 		//mySwiper.addSlide(1,document.getElementById("homescreen"));
 		swapNodes(document.getElementById("app_drawer"),document.getElementById("homescreen"));
 	}	
-	mySwiper.destroy();
-		
-	document.getElementById("settings_ba").style.display = 'block';
-	document.getElementById("allsettings").style.display = 'flex';	
-	document.getElementById("swiper_container").style.display = 'none';
-		
+
+	
+			
     if(force_update_applist==1)
 	{
 		force_update_applist = 0;
@@ -4781,12 +4874,12 @@ function show_settings()
 function update_app_divs()
 {
 	"use strict";
+
 	for(var i=1;i<cat_anz;i++)
 	{
 		var cat_content = apps_by_cat(all_apps,i);
 		set_current_apps(cat_content,"table_apps_cat"+i);
 	}
-	
 	
 	if(searching==0)
 	{
@@ -4794,13 +4887,11 @@ function update_app_divs()
 		document.getElementById("search_input").style.display = 'none';
 	}
 	
-	new_font_size_adjust();
-	
+	new_font_size_adjust();	
 	update_homescreen();
 	update_search_div();
-
 	set_app_drawer_black_white();
-
+	
 	if(should_wait_loadscreen == 0)
 	{
 		if( window.getComputedStyle(document.getElementById("loading_div")).display == "flex" )
@@ -4810,7 +4901,7 @@ function update_app_divs()
 			{				
 				document.getElementById("loading_div").style.display = 'none';
 				document.getElementById("loading_div").classList.remove('fade');
-			},800);
+			},500);
 		}
 	}
 	else
@@ -4830,93 +4921,108 @@ function update_app_divs()
 			return;
 		}
 	}
+	
 }
+
+
+
 
 //Update the Search div
 function update_search_div()
 {
 	"use strict";	
+
 	var table_id = document.getElementById("searchtable");
 	var alpha_id = document.getElementById("alpha");
 	
 	var should_show =  window.getComputedStyle(alpha_id).display;
-
+	
 	alpha_id.style.display = "block";
 
 	table_id.style.display = "block";
-    table_id.innerHTML = "";
     
     var array_l = get_all_start();
-    var cc = 0;
+
     var zeilen = 0;
-
-    var row1 = "";
-    var row2 = "";
-    var row3 = "";
-    var row4 = "";
-
-    for(var i = 0; i<array_l.length; i++)
+   
+    if( JSON.stringify(array_l) == JSON.stringify(update_search_div_speed_up)) //Array compare
     {
-        var current = array_l[i];
+		zeilen = update_search_div_speed_up_zeilen; //Cut redraw costs
+	}
+	else
+	{
+		table_id.innerHTML = "";
+		
+		var cc = 0;
+		var row1 = "";
+		var row2 = "";
+		var row3 = "";
+		var row4 = "";
 
-        if (cc == 0) 
-        {
-            row1 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div> </div>';
-        }
+		for(var i = 0; i<array_l.length; i++)
+		{
+			var current = array_l[i];
 
-        if (cc == 1) 
-        {
-            row2 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div></div>';
-        }
+			if (cc == 0) 
+			{
+				row1 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div> </div>';
+			}
 
-        if (cc == 2)
-        {
-            row3 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div></div>';
-        }
+			if (cc == 1) 
+			{
+				row2 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div></div>';
+			}
 
-        if (cc == 3)
-        {
-            row4 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div></div>';
-            
-    		var x = table_id.insertRow(-1);
-			x.innerHTML='<tr class="child"><td>' + row1 + '</td><td>' + row2 + '</td><td>' + row3 + '</td><td>' + row4 + '</td></tr>';
+			if (cc == 2)
+			{
+				row3 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div></div>';
+			}
 
-            cc = -1;
-            zeilen = zeilen + 1;
-        }
+			if (cc == 3)
+			{
+				row4 = '<div class="ss_e" ontouchstart="show_search_letter(this)" > <div class="sletter"> ' + current + '</div></div>';
+				var x = table_id.insertRow(-1);
+				x.innerHTML='<tr class="child"><td>' + row1 + '</td><td>' + row2 + '</td><td>' + row3 + '</td><td>' + row4 + '</td></tr>';
+				cc = -1;
+				zeilen = zeilen + 1;
+			}
 
-        cc = cc + 1;
-    }
+			cc = cc + 1;
+		}
 
-    
-    if (cc == 1)
-    {
-        var x = table_id.insertRow(-1);
-		x.innerHTML='<tr class="child"><td>' + row1 + '</td></tr>';
-		zeilen = zeilen + 1;
-    }
-    
-    if (cc == 2) 
-    {
-        var x = table_id.insertRow(-1);
-		x.innerHTML='<tr class="child"><td>' + row1 + '</td><td>' + row2 + '</td></tr>';
-		zeilen = zeilen + 1;
-    }
+		if (cc == 1)
+		{
+			var x = table_id.insertRow(-1);
+			x.innerHTML='<tr class="child"><td>' + row1 + '</td></tr>';
+			zeilen = zeilen + 1;
+		}
+		
+		if (cc == 2) 
+		{
+			var x = table_id.insertRow(-1);
+			x.innerHTML='<tr class="child"><td>' + row1 + '</td><td>' + row2 + '</td></tr>';
+			zeilen = zeilen + 1;
+		}
 
-    if (cc == 3) 
-    {
-        var x = table_id.insertRow(-1);
-		x.innerHTML='<tr class="child"><td>' + row1 + '</td><td>' + row2 + '</td><td>' + row3 + '</td></tr>';
-		zeilen = zeilen + 1;
-    }
+		if (cc == 3) 
+		{
+			var x = table_id.insertRow(-1);
+			x.innerHTML='<tr class="child"><td>' + row1 + '</td><td>' + row2 + '</td><td>' + row3 + '</td></tr>';
+			zeilen = zeilen + 1;
+		}
+		
+		update_search_div_speed_up_zeilen = zeilen;
+		update_search_div_speed_up = array_l;
+	}
+
 
 	var horizontal = vwTOpx(80) / 4;
 	var padding = parseInt(status_bar_padding) +  parseInt(nav_bar_padding) ;
 	var ges_h = vhTOpx(85) - padding; //90 -10
 	var vertical = ges_h / zeilen;  //vhTOpx(90) / zeilen;
 
-
-
+	
+	
 	if(horizontal > vertical)
 	{
 		var margin = (vwTOpx(80) / 4  ) - vertical ;
@@ -4958,20 +5064,21 @@ function update_search_div()
 		document.getElementById("sif").style.left = "2vw"; 
 	}
 	
+	
+	var max = 0;
 	try
 	{
-		var max = document.getElementsByClassName("ss_e")[0].offsetHeight;
+		max = document.getElementsByClassName("ss_e")[0].offsetHeight;
 	}
 	catch(error)
 	{
 		return;
 	}
 	
+	
 	document.getElementsByClassName("sletter")[0].style.fontSize = "0px";
 	
 	var border_size = (max / 100)*4;
-	
-	
 	
 	var t_ss_e = document.getElementsByClassName('ss_e');
 	for (var i = 0; i < t_ss_e.length; i++)
@@ -4981,10 +5088,7 @@ function update_search_div()
 		t_ss_e[i].style.borderWidth = border_size+"px";
 	}	
 			
-	
 	max = document.getElementsByClassName("ss_e")[0].offsetHeight;
-	
-	
 	
 	var c = 0;
 	var note_break = 0;
@@ -4995,9 +5099,11 @@ function update_search_div()
 		c = c + 100;
 		document.getElementsByClassName("sletter")[0].style.fontSize = c+"px";
 		var gesh = document.getElementsByClassName("sletter")[0].offsetHeight;
-		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesh){break;}
+		
+		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesw){break;}
+
 		if(note_break > 2000){break;}
 	}
 	
@@ -5009,8 +5115,8 @@ function update_search_div()
 		note_break = note_break + 1;
 		document.getElementsByClassName("sletter")[0].style.fontSize = c+"px";
 		var gesh = document.getElementsByClassName("sletter")[0].offsetHeight;
-		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesh){break;}
+		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesw){break;}
 		if(note_break > 2000){break;}
 	}
@@ -5023,8 +5129,8 @@ function update_search_div()
 		note_break = note_break + 1;
 		document.getElementsByClassName("sletter")[0].style.fontSize = c+"px";
 		var gesh = document.getElementsByClassName("sletter")[0].offsetHeight;
-		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesh){break;}
+		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesw){break;}
 		if(note_break > 2000){break;}
 	}
@@ -5042,8 +5148,8 @@ function update_search_div()
 		note_break = note_break + 1;
 		document.getElementsByClassName("sletter")[0].style.fontSize = c+"px";
 		var gesh = document.getElementsByClassName("sletter")[0].offsetHeight;
-		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesh){break;}
+		var gesw = document.getElementsByClassName("sletter")[0].offsetWidth;
 		if( max < gesw){break;}
 		if(note_break > 2000){break;}
 	}
@@ -5054,7 +5160,6 @@ function update_search_div()
 	{
 		x[i].style.fontSize = c+"px";
 	}
-	
 	
 	if (should_show != "block" || searching == 0) 
 	{
@@ -5442,7 +5547,6 @@ function force_update_wallpaper()
 function new_font_size_adjust()
 {
 	"use strict";	
-	
     if (color_text != "") 
     {
         document.getElementById("header").style.color = color_text;
@@ -5464,16 +5568,19 @@ function new_font_size_adjust()
 	}
 	
 	var cat_name_el = document.getElementById('Cat_name_text');
+	
 	cat_name_el.style.fontSize = (font_size_header*0.090)+"vmax"; 
 	
-	var fontSize = window.getComputedStyle(cat_name_el, null).getPropertyValue('font-size');
+	if( fontSize_getComputedStyle_speedup == -1)
+	{
+		fontSize_getComputedStyle_speedup = window.getComputedStyle(cat_name_el, null).getPropertyValue('font-size');
+	}
 
-	if( parseFloat(fontSize) > vhTOpx(9))
+	if( parseFloat(fontSize_getComputedStyle_speedup) > vhTOpx(9) )
 	{
 		cat_name_el.style.fontSize = (font_size_header*0.090)+"vh";
 	}
-	//document.getElementById('Cat_name_text').style.fontSize = (font_size_header*0.090)+"vh" ;
-	
+		
 }
 
 
@@ -5496,7 +5603,11 @@ function update_app_list()
 function resize()
 {
 	"use strict";
-
+	
+	
+	new_indicator_width = -1;
+	fontSize_getComputedStyle_speedup = -1;
+	
 	if(current_view == "homescreen" && app_move_mode == 1) 
 	{ 
 		end_appmove_homescreen();
@@ -5558,7 +5669,6 @@ function resize()
 		document.getElementById("select_iconpack_dialog").style.left = "35vw";
 		document.getElementById("all_icons_dialog").style.left = "35vw";
 		
-		
 		if(swipe_mode=="r")
 		{
 			document.getElementById("scrollable").style.left = "20vw";//20vw
@@ -5597,8 +5707,6 @@ function resize()
 		document.body.style.backgroundSize = "cover"; 
 		document.body.style.backgroundPosition = "0px 0px";
 	}
-	
-	
 	
 	if(statusbar_state=="1") //Show Statusbar
 	{	
@@ -5647,11 +5755,9 @@ function resize()
 		//unset_trans(); //may lead to a endless recall of redraw
 	}
 		
-	
 	update_app_divs();
-
-	apply_clock_settings();
-
+	update_homescreen_clock_position();
+	
 	if(mySwiper != null && mySwiper != 0)
 	{
 		try
@@ -5662,6 +5768,9 @@ function resize()
 		{
 		}
 	}
+	
+	
+
 }
 
 //Add the + icon to a categorie
@@ -5907,6 +6016,8 @@ function set_homescreen_padding(padding_top,padding_button)
 	"use strict";	
 	
 	
+	
+		
 	padding_top = pxTOvh(padding_top);
 	padding_button =  pxTOvh(padding_button);
 
@@ -5926,6 +6037,7 @@ function set_homescreen_padding(padding_top,padding_button)
 
 	var homescreen_out_clock_obj = document.getElementById("homescreen_out_clock");
 	
+
 	homescreen_out_clock_obj.style.top = padding_top+"vh";
 	homescreen_out_clock_obj.style.height = home_clock_height+"vh";
 		
@@ -5934,11 +6046,14 @@ function set_homescreen_padding(padding_top,padding_button)
 		adjust_delfromhomescreen_div();
 	}
 	
-	
-	var table_h = home_screen_div_obj.offsetHeight - vhTOpx(2); 
-	var table_w = home_screen_div_obj.offsetWidth - vwTOpx(10) - vhTOpx(2); 
+	var vh_two = vhTOpx(2);
+	var table_h = home_screen_div_obj.offsetHeight - vh_two; 
+	var table_w = home_screen_div_obj.offsetWidth - vwTOpx(10) - vh_two; 
+
 	var table_id = document.getElementById("table_homescreen");
 	var tds = table_id.getElementsByTagName("td");
+	
+	
 	
 	for (var i=0; i<tds.length; i++)
 	{
@@ -6007,6 +6122,9 @@ function set_homescreen_padding(padding_top,padding_button)
 		}
 	}
 	
+
+	
+	
 	//Homescreen badges for notificatiosn
 	try
 	{
@@ -6033,7 +6151,7 @@ function set_homescreen_padding(padding_top,padding_button)
 	
 	}
 	catch( error ){}
-	
+
 }		
 	
 //A notification for homescreen app (add the + icon)
@@ -7590,6 +7708,7 @@ function compare_apps_with_installed_apps()
 			
 			//update_app_divs();
 			set_app_list(all_apps);
+			
 			applay_settings(get_current_settings());
 
 			if( cat_1_new.length > 0 && cat_1_new.length < 4){ set_new_cat(1); }
@@ -7642,7 +7761,7 @@ function load_settings()
 			applay_settings(new_settings);
 
 			init_swiper(0);	
-			setTimeout(function(){ apply_clock_settings();	}, 1500);//15000); //Wait for the first interval...
+			setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//15000); //Wait for the first interval...
 
 
 			setTimeout(function()
@@ -7658,7 +7777,7 @@ function load_settings()
 			applay_settings(defaut_settings_string);
 			
 			init_swiper(0);	
-			setTimeout(function(){ apply_clock_settings();	}, 1500);//Wait for the first interval...
+			setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//Wait for the first interval...
 			
 			setTimeout(function()
 			{
@@ -7675,7 +7794,7 @@ function load_settings()
 		applay_settings(defaut_settings_string);	
 		
 		init_swiper(0);	
-		setTimeout(function(){ apply_clock_settings();	}, 1500);//Wait for the first interval...
+		setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//Wait for the first interval...
 
 		setTimeout(function()
 		{
@@ -8074,6 +8193,8 @@ function update_wallpaper()
 function onResume()
 {
 	"use strict";	
+	//ReInit ticken
+	ticken();
 	
 	setTimeout(function() //Wait some time before update the wallpaper
 	{ 		 

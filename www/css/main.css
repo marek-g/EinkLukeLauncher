@@ -624,13 +624,7 @@ body
     background-color: green;
 }
 
-/*
-.select_app_icon
-{
-  width: 10%;
-  height: auto;
-}
-*/
+
 .select_app_icon
 {
     float:left;
@@ -1136,12 +1130,13 @@ body
 .settings_text_header_class
 {
 	font-weight:bold;
-	font-size: 5vh;
+	font-size: 4vmax;
 	color:white;
 	white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 
 
 #dropdm_popup
@@ -1240,7 +1235,7 @@ body
 	display: flex;
 	align-items: center; 
 	color:white;
-	font-size:3vh;
+	font-size:3vmax;
 	text-decoration:none;
 	font-weight: bold;
 	width:70vw;
@@ -1352,7 +1347,7 @@ body
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size:2vh;
+	font-size:1.5vmax;
 }
 
 .settings_text_normal
@@ -1360,7 +1355,7 @@ body
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size:2.5vh;
+	font-size:2vmax;
 }
 
 
@@ -1370,7 +1365,7 @@ body
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size:3vh;
+	font-size:2.5vmax;
 }
 
 #padding_top_input_field
@@ -1668,8 +1663,10 @@ body
 
 .iconpackicon
 {    
-    width:15vw;
+    max-width:15vw;
+    max-height:8vh;
     height:auto;
+    width:auto;
 }
 
 #table_iconpackicons_list
@@ -1832,14 +1829,20 @@ body
 	color:white;
 }
 
+#table_iconpackicons_cat_list
+{
+	margin: auto;
+}
 
 
 .select_app_icon_cat
 {
     float:left;
     display:inline-block;
-    width: 10vw;
+    max-width: 10vw;
+    max-height:10vh;
     height:auto;
+    width:auto;
     margin-left: 1vw;
     margin-right: 3vw;
 }

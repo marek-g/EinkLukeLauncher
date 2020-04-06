@@ -198,7 +198,7 @@
 							<h4 id="homescreen_clock_text_b" onclick="start_clock_app();" >13</h4>
 							<h4 id="homescreen_clock_text" onclick="start_clock_app();" > :37</h4>
 							<h2 id="homescreen_datum_text" onclick="start_date_app();" >03.11.1993</h2>
-							<h4 id="homescreen_alarm_text" ></h4>
+							<h4 id="homescreen_alarm_text" >&nbsp;</h4>
 						</div>
 					</div>
 					</div>
@@ -1515,8 +1515,6 @@ function ready_function()
 {				
 	"use strict";
 					
-
-
 	window.plugins.intentShim.getIntent(function(short_cut_info)
 	{
 		//Wait for finished loading
@@ -1545,8 +1543,6 @@ function ready_function()
 				var shortcut_id = short_cut_info_array[3];
 				var user_id = short_cut_info_array[4];
 
-
-			
 
 				//Add the virtualapp					
 				if( icon == "blank") //There must be an Error
@@ -1851,7 +1847,8 @@ document.addEventListener("backbutton", onBackKeyDown, false);
  
 if(debug == 1)
 {
-	alert("Running in Debug Mode!");
+	//alert("Running in Debug Mode!");
+	
 	//Temporär!!!!!!!!!
 	window.onload = function () 
 	{	

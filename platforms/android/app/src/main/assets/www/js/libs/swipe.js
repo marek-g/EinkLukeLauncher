@@ -67,8 +67,13 @@
    * @returns {Number}
    */
 
-  function getTranslate(el, isHorizontal) {
-    var matrix = getComputedStyle(el).transform.replace(/[a-z]|\(|\)|\s/g, '').split(',').map(parseFloat);
+  function getTranslate(el, isHorizontal) 
+  {
+	//Old Version
+    //var matrix = getComputedStyle(el).transform.replace(/[a-z]|\(|\)|\s/g, '').split(',').map(parseFloat);
+    //Speedup
+    var matrix = getComputedStyle(el).transform.split(',').map(parseFloat);
+    
     var arr;
 
     if (matrix.length === 16) {
@@ -200,7 +205,8 @@
       }
     };
 
-    _proto.initListener = function initListener() {
+    _proto.initListener = function initListener() 
+    {
       var _this2 = this;
 
       var $wrapper = this.$wrapper,
@@ -223,38 +229,57 @@
           $wrapper.style.transition = 'none';
           touchStatus.isTouchStart = true;
           touchStatus.touchStartTime = Date.now();
+          /*
           touchStatus.touchTracks.push({
             x: supportTouch ? e.touches[0].pageX : e.pageX,
             y: supportTouch ? e.touches[0].pageY : e.pageY
           });
-          
+          */
           
           config.currentX =  e.touches[0].pageX;
           config.currentY =  e.touches[0].pageY;
           
+          touchStatus.last_x = config.currentX ;
+          touchStatus.last_y = config.currentY ;
           
           if (shouldPreventDefault && !config.passiveListeners) e.preventDefault();
         },
         onTouchMove: function onTouchMove(e) {
+
           var touchStatus = _this2.touchStatus;
-          var touchTracks = touchStatus.touchTracks;
+          //var touchTracks = touchStatus.touchTracks;
           if (!touchStatus.isTouchStart || touchStatus.isScrolling) return;
           if (config.touchMoveStopPropagation) e.stopPropagation();
+         
           var currentPosition = {
             x: supportTouch ? e.touches[0].pageX : e.pageX,
             y: supportTouch ? e.touches[0].pageY : e.pageY
           };
           
+          
           config.currentX =  currentPosition.x;
           config.currentY =  currentPosition.y;
           
-          
-          var diff = {
+          /*
+          var diff_old = {
             x: currentPosition.x - touchTracks[touchTracks.length - 1].x,
             y: currentPosition.y - touchTracks[touchTracks.length - 1].y
           };
-          touchTracks.push(currentPosition);
+		 */
+		 //Faster without array...
+		 var diff = {
+            x: currentPosition.x - _this2.touchStatus.last_x,
+            y: currentPosition.y - _this2.touchStatus.last_y
+          };
+
+	 
+		 _this2.touchStatus.last_x = config.currentX ;
+		 _this2.touchStatus.last_y = config.currentY ;
+		  
+         //touchTracks.push(currentPosition);
+         
           var touchAngle = Math.atan2(Math.abs(diff.y), Math.abs(diff.x)) * 180 / Math.PI;
+       
           var offset = 0;
 
           if (_this2.isHorizontal) {
@@ -276,6 +301,9 @@
           }
 
           _this2.scrollPixel(offset * config.touchRatio);
+
+
+
         },
         onTouchEnd: function onTouchEnd() {
           if (!_this2.touchStatus.isTouchStart) return;
@@ -398,7 +426,12 @@
     };
 
     _proto.scrollPixel = function scrollPixel(px) {
-      var ratio = px.toExponential().split('e')[1];
+		
+	  var t = px.toExponential();
+			
+     // var ratio = t.split('e')[1];//new function speedup
+	  var ratio = t.substring( t.indexOf("e")+1 );
+
       var expand = ratio <= 0 ? Math.pow(10, -(ratio - 1)) : 1;
       var oldTransform = getTranslate(this.$wrapper, this.isHorizontal);
 
@@ -418,7 +451,9 @@
 
     _proto.initTouchStatus = function initTouchStatus() {
       this.touchStatus = {
-        touchTracks: [],
+        //touchTracks: [],
+        last_x : 0,
+        last_y : 0,
         startOffset: 0,
         touchStartTime: 0,
         isTouchStart: false,

@@ -120,6 +120,7 @@ var btn_bottomzero_string = "";
 var msg_success = "";
 var modal_alarm_clock_text = "";
 var next_day_string = "";
+var warn_sort_cat_string = "";
 //All element strings are changed in order to apply the current language
 function applay_lang()
 {
@@ -248,6 +249,7 @@ function applay_lang()
 		 msg_success = "Success!";
 		 modal_alarm_clock_text = "Show alarm";
 		 next_day_string = "Tomorrow";
+		 warn_sort_cat_string = "From now on Apps won't be sorted automatically!";
 		   
 		if(default_cats==1)
 		{
@@ -388,6 +390,7 @@ function applay_lang()
 		 msg_success = "Erfolgreich!";
 		 modal_alarm_clock_text = "Alarm anzeigen";
 		 next_day_string = "Morgen";
+		 warn_sort_cat_string = "Apps werden nun nicht automatisch sortiert!";
 		  
 		if(default_cats==1)
 		{
