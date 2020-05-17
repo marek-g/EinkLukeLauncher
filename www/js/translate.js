@@ -121,6 +121,9 @@ var msg_success = "";
 var modal_alarm_clock_text = "";
 var next_day_string = "";
 var warn_sort_cat_string = "";
+var font_string = "";
+var font_select_string = "";
+
 //All element strings are changed in order to apply the current language
 function applay_lang()
 {
@@ -178,7 +181,7 @@ function applay_lang()
 		 modal_header_clock_pos_text = "Clock position";
 		 btn_applay_clock_pos_text = "Applay";
 		 modal_header_clock_settings_text = "Clock setting";
-		 modal_clock_show_text = "Show time";
+		 modal_clock_show_text = "Display";
 		 modal_sec_show_text = "Show seconds";
 		 modal_hour_show_text = "Show bold hours";
 		 modal_date_show_text = "Show date";
@@ -250,6 +253,8 @@ function applay_lang()
 		 modal_alarm_clock_text = "Show alarm";
 		 next_day_string = "Tomorrow";
 		 warn_sort_cat_string = "From now on Apps won't be sorted automatically!";
+		 font_string = "Typeface";
+		 font_select_string = "Select typeface:";
 		   
 		if(default_cats==1)
 		{
@@ -321,7 +326,7 @@ function applay_lang()
 		 modal_header_clock_pos_text = "Position der Uhr";
 		 btn_applay_clock_pos_text = "Anwenden";
 		 modal_header_clock_settings_text = "Uhr Einstellungen";
-		 modal_clock_show_text = "Zeit anzeigen";
+		 modal_clock_show_text = "Darstellen";
 		 modal_sec_show_text = "Sekunden anzeigen";
 		 modal_hour_show_text = "Stunden fett anzeigen";
 		 modal_date_show_text = "Datum anzeigen";
@@ -391,6 +396,8 @@ function applay_lang()
 		 modal_alarm_clock_text = "Alarm anzeigen";
 		 next_day_string = "Morgen";
 		 warn_sort_cat_string = "Apps werden nun nicht automatisch sortiert!";
+		 font_string = "Schriftart";
+		 font_select_string = "Schriftart wählen:";
 		  
 		if(default_cats==1)
 		{
@@ -562,6 +569,15 @@ function applay_lang()
 	document.getElementById("btn_import_abort").textContent = abort_btn_string;
 	
 	document.getElementById("padding_bottom_input_set_zero").textContent = btn_bottomzero_string;
+	
+	document.getElementById("settings_text_font_appdrawer").textContent = font_string;
+	document.getElementById("modal_header_text_font_appdrawer").textContent = font_select_string;
+	
+	document.getElementById("settings_text_font_homescreen").textContent = font_string;
+	document.getElementById("modal_header_text_font_homescreen").textContent = font_select_string;
+	
+	document.getElementById("normal_font_appdrawer_item").textContent = default_string;
+	document.getElementById("normal_font_homescreen_item").textContent = default_string;
 	
 	if(current_kat!=-1)
 	{

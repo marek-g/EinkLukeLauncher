@@ -175,6 +175,11 @@ import java.lang.reflect.Method;
 import android.view.Display;
 import android.util.DisplayMetrics;
 
+import java.text.DateFormat;  
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
+import java.util.Calendar;  
+
 public class Info extends CordovaPlugin 
 {
 
@@ -564,7 +569,7 @@ public class Info extends CordovaPlugin
 			
 			if(hasNavBar(context) == true)
 			{
-				navbarsize = 48;//getNavigationBarSize(context).y;	
+				navbarsize = 48;//Not accurate...getNavigationBarSize(context).y;	
 			}
 			else
 			{
@@ -575,6 +580,7 @@ public class Info extends CordovaPlugin
 						
 			int statusBarHeight = 24;
 			/* 
+			 *Not accurate... 
 			int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
 			
 			if (resourceId > 0) 
@@ -639,7 +645,8 @@ public class Info extends CordovaPlugin
 			{
 				callbackContext.success("-1");
 				return true;
-			}  
+			} 
+
        }
        
 

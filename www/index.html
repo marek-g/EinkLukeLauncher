@@ -194,11 +194,11 @@
 				<div id="homescreen_out_clock">
 					<div id="middle">
 					<div id="homescreen_clock">
-						<div id="homescreen_clock_green">
+						<div id="homescreen_clock_green"  ontouchstart="home_touch_start(event);" ontouchend="home_touch_end(event);">
 							<h4 id="homescreen_clock_text_b" onclick="start_clock_app();" >13</h4>
 							<h4 id="homescreen_clock_text" onclick="start_clock_app();" > :37</h4>
 							<h2 id="homescreen_datum_text" onclick="start_date_app();" >03.11.1993</h2>
-							<h4 id="homescreen_alarm_text" >&nbsp;</h4>
+							<h4 id="homescreen_alarm_text" onclick="start_clock_app();" >&nbsp;</h4>
 						</div>
 					</div>
 					</div>
@@ -465,16 +465,8 @@
 		<div class="scrollable_second_setting" >		
 			<table class="allsettings_header_table" >		
 				
-			<tr>
-					<th><img class="icon_settings" alt="Color" src="icons/color.png"></th>
-					<td>
-							<h3 id="settings_text_color" class="settings_text_big" onclick="show_modal_select_text_color();" ><b>Schrift Farbe</b></h3> 
-							<div id="text_color_pre"  onclick="show_modal_select_text_color();" ><b>&nbsp;</b></div>
-							<br>
-					</td>
-			</tr>
-					
-					
+
+									
 			<tr>	
 					<th><img class="icon_settings" alt="Categories" src="icons/cat.png"></th>
 					<td>
@@ -515,7 +507,28 @@
 						<h4 class="settings_text_small" id="appdrawericonsize_mode" >&nbsp;</h4>
 					</td>
 			 </tr>  		
-			 		
+			 	
+			<tr>
+					<th><img class="icon_settings" alt="Color" src="icons/color.png"></th>
+					<td>
+							<h3 id="settings_text_color" class="settings_text_big" onclick="show_modal_select_text_color();" ><b>Schrift Farbe</b></h3> 
+							<div id="text_color_pre"  onclick="show_modal_select_text_color();" ><b>&nbsp;</b></div>
+							<br>
+					</td>
+			</tr>
+			
+
+
+			<tr>
+					<th><img class="icon_settings" alt="Font" src="icons/info.png"></th>
+					<td>
+							<h3 id="settings_text_font_appdrawer" class="settings_text_big" onclick="show_modal_select_appdrawer_font();" ><b>Schriftart</b></h3> 
+							<h4 class="settings_text_small" id="appdrawer_current_font" ></h4>
+							<br>
+					</td>
+			</tr>
+			
+						 		
 			<tr>	
 				<th>
 				</th>
@@ -729,7 +742,16 @@
 						</td>
 					  </tr>
 					  
-					  	
+					<tr>
+						<th><img class="icon_settings" alt="Font" src="icons/info.png"></th>
+						<td>
+							<h3 id="settings_text_font_homescreen" class="settings_text_big" onclick="show_modal_select_homescreen_font();" ><b>Schriftart</b></h3> 
+							<h4 class="settings_text_small" id="homescreen_current_font" ></h4>
+							<br>
+						</td>
+					</tr>
+			
+			  	
 					<tr>	
 						<th>
 						</th>
@@ -925,6 +947,103 @@
 			
 			</div>
 		</div>		
+	
+	
+	
+	<div id="settings_appdrawerfont_div" class="third_settings">
+			<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_text_font_appdrawer" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+				<td>
+				<br>
+				<div id="all_fonts_appdrawer"> 
+					<a href='#' id="normal_font_appdrawer_item" style='font-family:""' class='select_app_text' onclick='set_appdrawer_font("");'>Normal</a><br>
+					
+					<a href='#' style='font-family:"Geo"' class='select_app_text' onclick='set_appdrawer_font("Geo");'>Geo</a><br>
+					<a href='#' style='font-family:"Monoton"' class='select_app_text' onclick='set_appdrawer_font("Monoton");'>Monoton</a><br>
+					<a href='#' style='font-family:"PatrickHand"' class='select_app_text' onclick='set_appdrawer_font("PatrickHand");'>Patrick Hand</a><br>
+					<a href='#' style='font-family:"ComicNeue"' class='select_app_text' onclick='set_appdrawer_font("ComicNeue");'>Comic Neue</a><br>
+					<a href='#' style='font-family:"Mali"' class='select_app_text' onclick='set_appdrawer_font("Mali");'>Mali</a><br>
+					<a href='#' style='font-family:"PoiretOne"' class='select_app_text' onclick='set_appdrawer_font("PoiretOne");'>Poiret One</a><br>
+					<a href='#' style='font-family:"Audiowide"' class='select_app_text' onclick='set_appdrawer_font("Audiowide");'>Audiowide</a><br>
+					<a href='#' style='font-family:"Megrim"' class='select_app_text' onclick='set_appdrawer_font("Megrim");'>Megrim</a><br>
+					<a href='#' style='font-family:"Codystar"' class='select_app_text' onclick='set_appdrawer_font("Codystar");'>Codystar</a><br>
+					<a href='#' style='font-family:"Buda"' class='select_app_text' onclick='set_appdrawer_font("Buda");'>Buda</a><br>
+
+				</div>
+				<br>
+	
+				<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+	
+	
+	<div id="settings_homescreenfont_div" class="third_settings">
+			<div class="all_settings_fixed_header" >	
+			<table class="allsettings_header_table" >
+					<tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_text_font_homescreen" class="settings_text_header_class">&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>
+			</div>
+			<div class="scrollable_second_setting" >		
+			<table class="allsettings_header_table" >		
+			<tr>	
+				<th>
+				</th>
+				<td>
+				<br>
+				<div id="all_fonts_appdrawer"> 
+					<a href='#' id="normal_font_homescreen_item"  style='font-family:""' class='select_app_text' onclick='set_homescreen_font("");'>Normal</a><br>
+					
+					<a href='#' style='font-family:"Geo"' class='select_app_text' onclick='set_homescreen_font("Geo");'>Geo</a><br>
+					<a href='#' style='font-family:"Monoton"' class='select_app_text' onclick='set_homescreen_font("Monoton");'>Monoton</a><br>
+					<a href='#' style='font-family:"PatrickHand"' class='select_app_text' onclick='set_homescreen_font("PatrickHand");'>Patrick Hand</a><br>
+					<a href='#' style='font-family:"ComicNeue"' class='select_app_text' onclick='set_homescreen_font("ComicNeue");'>Comic Neue</a><br>
+					<a href='#' style='font-family:"Mali"' class='select_app_text' onclick='set_homescreen_font("Mali");'>Mali</a><br>
+					<a href='#' style='font-family:"PoiretOne"' class='select_app_text' onclick='set_homescreen_font("PoiretOne");'>Poiret One</a><br>
+					<a href='#' style='font-family:"Audiowide"' class='select_app_text' onclick='set_homescreen_font("Audiowide");'>Audiowide</a><br>
+					<a href='#' style='font-family:"Megrim"' class='select_app_text' onclick='set_homescreen_font("Megrim");'>Megrim</a><br>
+					<a href='#' style='font-family:"Codystar"' class='select_app_text' onclick='set_homescreen_font("Codystar");'>Codystar</a><br>
+					<a href='#' style='font-family:"Buda"' class='select_app_text' onclick='set_homescreen_font("Buda");'>Buda</a><br>
+
+			
+			
+				</div>
+				<br>
+	
+				<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>	
+	
+	
+	
+	
 	
 	
 	<div id="settings_colortext_div" class="third_settings">
@@ -1514,7 +1633,7 @@ String.prototype.replaceAll = function(search, replacement)
 function ready_function() 
 {				
 	"use strict";
-					
+	
 	window.plugins.intentShim.getIntent(function(short_cut_info)
 	{
 		//Wait for finished loading
@@ -1707,8 +1826,6 @@ function ready_function()
 		window.plugins.intentShim.onIntent(function (intent) //HomeScreen Button Press
 		{
 
-
-		   
 		  if(  window.getComputedStyle(document.getElementById("settings_ba")).display == "block" ) //Hide Dropdown menu
 		  {
 			  back_function();
@@ -1848,7 +1965,6 @@ document.addEventListener("backbutton", onBackKeyDown, false);
 if(debug == 1)
 {
 	//alert("Running in Debug Mode!");
-	
 	//Temporär!!!!!!!!!
 	window.onload = function () 
 	{	

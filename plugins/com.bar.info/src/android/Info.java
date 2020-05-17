@@ -175,6 +175,11 @@ import java.lang.reflect.Method;
 import android.view.Display;
 import android.util.DisplayMetrics;
 
+import java.text.DateFormat;  
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
+import java.util.Calendar;  
+
 public class Info extends CordovaPlugin 
 {
 
@@ -640,7 +645,8 @@ public class Info extends CordovaPlugin
 			{
 				callbackContext.success("-1");
 				return true;
-			}  
+			} 
+
        }
        
 

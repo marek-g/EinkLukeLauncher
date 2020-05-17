@@ -73,6 +73,22 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-device.device",
+      "file": "plugins/cordova-plugin-device/www/device.js",
+      "pluginId": "cordova-plugin-device",
+      "clobbers": [
+        "device"
+      ]
+    },
+    {
+      "id": "cordova-plugin-fonts.fonts",
+      "file": "plugins/cordova-plugin-fonts/www/fonts.js",
+      "pluginId": "cordova-plugin-fonts",
+      "clobbers": [
+        "navigator.Fonts"
+      ]
+    },
+    {
       "id": "cordova-plugin-intent-list.IntentList",
       "file": "plugins/cordova-plugin-intent-list/www/IntentList.js",
       "pluginId": "cordova-plugin-intent-list",
@@ -162,6 +178,8 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-open-native-settings": "1.5.2",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-camera": "4.1.0",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-fonts": "0.6.5",
     "cordova-plugin-intent-list": "0.0.5",
     "cordova-plugin-nativestorage": "2.3.2",
     "cordova-plugin-navigationbar-color": "0.0.8",

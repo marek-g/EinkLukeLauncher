@@ -25,6 +25,7 @@ html { -webkit-text-size-adjust: none; }
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
     -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
     outline: none !important;
+ 
 }
 
 
@@ -679,6 +680,7 @@ body
 	width:100vw;
 	background-color:transparent;
 	border:none;
+	text-align: center; /*New*/
 }
 
 
@@ -690,18 +692,25 @@ body
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
+	white-space: nowrap;
 }
 
 #homescreen_clock_text
 {
 	display:inline;
 	font-weight:normal;
+	margin: 0!important; 
+	padding: 0!important;
+	line-height:95%;
 }
 
 #homescreen_clock_text_b
 {
 	display:inline;
 	font-weight:normal;
+	margin: 0!important; 
+	padding: 0!important;
+	line-height:95%;
 }
 
 #text_color_pre
@@ -883,15 +892,19 @@ body
 
 #homescreen_datum_text
 {
-  margin-top:-1vh;
+  /*margin-top:-1vh;*/
   text-align: center;
+  margin: 0!important; 
+  padding: 0!important; 
 }
 
 
 #homescreen_alarm_text
 {
-  margin-top:-4vh;
+  /*margin-top:-4vh;*/
   text-align: center;
+  margin: 0!important; 
+  padding: 0!important;
 }
 
 #Cat_name
@@ -1057,8 +1070,8 @@ body
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  width: 10vw;
-  height: 5vh;
+  width: 8vh;
+  height: 4vh;
   display: inline-block;
   position: relative;
   
@@ -1078,8 +1091,8 @@ body
   display: block;
   position: absolute;
   z-index: 2;
-  width: 2vw;
-  height: 5vh;
+  width: 2vh;
+  height: 4vh;
   background: #e1e1e1; 
   border-radius: 10%;
 }
@@ -1092,7 +1105,7 @@ body
 
 .toggle_new:checked:before
 {
-  left: 8vw;
+  left: 6vh;
 }
 
 
@@ -2053,3 +2066,23 @@ body
 {
 	white-space: normal!;
 }
+
+
+
+
+
+@font-face { font-family: 'Geo';src: url('../fonts/Geo.ttf') format('truetype'); }
+@font-face { font-family: 'Monoton';src: url('../fonts/Monoton.ttf') format('truetype'); }
+@font-face { font-family: 'PatrickHand';src: url('../fonts/PatrickHand.ttf') format('truetype'); }
+@font-face { font-family: 'ComicNeue';src: url('../fonts/ComicNeue.ttf') format('truetype'); }
+@font-face { font-family: 'Mali';src: url('../fonts/Mali.ttf') format('truetype'); }
+@font-face { font-family: 'PoiretOne';src: url('../fonts/PoiretOne.ttf') format('truetype'); }
+@font-face { font-family: 'Audiowide';src: url('../fonts/Audiowide.ttf') format('truetype'); }  
+@font-face { font-family: 'Megrim';src: url('../fonts/Megrim.ttf') format('truetype'); }  
+@font-face { font-family: 'Codystar';src: url('../fonts/Codystar.ttf') format('truetype'); }  
+@font-face { font-family: 'Buda';src: url('../fonts/Buda.ttf') format('truetype'); }  
+
+
+
+	
+             

@@ -53,6 +53,9 @@ var swipe_mode = "r";
 
 var bottom_padding_zero = "0";
 
+var appdrawer_font = "";
+var homescreen_font = "";
+
 //Used to select Iconpack
 var disp_current_iconpack = "";
 var iconpack_timer = null;
@@ -93,6 +96,7 @@ var current_wallpaper_id = -1; //Android 24(7.0) or higher...
 var hct = null;
 var hctb = null;
 var hdt = null;
+
 //App names for appstores - when started, an app list update is triggered
 var app_stores = [
 "com.android.settings",
@@ -107,7 +111,6 @@ var app_stores = [
 //Array with the title of every categorie    
 var kat_list = [];	
 	
-
 var long_click_timeout = 800; //800 Milliseconds timeout for a long click
 var type_of_touch = 0;
 var current_kat = -1; //The current categorie
@@ -144,8 +147,9 @@ var cat_row = "";
 var new_icon_width = "512";
 var new_icon_height = "512";
 
-
-
+//Longpress timers..
+var long_press_cat_timer = null; //Lonpress timer Appcaticon
+var home_touch_start_timer = null; //Longpress timer Clock/Date Homescreen
 
 //All the functions
 
@@ -165,7 +169,7 @@ function applay_cats(in_cat_list_arary)
 	for(var i2 = 1; i2 < cat_anz; i2++)
 	{		
 		var icon = in_cat_list_arary[i2-1][0];		
-		full_string = "<td ontouchstart='open_categorie( document.getElementById("+i2+") );' id='"+i2+"' class='redips-trash'><div id='div_"+i2+"_item' class='cat_item'><img id='"+i2+"_png' src='"+icon+"'></div></td>";	
+		full_string = "<td ontouchend='cat_touch_end()' ontouchstart='open_categorie(event, document.getElementById("+i2+") );' id='"+i2+"' class='redips-trash'><div id='div_"+i2+"_item' class='cat_item'><img id='"+i2+"_png' src='"+icon+"'></div></td>";	
 
 		var new_row = table_cats.insertRow(-1);	
 		new_row.innerHTML='<tr class="child">'+full_string+'</tr>'; 
@@ -226,14 +230,16 @@ function cat_touch_end()
 function long_touch_check(in_x, in_y) 
 {
 	"use strict";
+	
     if (type_of_touch == 1) 
     { 
+		/*
 		var dist_x = in_x - mySwiper.config.currentX; //mySwiper.touches.currentX
 		var dist_y = in_y - mySwiper.config.currentY; //mySwiper.touches.currentY
 		if(dist_x<0){dist_x = dist_x*-1;}
 		if(dist_y<0){dist_y = dist_y*-1;}
+		*/
 		
-	
 		var dist_x_m = in_x - move_x;
 		var dist_y_m = in_y - move_y;
 		if(dist_x_m<0){dist_x_m = dist_x_m*-1;}
@@ -241,12 +247,12 @@ function long_touch_check(in_x, in_y)
 
 		//Still pressing, so its a long press
 		type_of_touch = 3;
-
-	
+		
 		//Check if there is to much movement	
+		/*
 		if( pxTOvw(dist_x) > 2){return;}		
 		if( pxTOvh(dist_y) > 2){return;}		
-	
+		*/
 		
 		if( pxTOvw(dist_x_m) > 2){return;}
 		if( pxTOvh(dist_y_m) > 2){return;}	
@@ -259,6 +265,15 @@ function long_touch_check(in_x, in_y)
 		{
 			var current_class =  all_elements[counter].getAttribute("class"); 
 	   
+			if( current_class == "swiper-container")
+			{
+				if(current_view=="homescreen")
+				{
+					show_settings();
+					open_homescreen_settings();
+				}	
+			}
+			
 			if (current_class == "gallery redips-drag") 
 			{
 				return_element = all_elements[counter];
@@ -305,6 +320,18 @@ function long_touch_check(in_x, in_y)
 				if(current_view=="homescreen")
 				{
 					edit_homescreen_table();
+				}
+				return;
+			}
+			
+			
+			if (current_class == "redips-trash")
+			{
+				if(current_view=="appdrawer")
+				{
+					show_settings();
+					open_appdrawer_settings();
+					open_cat_settings();
 				}
 				return;
 			}
@@ -484,18 +511,7 @@ function update_clock_settings()
 		background_clock = "0";
 	}
 	
-	if( show_alarm == "0")
-	{
-		try
-		{
-			document.getElementById("homescreen_alarm_text").textContent = "";
-		}
-		catch (error){}
-	}
-	else
-	{
-		update_next_alarm();
-	}
+	update_next_alarm();
 	
 	clock = bold_hours + "-" + show_seconds + "-" + date_f + "-" + color_f + "-" + background_clock + "-" + show_alarm;
 	
@@ -609,16 +625,19 @@ function update_homescreen_clock_position()
 	var note_break = 0;
 	var clock_height = 0;
 	
+	var clock_text_factor = 2;
+	var datum_text_factor = 0.6;
+	var alarm_text_factor = 0.3;
 	
 	while(true)
 	{
 		c = c + 20;
 		note_break = note_break + 1;
 
-		elem1.style.fontSize = (c * 2) + "px"; 
-		elem2.style.fontSize = (c * 2) + "px"; 
-		elem3.style.fontSize = (c * 0.8) + "px";
-		elem4.style.fontSize = (c * 0.2) + "px";
+		elem1.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem2.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem3.style.fontSize = (c * datum_text_factor) + "px";
+		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
 		clock_height = parseInt(document.getElementById('homescreen_clock').offsetHeight);
 		if( clock_height > max_h){break;}
@@ -632,10 +651,10 @@ function update_homescreen_clock_position()
 		c = c + 5;
 		note_break = note_break + 1;
 
-		elem1.style.fontSize = (c * 2) + "px"; 
-		elem2.style.fontSize = (c * 2) + "px"; 
-		elem3.style.fontSize = (c * 0.8) + "px";
-		elem4.style.fontSize = (c * 0.25) + "px";
+		elem1.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem2.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem3.style.fontSize = (c * datum_text_factor) + "px";
+		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
 		clock_height = parseInt(document.getElementById('homescreen_clock').offsetHeight);
 		if( clock_height > max_h){break;}
@@ -653,17 +672,17 @@ function update_homescreen_clock_position()
 		c = c + 1;
 		note_break = note_break + 1;
 		
-		elem1.style.fontSize = (c * 2) + "px"; 
-		elem2.style.fontSize = (c * 2) + "px"; 
-		elem3.style.fontSize = (c * 0.8) + "px";
-		elem4.style.fontSize = (c * 0.25) + "px";
+		elem1.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem2.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem3.style.fontSize = (c * datum_text_factor) + "px";
+		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
 		clock_height = parseInt(document.getElementById('homescreen_clock').offsetHeight);
 		if( clock_height > max_h){break;}
 		if(note_break > 2000){break;}
 	}
 	
-	var gesw = (window.innerWidth/100)*80;
+	var gesw = (window.innerWidth/100)*75; //Max 75% width
 	note_break = 0;
 	
 	while(true)
@@ -672,21 +691,23 @@ function update_homescreen_clock_position()
 		
 		if( clock_width < gesw){break;}
 		c = c - 1;
-		elem1.style.fontSize = (c * 2) + "px"; 
-		elem2.style.fontSize = (c * 2) + "px"; 
-		elem3.style.fontSize = (c * 0.8) + "px"; 
-		elem4.style.fontSize = (c * 0.25) + "px";
+		elem1.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem2.style.fontSize = (c * clock_text_factor) + "px"; 
+		elem3.style.fontSize = (c * datum_text_factor) + "px"; 
+		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
 		if(note_break > 2000){break;}
 	}	
 	
 	//Center the div horizontal, padding 10 vw to the sides
+	/*
+	 *Not needed..now Css...
 	var clock_width_vw = pxTOvw( document.getElementById('homescreen_clock_green').offsetWidth  );
 	var set_to = (80 - clock_width_vw) / 2;
 	set_to = set_to + 10;
 		
 	document.getElementById("homescreen_clock_green").style.left = set_to+ "vw";
-    
+    */
     if(homescreen_tmp_vis == 1 )
 	{
 		document.getElementById("homescreen").style.display = "none";
@@ -1017,7 +1038,7 @@ function back_function()
 			{
 				var tmp_id = all_third_setting_divs[i].id;
 				
-				if(tmp_id=="settings_appdrawericonsize_div" || tmp_id == "settings_swipe_div" || tmp_id == "settings_colortext_div" || tmp_id == "settings_cat_div" || tmp_id == "settings_read_div" || tmp_id=="settings_align_div" )
+				if(tmp_id=="settings_appdrawericonsize_div" || tmp_id == "settings_appdrawerfont_div" || tmp_id == "settings_swipe_div" || tmp_id == "settings_colortext_div" || tmp_id == "settings_cat_div" || tmp_id == "settings_read_div" || tmp_id=="settings_align_div" )
 				{
 					show_app_drawer = 1;
 				}
@@ -1138,7 +1159,7 @@ function ticken()
 	{
 	}
 	
-    if (clock != "0") //Showthe clock
+    if (clock != "0") //Show the clock
     {
         tmp_date_counter = tmp_date_counter + 1;
         
@@ -1272,6 +1293,8 @@ function ticken()
 			catch (e){}
 		}
         
+		update_next_alarm();
+    
     }
 
 	if(show_seconds == 0)
@@ -1297,7 +1320,7 @@ function get_current_settings()
 {
 	"use strict";
     var back = "";
-    back =  startpage  + "||" + black_white + "||" + clock + "||" + color_text + "||" + read  + "||" + lang + "||" + clock_app + "||" + date_app +"||" + statusbar_state + "||" + black_white_homescreen + "||"+nav_bar_state + "||" + nav_bar_padding + "||" + status_bar_padding + "||" + homescreen_nofitications + "||" + font_size_header + "||" + font_size_app + "||" + font_size_homescreen + "||" + appdrawer_vertical+"-"+appdrawer_horizontal +"||"+ zeilen_homescreen +"-"+spalten_homescreen+"||"+default_cats+"||"+cat_icon_size +"||" + JSON.stringify(cat_array) + "||" + global_icon_pack + "||" + appdrawer_align +"||" + swipe_mode+"||"+appdrawer_icon_size+"||"+bottom_padding_zero;
+    back =  startpage  + "||" + black_white + "||" + clock + "||" + color_text + "||" + read  + "||" + lang + "||" + clock_app + "||" + date_app +"||" + statusbar_state + "||" + black_white_homescreen + "||"+nav_bar_state + "||" + nav_bar_padding + "||" + status_bar_padding + "||" + homescreen_nofitications + "||" + font_size_header + "||" + font_size_app + "||" + font_size_homescreen + "||" + appdrawer_vertical+"-"+appdrawer_horizontal +"||"+ zeilen_homescreen +"-"+spalten_homescreen+"||"+default_cats+"||"+cat_icon_size +"||" + JSON.stringify(cat_array) + "||" + global_icon_pack + "||" + appdrawer_align +"||" + swipe_mode+"||"+appdrawer_icon_size+"||"+bottom_padding_zero+"||"+appdrawer_font+"||"+homescreen_font;
     return back;
 }
 
@@ -1406,10 +1429,13 @@ function applay_settings(in_string)
 
 	date_app = "com.android.calendar";
 	try{
-		date_app = array_s[7];
+		if(array_s[7] != undefined)
+		{
+			date_app = array_s[7];
+		}
 	}catch( error ){}
 	if( date_app == "" ) { date_app = "com.android.calendar"; }	
-		
+	
 		
 	statusbar_state = "1";
 	try{
@@ -1600,8 +1626,27 @@ function applay_settings(in_string)
 	}catch( error ){}
 	if( bottom_padding_zero != "0" && bottom_padding_zero != "1" ) { bottom_padding_zero = "1"; }
 	
+			
+	appdrawer_font = "";
+	try{
+		if(array_s[27] != undefined)
+		{
+			appdrawer_font = array_s[27];
+		}
+	}catch( error ){}
+
+	
+	homescreen_font = "";
+	try{
+		if(array_s[28] != undefined)
+		{
+			homescreen_font = array_s[28];
+		}
+	}catch( error ){}	
+
 	
 	//---------------------------------------------------------------------------------------------
+				
 		
 	if(default_cats==0)
 	{
@@ -1643,8 +1688,7 @@ function applay_settings(in_string)
 	}
 	
 	applay_lang();
-	applay_cats(cat_array);
-	
+	applay_cats(cat_array);	
 
 	//Update the Cat Display Table
 	var table_id = document.getElementById("cat_custom_table");
@@ -1947,8 +1991,6 @@ function applay_settings(in_string)
 	}
 	
 	
-	
-
 	if(status_bar_padding == -1)
 	{
 		//Use the android values		
@@ -2106,6 +2148,26 @@ function applay_settings(in_string)
     spalten_homescreen = array_s[1];	 
 	
 	
+	if(appdrawer_font == "")
+	{
+		document.getElementById("appdrawer_current_font").textContent = default_string;
+	}
+	else
+	{
+		document.getElementById("appdrawer_current_font").textContent = appdrawer_font;
+	}
+		
+	
+	if(homescreen_font == "")
+	{
+		document.getElementById("homescreen_current_font").textContent = default_string;
+	}
+	else
+	{
+		document.getElementById("homescreen_current_font").textContent = homescreen_font;
+	}			
+	
+	
 	update_next_alarm();
 	resize();
 			
@@ -2116,6 +2178,8 @@ function applay_settings(in_string)
     }
     catch (e){}
     
+   
+ 
    still_in_settings = 0;
 }
 
@@ -2768,6 +2832,45 @@ function show_modal_select_homescreen_color()
 }
 
 
+
+
+//Show the font picker for the appdrawer
+function show_modal_select_appdrawer_font()
+{
+	"use strict";				
+    document.getElementById("allsettings").style.display = "none"; 
+	document.getElementById("settings_appdrawer_div").style.display = "none"; 
+	document.getElementById("settings_appdrawerfont_div").style.display = "block"; 
+}
+
+
+//Show the font picker for the appdrawer
+function show_modal_select_homescreen_font()
+{
+	"use strict";				
+    document.getElementById("allsettings").style.display = "none"; 
+	document.getElementById("homescreen_div").style.display = "none"; 
+	document.getElementById("settings_homescreenfont_div").style.display = "block"; 
+}
+
+
+//Set the Appdrawer font
+function set_appdrawer_font(in_font_name)
+{
+	"use strict";	
+	appdrawer_font = in_font_name;
+	back_function();
+}
+
+//Set the Homescreen font
+function set_homescreen_font(in_font_name)
+{
+	"use strict";	
+	homescreen_font = in_font_name;
+	back_function();
+}
+
+
 //Set the navbar padding
 function padding_input()
 {
@@ -3053,6 +3156,8 @@ function edit_homescreen_table()
 	
 	adjust_delfromhomescreen_div();
 	
+	update_font_family();
+	
 	app_move_mode = 1;
 }
 
@@ -3245,6 +3350,7 @@ function update_homescreen()
 				set_current_apps(catt,"table_apps_cat"+i);
 			}
 			set_app_drawer_black_white();
+			update_font_family();
 			new_font_size_adjust();
 			update_search_div();
 		}
@@ -3331,13 +3437,10 @@ function update_homescreen()
 		}
 	}
 
+	update_font_family();
 	set_homescreen_black_white();
 
-	
 
-	
-	
-	
 	if(nav_bar_state=="0")
 	{
 		set_homescreen_padding(0,0);
@@ -3363,8 +3466,6 @@ function update_homescreen()
 	
 	}
 
-	
-	
 }
 
 
@@ -3396,6 +3497,7 @@ function show_all_hidden_apps()
     document.getElementById("table_current_apps").style.display = "block";
     document.getElementById("header").style.display = "block";
     document.getElementById("appsettings").style.display = "none";
+    update_font_family();
     new_font_size_adjust();
 
 }
@@ -3522,9 +3624,46 @@ function app_touch_start(e)
 	{
 		long_touch_check(startx, starty);
 	}, long_click_timeout); //Timeout for a long click
-     
+
 }
 
+
+
+//Long Press Check for Clock/Date on the Homescreen
+function home_touch_start(e)
+{
+	"use strict";	
+	startx = e.touches[0].clientX;
+	starty = e.touches[0].clientY;
+	
+	move_x = startx;
+	move_y = starty;
+	
+	type_of_touch = 1; //the value is 1, when the touch is started
+		
+	try
+	{
+		clearTimeout(home_touch_start_timer);
+	}
+	catch (e) {}
+			
+	home_touch_start_timer = setTimeout(function()
+	{
+		long_touch_check(startx, starty);
+	}, long_click_timeout*1.3); //Timeout for a long click
+
+}
+
+
+
+//If the toch on Clock/Date widget ends
+function home_touch_end()
+{
+	"use strict";
+	type_of_touch = 3; //End long touch...
+}
+ 
+ 
 
 //Movement while touching
 function on_touch_move(e)
@@ -3624,6 +3763,7 @@ function app_touch_end(e)
 function end_app_settings()
 {
 	"use strict";	
+
 	var appsettings_obj = document.getElementById("appsettings") ;
 	if( window.getComputedStyle(appsettings_obj).display == "block" )
 	{	
@@ -3656,10 +3796,34 @@ function end_app_settings()
 
 
 //Open an App Categorie
-function open_categorie(in_obj)//,type)
+function open_categorie(event,in_obj)//,type)
 {
 	"use strict";
 
+	//LongPress check
+	if ( event != null )
+	{
+		startx = event.touches[0].clientX;
+		starty = event.touches[0].clientY;
+
+		move_x = startx;
+		move_y = starty;
+		
+		type_of_touch = 1; //the value is 1, when the touch is started
+		try
+		{
+			clearTimeout(long_press_cat_timer);
+		}
+		catch (e) {}
+			
+		long_press_cat_timer = setTimeout(function()
+		{
+			long_touch_check(startx, starty);
+		}, long_click_timeout*1.3); //Timeout for a long click	
+	}
+
+	
+	
 	var dropdm_popup_obj = document.getElementById("dropdm_popup");
 	
     if(  window.getComputedStyle(dropdm_popup_obj).display == "block" ) //Hide Dropdown menu
@@ -4313,12 +4477,26 @@ function apps_by_cat(in_array, in_cat)
 }
 
 
+//Set the Font Style for the Appdrawer and the Homescreen
+function update_font_family()
+{
+	"use strict";
+		
+	document.getElementById("scrollable").style.fontFamily = appdrawer_font; 
+	document.getElementById("header").style.fontFamily = appdrawer_font; 
+	document.getElementById("searchtable").style.fontFamily = appdrawer_font; 
+	document.getElementById("sif").style.fontFamily = appdrawer_font; 
+	
+	//Homescreen
+	document.getElementById("middle").style.fontFamily = homescreen_font;
+}
+
+
 //This functions is showing the current Apps
 function set_current_apps(in_array,in_table)
 {
 	"use strict";	
-	//in_table = in_table.replace("#","");
- 
+
     //Clear Table
     var table_id = document.getElementById(in_table);
    
@@ -4603,7 +4781,8 @@ function show_search_letter(in_element)
 	document.getElementById("search_input").style.display = "none";
 	document.getElementById("Cat_name_text").textContent = result_string+": " + in_letter;
 	document.getElementById("Cat_name").style.display = "table";
-
+	
+	update_font_family();
     new_font_size_adjust();
 }
 
@@ -4651,7 +4830,7 @@ function set_app_drawer_black_white()
 			hidden_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}				
 	}	
-		
+			
 }
 
 //If the Homescreen icons should be black and white
@@ -4674,6 +4853,7 @@ function set_homescreen_black_white()
 			homescreen_apps[i].style.webkitFilter = "grayscale(0%)";
 		}
 	}
+	
 }
 
 
@@ -4887,6 +5067,7 @@ function update_app_divs()
 		document.getElementById("search_input").style.display = 'none';
 	}
 	
+	update_font_family();
 	new_font_size_adjust();	
 	update_homescreen();
 	update_search_div();
@@ -4901,6 +5082,7 @@ function update_app_divs()
 			{				
 				document.getElementById("loading_div").style.display = 'none';
 				document.getElementById("loading_div").classList.remove('fade');
+								
 			},500);
 		}
 	}
@@ -5176,9 +5358,10 @@ function update_single_app_div(in_cat)
 	"use strict";	
 	var catt = apps_by_cat(all_apps, ""+in_cat);
 
-	set_current_apps(catt,"table_apps_cat"+in_cat	);
+	set_current_apps(catt,"table_apps_cat"+in_cat);
 	set_app_drawer_black_white();
-
+	update_font_family();
+	
 	if(searching==0)
 	{
 		document.getElementById("alpha").style.display = 'none';
@@ -5316,7 +5499,6 @@ function set_app_list(in_array)
 function start_date_app()
 {
 	"use strict";	
-	date_app = "";
 	if( date_app != "" && date_app != "-" )
 	{
 		launch_app(date_app);
@@ -5336,7 +5518,6 @@ function start_date_app()
 
 
 //Based on https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript
-
 function dateDiffInDays(a, b)
 {
 	"use strict";	
@@ -5353,93 +5534,109 @@ function update_next_alarm()
 {
 	"use strict";	
 
-	try
-	{
-		androidinfo.get_next_alarm( function ok(next_alarm)
-		{
-			if( next_alarm != "-1")
-			{
-
-				var alarm_time = new Date(Math.round(next_alarm));
-				
-				var alarm_time_string = "";
-				
-				var alarm_h = 0;
-				var alarm_m = 0;
-				var current_date_obj = new Date();
-				var display_date = "";
-				var date_diff = 0;
-				
-				var date_diff = dateDiffInDays(current_date_obj, alarm_time);
-				
-				alarm_h = alarm_time.getHours();
-				if(alarm_h < 10){alarm_h = "0"+ alarm_h}; //Pad the leading zero
-				
-				alarm_m = alarm_time.getMinutes();
-				if(alarm_m < 10){ alarm_m = "0" + alarm_m;}//Pad the leading zero
-				
-				alarm_time_string = alarm_h + ":" + alarm_m;
-				
-				
-				
-				if(date_diff == 0)
-				{
-					document.getElementById("homescreen_alarm_text").textContent = "◷ " + alarm_time_string + " ◷";
-				}
-				
-				if(date_diff == 1)
-				{
-					display_date = next_day_string;
-					document.getElementById("homescreen_alarm_text").textContent = "◷ " + display_date + " " + alarm_time_string +" ◷";
-				}
-				
-				if(date_diff > 1)
-				{
-					var alarm_d = alarm_time.getDate()
-					var alarm_m = alarm_time.getMonth();
-					var alarm_y = alarm_time.getFullYear();
-					
-					if(alarm_d < 10){alarm_d = "0"+alarm_d;}
-					if(alarm_m < 10){alarm_m = "0"+alarm_m;}
-					
-					
-					
-
-					if(datum != "1" && datum != "8" )
-					{
-						alarm_y = alarm_y.substr(-2);
-					}
-			
-					
-					
-					if(parseInt(datum, 10) >= 8)
-					{
-						display_date = alarm_m + "." +alarm_d + "." + alarm_y;
-					}
-					else
-					{
-						display_date = alarm_d + "." +alarm_m + "." + alarm_y;
-					}
-					
-					document.getElementById("homescreen_alarm_text").textContent = "◷ " + display_date + " - " + alarm_time_string + " ◷";
-
-				}
-				
-			}
-			else
-			{
-				document.getElementById("homescreen_alarm_text").textContent = "";
-			}
-			
-				
-		}, function bad(){} );
-			
+	var alarm_clock  = ""; 
 	
-
-	}
-	catch (err)
+	if (clock != "0") //Show the clock
+    {
+        tmp_date_counter = tmp_date_counter + 1;
+        
+        var array_s = clock.split("-");
+        alarm_clock = array_s[5];
+    }
+    
+	if(alarm_clock != "0")
 	{
-		document.getElementById("homescreen_alarm_text").textContent = "";
+		try
+		{
+			androidinfo.get_next_alarm( function ok(next_alarm)
+			{
+				
+				if( next_alarm != "-1")
+				{
+					var alarm_time = new Date(Math.round(next_alarm));
+			
+					var alarm_time_string = "";
+					
+					var alarm_h = 0;
+					var alarm_m = 0;
+					var current_date_obj = new Date();
+					var display_date = "";
+					var date_diff = 0;
+					
+					var date_diff = dateDiffInDays(current_date_obj, alarm_time);
+					
+					alarm_h = alarm_time.getHours();
+					if(alarm_h < 10){alarm_h = "0"+ alarm_h}; //Pad the leading zero
+					
+					alarm_m = alarm_time.getMinutes();
+					if(alarm_m < 10){ alarm_m = "0" + alarm_m;}//Pad the leading zero
+					
+					alarm_time_string = alarm_h + ":" + alarm_m;
+
+					if(date_diff == 0)
+					{
+						document.getElementById("homescreen_alarm_text").textContent = "◷ " + alarm_time_string + " ◷";
+					}
+					
+					if(date_diff == 1)
+					{
+						display_date = next_day_string;
+						document.getElementById("homescreen_alarm_text").textContent = "◷ " + display_date + " " + alarm_time_string +" ◷";
+					}
+					
+					if(date_diff > 1)
+					{
+						var alarm_d = alarm_time.getDate()
+						var alarm_m = alarm_time.getMonth();
+						var alarm_y = alarm_time.getFullYear();
+						
+						if(alarm_d < 10){alarm_d = "0"+alarm_d;}
+						if(alarm_m < 10){alarm_m = "0"+alarm_m;}
+		
+
+						if(datum != "1" && datum != "8" )
+						{
+							alarm_y = alarm_y.substr(-2);
+						}
+				
+											
+						if(parseInt(datum, 10) >= 8)
+						{
+							display_date = alarm_m + "." +alarm_d + "." + alarm_y;
+						}
+						else
+						{
+							display_date = alarm_d + "." +alarm_m + "." + alarm_y;
+						}
+						
+						document.getElementById("homescreen_alarm_text").textContent = "◷ " + display_date + " - " + alarm_time_string + " ◷";
+					}
+					
+				}
+				else
+				{
+					document.getElementById("homescreen_alarm_text").textContent = "";
+				}
+				
+					
+			}, function bad(){} );
+				
+		
+
+		}
+		catch (err)
+		{
+			document.getElementById("homescreen_alarm_text").textContent = "";
+		}
+		
+	}
+	else
+	{
+		try
+		{
+			document.getElementById("homescreen_alarm_text").textContent = "";
+		}
+		catch (error){}
 	}
 	
 }
@@ -5563,7 +5760,7 @@ function new_font_size_adjust()
 		var x = document.querySelectorAll(".desc");
 		for (var i = 0; i < x.length; i++)
 		{
-			x[i].style.fontSize = (font_size_app*0.090)+"vmax"; 
+			x[i].style.fontSize = (font_size_app*0.090)+"vmax";
 		}
 	}
 	
@@ -5603,7 +5800,6 @@ function update_app_list()
 function resize()
 {
 	"use strict";
-	
 	
 	new_indicator_width = -1;
 	fontSize_getComputedStyle_speedup = -1;
@@ -5768,7 +5964,6 @@ function resize()
 		{
 		}
 	}
-	
 	
 
 }
@@ -6015,9 +6210,6 @@ function set_homescreen_padding(padding_top,padding_button)
 {
 	"use strict";	
 	
-	
-	
-		
 	padding_top = pxTOvh(padding_top);
 	padding_button =  pxTOvh(padding_button);
 
@@ -6123,8 +6315,7 @@ function set_homescreen_padding(padding_top,padding_button)
 	}
 	
 
-	
-	
+
 	//Homescreen badges for notificatiosn
 	try
 	{
@@ -6892,7 +7083,8 @@ function init_luke_launcher()
 
 	
 	document.getElementById("redips-drag").ontouchmove = function (event){ on_touch_move(event); };
-	document.getElementById("home_screen_div").ontouchmove = function (event){ on_touch_move(event); };
+	//document.getElementById("home_screen_div").ontouchmove = function (event){ on_touch_move(event); };
+	document.getElementById("homescreen").ontouchmove = function (event){ on_touch_move(event); };
 
 
 	document.getElementById("s_app_icon").ontouchstart = function (event){ open_select_icon(event); };
@@ -6922,8 +7114,6 @@ function init_luke_launcher()
 	document.getElementById("padding_top_input_field").addEventListener('input', padding_top_input, false);
 	
 	load_settings();
-	
-	current_view = "appdrawer";
 	
 	hct = document.getElementById("homescreen_clock_text");
 	hctb = document.getElementById("homescreen_clock_text_b");
@@ -7064,7 +7254,6 @@ function icon_pack_icon_cat_selected(drawable)
 {
 	"use strict";
 	var save_file = cat_row + ".png";
-
 
 	try
 	{	
@@ -7739,7 +7928,7 @@ function compare_apps_with_installed_apps()
 function load_settings()
 {
 	"use strict";	
-
+		
 	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1";
 	
 	//If German is avalible
@@ -7747,7 +7936,20 @@ function load_settings()
 	{
 		 defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||de||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1";
 	}
-		 
+
+	var device_manufacturer = "";
+	try
+	{
+		device_manufacturer = device.manufacturer;
+		device_manufacturer = device_manufacturer.toLowerCase()
+	}catch(err){}
+	
+	if( device_manufacturer == "xiaomi")
+	{
+		//On Xiaomi Miui devices, the alarm manager is not reliable -> So showing the alarm is in default not active
+		defaut_settings_string= defaut_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
+	}
+	
 	try 
 	{
 
@@ -7760,13 +7962,15 @@ function load_settings()
 			
 			applay_settings(new_settings);
 
-			init_swiper(0);	
+			init_swiper(1); //Start at the Homescreen -> not the Appdrawer
+			current_view = "homescreen";
+				
 			setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//15000); //Wait for the first interval...
 
 
 			setTimeout(function()
 			{ 
-				open_categorie( document.getElementById("1") );
+				open_categorie( null, document.getElementById("1") );
 			}, 10);
 			
 			load_saved_apps();
@@ -7777,11 +7981,13 @@ function load_settings()
 			applay_settings(defaut_settings_string);
 			
 			init_swiper(0);	
+			current_view = "appdrawer";
+			
 			setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//Wait for the first interval...
 			
 			setTimeout(function()
 			{
-				open_categorie( document.getElementById("1") );
+				open_categorie( null,document.getElementById("1") );
 			}, 10);
 			
 			load_saved_apps();
@@ -7794,11 +8000,13 @@ function load_settings()
 		applay_settings(defaut_settings_string);	
 		
 		init_swiper(0);	
+		current_view = "appdrawer";
+		
 		setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//Wait for the first interval...
 
 		setTimeout(function()
 		{
-			open_categorie( document.getElementById("1") );
+			open_categorie( null, document.getElementById("1") );
 		}, 10);
 		load_saved_apps();
 	}
@@ -8227,19 +8435,8 @@ function onResume()
 	var array_s = clock.split("-");
     var alarm_clock = array_s[5];
   	//Only when the alarm clock is activated	
-	if(alarm_clock != "0")
-	{
-		update_next_alarm();
-	}
-	else
-	{
-		try
-		{
-			document.getElementById("homescreen_alarm_text").textContent = "";
-		}
-		catch (error){}
-	}
-
+	
+	update_next_alarm();
 }
 
 

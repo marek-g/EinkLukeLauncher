@@ -26,6 +26,9 @@
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "luke.launcher"
     },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
     "cordova-plugin-intent-list": {
       "PACKAGE_NAME": "luke.launcher"
     },

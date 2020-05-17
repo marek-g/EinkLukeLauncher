@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="luke.launcher" version="1.0.15" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="luke.launcher" version="1.0.16" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>LukeLauncher</name>
     <description>
         A category based launcher. 
@@ -23,16 +23,17 @@
     
 	<preference name="cordova.plugins.diagnostic.modules" value="EXTERNAL_STORAGE" />
 
+    <preference name="splashscreen" value="none" />
+
+
     <platform name="android">
-	
+		     
 		<hook type="before_build" src="clean_build.sh" />
 		<hook type="before_compile" src="clean_compile.sh" />
 		
         <icon src="logo_small.png" />
         
-        <preference name="SplashScreen" value="none"/>
-
-
+    
         <config-file target="AndroidManifest.xml" parent="./application/activity" android:excludeFromRecents="true" android:launchMode="singleTask" >
 		
 			<intent-filter>
