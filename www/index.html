@@ -27,7 +27,7 @@
 
 <body>
 	
-	
+
 	<div id="loading_div">
 	
 		<img alt="Logo 1" id="load_img1" src="icons/l1.png">
@@ -37,7 +37,9 @@
 	</div>
 	
 	
-	
+<div id="main_app_div">
+
+
 	<div id="swiper_container" class="swiper-container">
 
 	<div class="swiper-wrapper">
@@ -195,10 +197,10 @@
 					<div id="middle">
 					<div id="homescreen_clock">
 						<div id="homescreen_clock_green"  ontouchstart="home_touch_start(event);" ontouchend="home_touch_end(event);">
-							<h4 id="homescreen_clock_text_b" onclick="start_clock_app();" >13</h4>
-							<h4 id="homescreen_clock_text" onclick="start_clock_app();" > :37</h4>
-							<h2 id="homescreen_datum_text" onclick="start_date_app();" >03.11.1993</h2>
-							<h4 id="homescreen_alarm_text" onclick="start_clock_app();" >&nbsp;</h4>
+							<h4 id="homescreen_clock_text_b" onclick="start_clock_app();" ></h4>
+							<h4 id="homescreen_clock_text" onclick="start_clock_app();" ></h4>
+							<h2 id="homescreen_datum_text" onclick="start_date_app();" ></h2>
+							<h4 id="homescreen_alarm_text" onclick="start_clock_app();" ></h4>
 						</div>
 					</div>
 					</div>
@@ -279,6 +281,16 @@
 							<input id="statusbarstate" type="checkbox" class="toggle_new"  onchange='change_statusbar(this)'>
 						</td>
 					  </tr>
+					  
+					<tr>
+						<th><img class="icon_settings" alt="Size" src="icons/orient.png"></th>
+						<td>
+							<h3 id="settings_orient" class="settings_text_big" onclick="open_orient_settings();" ><b>Ausrichtung</b></h3>
+							<h4 class="settings_text_small" id="currentorientstate"></h4>
+						</td>
+					  </tr> 
+					  					  
+					  
 					  <tr>
 						<th><img class="icon_settings" alt="Navbar" src="icons/navbar.png"></th>
 						<td>
@@ -407,6 +419,59 @@
 		</div>
 	</div>
 	
+	
+	
+
+	<div id="settings_orient_div" class="second_settings">
+				<div class="all_settings_fixed_header" >	
+					<table class="allsettings_header_table" >
+					  <tr>						
+							<th onclick="back_function();"  >
+								<img class="icon_settings" alt="Back" src="icons/back.png">
+							</th>
+							<td>
+								<h2 id="modal_header_orient" class="settings_text_header_class" >&nbsp;</h2>
+							</td>
+					  </tr>
+					</table>	
+				</div>
+					
+			<div class="scrollable_second_setting" >
+					
+			<table class="allsettings_header_table" >	
+				
+			<tr>	
+				<th>
+				</th>
+				
+				<td>
+			 <div class="radio_form">
+				 <br>
+					<form>
+						<label class="container_radio">
+							<input id="orient_input_auto" type="radio" name="orientmode" value="automatic" onchange="orient_change(this);"> <b id="modal_orient_auto"  class="settings_text_normal" >Automatisch</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<label class="container_radio">
+							<input id="orient_input_horizontal" type="radio" name="orientmode" value="horizontal" onchange="orient_change(this);"> <b id="modal_orient_horizontal" class="settings_text_normal" >Horizontal</b>
+							<span class="checkmark"></span>
+						</label>
+						<br>
+						<label class="container_radio">
+							<input id="orient_input_vertical" type="radio" name="orientmode" value="vertical" onchange="orient_change(this);"> <b id="modal_orient_vertical" class="settings_text_normal" >Vertikal</b>
+							<span class="checkmark"></span>
+						</label>
+					</form>
+					<br>
+				</div>
+				</td>
+					
+			</tr>	
+		</table>
+		
+		</div>
+	</div>	
 	
 	
 	<div id="progress_dialog_bg"></div>	
@@ -644,7 +709,7 @@
 					</td>
 				</tr> 
 				
-				
+				<!-- Old method...
 				<tr>
 					<th><img class="icon_settings" alt="Wallpaper" src="icons/wallpaper.png"></th>
 					<td>
@@ -652,6 +717,7 @@
 					</td>
 
 				</tr>
+				-->
 					  
 				<tr>
 					<th><img class="icon_settings" alt="Info" src="icons/info.png"></th>
@@ -1596,8 +1662,14 @@
 	</div>
 	</div>	
 
+  </div> <!-- End Main App Div -->
+  
+</body>
+
+
 <!-- For Debug in the Webbrowser -->
 <script>
+	
 	var debug = 0;
 	var loading_finished = 0; //Set to 1 after all saved apps are loaded...
 	
@@ -1633,6 +1705,8 @@ String.prototype.replaceAll = function(search, replacement)
 function ready_function() 
 {				
 	"use strict";
+	
+	navigator.splashscreen.show();
 	
 	window.plugins.intentShim.getIntent(function(short_cut_info)
 	{
@@ -1693,8 +1767,6 @@ function ready_function()
 				
 				new_font_size_adjust();
 
-
-				
 		
 				if(cat==2)
 				{	
@@ -1913,10 +1985,8 @@ function ready_function()
 		   
 		
 		
-		cordova.plugins.diagnostic.requestExternalStorageAuthorization(function(status)
-		{
-		if(status == cordova.plugins.diagnostic.permissionStatus.GRANTED)
-		{
+		
+		
 			var successinfo = function(message) 
 			{
 				var array_s = "";
@@ -1946,16 +2016,8 @@ function ready_function()
 			};
 			
 			var failinfo = function(message) {};
-			androidinfo.getall("getall", successinfo, failinfo);
-		}		
-		else
-		{
-			location.reload(); 
-		}
-	}, 
-	function(error){});
+			androidinfo.getall("getall", successinfo, failinfo); //Start
 
-	 
 }
 
 document.addEventListener("backbutton", onBackKeyDown, false);
@@ -1975,7 +2037,7 @@ if(debug == 1)
     
 </script>
 
-</body>
+
 </html>
 
 

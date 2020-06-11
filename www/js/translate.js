@@ -13,7 +13,6 @@ var hide_app_text = "";
 var show_app_text = "";
 var app_unin = "";
 var settings_header = "";
-var settings_bg_text = "";
 var settings_homescreen_icons_text = "";
 var settings_appdrawer_text = "";
 var settings_icon_type_text = "";
@@ -123,6 +122,10 @@ var next_day_string = "";
 var warn_sort_cat_string = "";
 var font_string = "";
 var font_select_string = "";
+var orient_text = "";
+var orient_auto = "";
+var orient_horizontal = "";
+var orient_vertical = "";
 
 //All element strings are changed in order to apply the current language
 function applay_lang()
@@ -157,7 +160,6 @@ function applay_lang()
 		 show_app_text = "Show";
 		 app_unin = "Uninstall";
 		 settings_header = "Settings";
-		 settings_bg_text = "Reload background";
 		 settings_homescreen_icons_text = "Homescreen icons";
 		 settings_appdrawer_text = "App-Drawer type";
 		 settings_icon_type_text = "App-Drawer icons black/white";
@@ -255,7 +257,11 @@ function applay_lang()
 		 warn_sort_cat_string = "From now on Apps won't be sorted automatically!";
 		 font_string = "Typeface";
 		 font_select_string = "Select typeface:";
-		   
+		 orient_text = "Orientation";  
+		 orient_auto = "Automatic";
+		 orient_horizontal = "Horizontal";
+		 orient_vertical = "Vertical";
+
 		if(default_cats==1)
 		{
 			cat_array = [];
@@ -302,7 +308,6 @@ function applay_lang()
 		 show_app_text = "Anzeigen";
 		 app_unin = "Deinstallieren";
 		 settings_header = "Einstellungen";
-		 settings_bg_text = "Hintergrund neu laden";
 		 settings_homescreen_icons_text = "Startbildschirm Icons";
 		 settings_appdrawer_text = "App-Übersicht Art";
 		 settings_icon_type_text = "App-Übersicht Icons Schwarz/Weiß";
@@ -398,7 +403,11 @@ function applay_lang()
 		 warn_sort_cat_string = "Apps werden nun nicht automatisch sortiert!";
 		 font_string = "Schriftart";
 		 font_select_string = "Schriftart wählen:";
-		  
+		 orient_text = "Ausrichtung";
+		 orient_auto = "Automatisch";
+		 orient_horizontal = "Horizontal";
+		 orient_vertical = "Vertikal";	
+		 	  
 		if(default_cats==1)
 		{
 			cat_array = [];
@@ -451,7 +460,6 @@ function applay_lang()
 	document.getElementById("btn_app_aus").textContent = hide_app_text;
 	document.getElementById("btn_app_uninstall").textContent = app_unin;
 	document.getElementById("settings_text_header").textContent = settings_header;
-	document.getElementById("settings_bg").textContent = settings_bg_text;
 	document.getElementById("settings_homescreen_icons").textContent = settings_homescreen_icons_text;
 	document.getElementById("settings_icon_type").textContent = settings_icon_type_text;
 	document.getElementById("settings_icon_type_homescreeen").textContent = settings_icon_type_homescreen_text;
@@ -579,6 +587,15 @@ function applay_lang()
 	document.getElementById("normal_font_appdrawer_item").textContent = default_string;
 	document.getElementById("normal_font_homescreen_item").textContent = default_string;
 	
+	document.getElementById("settings_orient").textContent = orient_text;
+	document.getElementById("modal_header_orient").textContent = orient_text;
+	
+	document.getElementById("modal_orient_auto").textContent = orient_auto;
+	document.getElementById("modal_orient_horizontal").textContent = orient_horizontal;
+	document.getElementById("modal_orient_vertical").textContent = orient_vertical;
+	
+		 
+		 
 	if(current_kat!=-1)
 	{
 		if(current_kat > cat_array.length)

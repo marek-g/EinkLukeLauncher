@@ -554,17 +554,11 @@ li.home
     
 body 
 { 
-
+	background:transparent;
+	
+	/*
     background: url('file:///data/data/luke.launcher/wallpaper.jpg') no-repeat center center fixed; 
     
-    /*
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    * 
-    *  background-size: cover;
-    *  background-size: 100vw 100vw;
-    */
     
     background-size: cover;
     overflow-x: hidden;
@@ -576,8 +570,14 @@ body
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
+    
+    */
  }
     
+#main_app_div
+{
+	opacity: 0;
+}
 
 #allsettings
 {
@@ -931,8 +931,22 @@ body
 }
 
 
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
 #loading_div
 {
+	display:none;
 	background: white;
 	z-index:1000;
 	position:absolute;
@@ -941,68 +955,67 @@ body
 	width:100vw;
 	height:100vh;
 	text-align:center;
-	display: flex;
     align-items: center;
     justify-content: center;
     opacity: 1;
-    transition: opacity 0.8s; 
+    transition: opacity 0.8s;
 }
 
 
 
-	#loading_div.fade
-	{
-	  opacity: 0;
-	}
+#loading_div.fade
+{
+  opacity: 0;
+}
 
 
-	#load_img1 
-	{ 
-	   max-width:5vw;
-	   animation-name: limg1;
-	   animation-duration: 1.5s;
-	   animation-delay: 0.8s; 
-	   animation-fill-mode: forwards;
-	   transform: translateX(10vw);
-	}
+#load_img1 
+{ 
+	max-width:5vw;
+	animation-name: limg1;
+	animation-duration: 1.5s;
+	animation-delay: 0.8s; 
+	animation-fill-mode: forwards;
+	transform: translateX(10vw);
+}
 
-	#load_img2 
-	{ 
-	   max-width:5vw;
-	   animation-name: limg2;
-	   animation-duration: 1.5s;
-	   animation-delay: 0.8s; 
-	   animation-fill-mode: forwards;
-	   transform: translateX(-10vw);
-	}
+#load_img2 
+{ 
+	max-width:5vw;
+	animation-name: limg2;
+	animation-duration: 1.5s;
+	animation-delay: 0.8s; 
+	animation-fill-mode: forwards;
+	transform: translateX(-10vw);
+}
 
-	@keyframes limg1 
-	{
-		from { transform: translateX(10vw) }
-		to   { transform: translateX(0vw) }
-	}
+@keyframes limg1 
+{
+	from { transform: translateX(10vw) }
+	to   { transform: translateX(0vw) }
+}
 
-	@keyframes limg2 
-	{
-		from { transform: translateX(-10vw) }
-		to   { transform: translateX(-0.5vw) }
-	}
+@keyframes limg2 
+{
+	from { transform: translateX(-10vw) }
+	to   { transform: translateX(-0.5vw) }
+}
 
-	#logo_text
-	{
-		animation-name: logotextanimation;
-		opacity: 0;
-		animation-delay: 1s;
-		animation-duration: 3s;
-		animation-fill-mode: forwards;
-		max-width:20vw;
-	}
+#logo_text
+{
+	animation-name: logotextanimation;
+	opacity: 0;
+	animation-delay: 1s;
+	animation-duration: 3s;
+	animation-fill-mode: forwards;
+	max-width:20vw;
+}
 
-	@keyframes logotextanimation
-	{
-	  0% { opacity: 0; }
-	  100% { opacity: 1; }
-	}
+@keyframes logotextanimation
+{
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
 
 
 
@@ -1986,6 +1999,23 @@ body
 }
 
 
+#modal_orient_auto
+{
+	display:block;
+	padding-left: 4vh;
+}
+
+#modal_orient_horizontal
+{
+	display:block;
+	padding-left: 4vh;
+}
+
+#modal_orient_vertical
+{
+	display:block;
+	padding-left: 4vh;
+}
 
 #modal_lang_ger
 {

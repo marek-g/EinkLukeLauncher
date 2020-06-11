@@ -41,6 +41,12 @@
     "cordova-plugin-proguard": {
       "PACKAGE_NAME": "luke.launcher"
     },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "luke.launcher"
     },
@@ -48,6 +54,10 @@
       "PACKAGE_NAME": "luke.launcher"
     },
     "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "luke.launcher"
+    },
+    "cordova-plugin-window-background": {
+      "WINDOW_BACKGROUND_COLOR": "##871717",
       "PACKAGE_NAME": "luke.launcher"
     },
     "cordova-plugin-x-toast": {
@@ -61,5 +71,9 @@
       "PACKAGE_NAME": "luke.launcher"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "luke.launcher"
+    }
+  }
 }

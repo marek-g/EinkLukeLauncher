@@ -554,7 +554,20 @@ public class Info extends CordovaPlugin
     }
     
     
-    
+    /*
+     * Based on:
+     * https://stackoverflow.com/questions/44447056/convert-adaptiveicondrawable-to-bitmap-in-android-o-preview
+    */
+	private Bitmap getBitmapFromDrawable( Drawable drawable) 
+	{
+		final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+		final Canvas canvas = new Canvas(bmp);
+		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+		drawable.draw(canvas);
+		return bmp;
+	}
+
+
     
     
     @Override
@@ -752,7 +765,7 @@ public class Info extends CordovaPlugin
 			}
 			catch (PackageManager.NameNotFoundException e){}
 			
-			Bitmap bitmap = ((BitmapDrawable)icon).getBitmap();
+			Bitmap bitmap = getBitmapFromDrawable(icon);//((BitmapDrawable)icon).getBitmap();
 			try
 			{	
 				if(bitmap!=null)

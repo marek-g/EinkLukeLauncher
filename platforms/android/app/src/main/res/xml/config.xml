@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="luke.launcher" version="1.0.16" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="luke.launcher" version="1.0.17" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="IntentShim">
         <param name="android-package" value="com.darryncampbell.cordova.plugin.intent.IntentShim" />
         <param name="onload" value="true" />
@@ -30,6 +30,13 @@
     </feature>
     <feature name="NavigationBar">
         <param name="android-package" value="com.viniciusfagundes.cordova.plugin.navigationbar.NavigationBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="CDVOrientation">
+        <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
     <feature name="StatusBar">
@@ -72,8 +79,14 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <config-file parent="/*" target="app/src/main/res/values/strings.xml">
+        <style name="CustomStyle" parent="@android:style/Theme.Material.Light.NoActionBar">
+            <item name="android:windowShowWallpaper">true</item>
+            <item name="android:windowBackground">@android:color/transparent</item>
+        </style>
+    </config-file>
     <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
-        <activity android:configChanges="orientation|keyboardHidden|screenSize" android:excludeFromRecents="true" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan" />
+        <activity android:configChanges="orientation|keyboardHidden|screenSize" android:excludeFromRecents="true" android:launchMode="singleTask" android:stateNotNeeded="true" android:theme="@style/CustomStyle" android:windowSoftInputMode="adjustPan" />
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
@@ -85,7 +98,7 @@
     <hook src="clean_build.sh" type="before_build" />
     <hook src="clean_compile.sh" type="before_compile" />
     <icon src="logo_small.png" />
-    <config-file android:excludeFromRecents="true" android:launchMode="singleTask" parent="./application/activity" target="AndroidManifest.xml">
+    <config-file parent="./application/activity" target="AndroidManifest.xml">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
@@ -95,7 +108,7 @@
             <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT" />
         </intent-filter>
     </config-file>
-    <config-file android:excludeFromRecents="true" parent="/manifest" target="AndroidManifest.xml">
+    <config-file parent="/manifest" target="AndroidManifest.xml">
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -105,5 +118,7 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="AndroidLaunchMode" value="singleTask" />
     <preference name="cordova.plugins.diagnostic.modules" value="EXTERNAL_STORAGE" />
-    <preference name="splashscreen" value="none" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="SplashMaintainAspectRatio" value="false" />
 </widget>

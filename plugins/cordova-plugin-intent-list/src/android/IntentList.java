@@ -62,25 +62,7 @@ public class IntentList extends CordovaPlugin {
     public static final String ACTION_GET_INTENT_LIST = "getIntentList";
 
     // @see https://stackoverflow.com/a/10600736
-    public static Bitmap drawableToBitmap (Drawable drawable) 
-    {
-        Bitmap bitmap = null;
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
-            }
-        }
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
-    }
+
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException
@@ -127,7 +109,7 @@ public class IntentList extends CordovaPlugin {
 							
 							// Drawable iconDrawable = context.getPackageManager().getApplicationIcon(context.getApplicationInfo());
 							
-							 Bitmap bitmap = Bitmap.createBitmap(appIcon.getIntrinsicWidth(),
+							Bitmap bitmap = Bitmap.createBitmap(appIcon.getIntrinsicWidth(),
 							appIcon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
 							final Canvas canvas = new Canvas(bitmap);
 							appIcon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());

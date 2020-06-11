@@ -81,14 +81,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-fonts.fonts",
-      "file": "plugins/cordova-plugin-fonts/www/fonts.js",
-      "pluginId": "cordova-plugin-fonts",
-      "clobbers": [
-        "navigator.Fonts"
-      ]
-    },
-    {
       "id": "cordova-plugin-intent-list.IntentList",
       "file": "plugins/cordova-plugin-intent-list/www/IntentList.js",
       "pluginId": "cordova-plugin-intent-list",
@@ -120,6 +112,28 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "pluginId": "cordova-plugin-navigationbar-color",
       "clobbers": [
         "window.NavigationBar"
+      ]
+    },
+    {
+      "id": "es6-promise-plugin.Promise",
+      "file": "plugins/es6-promise-plugin/www/promise.js",
+      "pluginId": "es6-promise-plugin",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-screen-orientation.screenorientation",
+      "file": "plugins/cordova-plugin-screen-orientation/www/screenorientation.js",
+      "pluginId": "cordova-plugin-screen-orientation",
+      "clobbers": [
+        "cordova.plugins.screenorientation"
+      ]
+    },
+    {
+      "id": "cordova-plugin-splashscreen.SplashScreen",
+      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+      "pluginId": "cordova-plugin-splashscreen",
+      "clobbers": [
+        "navigator.splashscreen"
       ]
     },
     {
@@ -179,14 +193,17 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-fonts": "0.6.5",
     "cordova-plugin-intent-list": "0.0.5",
     "cordova-plugin-nativestorage": "2.3.2",
     "cordova-plugin-navigationbar-color": "0.0.8",
     "cordova-plugin-proguard": "2.0.1",
+    "es6-promise-plugin": "4.2.2",
+    "cordova-plugin-screen-orientation": "3.0.2",
+    "cordova-plugin-splashscreen": "5.0.4",
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-wallpaper": "0.1.0",
     "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-window-background": "1.1.2",
     "cordova-plugin-x-toast": "2.7.2",
     "cordova.plugins.diagnostic": "5.0.1",
     "net.coconauts.notification-listener": "0.0.2"

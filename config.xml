@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="luke.launcher" version="1.0.16" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="luke.launcher" version="1.0.17" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>LukeLauncher</name>
     <description>
         A category based launcher. 
@@ -23,18 +23,22 @@
     
 	<preference name="cordova.plugins.diagnostic.modules" value="EXTERNAL_STORAGE" />
 
-    <preference name="splashscreen" value="none" />
-
-
+	
+	<preference name="SplashScreen" value="screen" />
+	<preference name="SplashScreenDelay" value="10000" />
+	<preference name="SplashMaintainAspectRatio" value="false" />
+        
     <platform name="android">
 		     
+	
 		<hook type="before_build" src="clean_build.sh" />
 		<hook type="before_compile" src="clean_compile.sh" />
 		
         <icon src="logo_small.png" />
         
+        
     
-        <config-file target="AndroidManifest.xml" parent="./application/activity" android:excludeFromRecents="true" android:launchMode="singleTask" >
+        <config-file target="AndroidManifest.xml" parent="./application/activity" >
 		
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -46,14 +50,10 @@
 				
 				<action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT" />
 				
-				
 			</intent-filter> 
-
-
-            
         </config-file>
         
-      <config-file target="AndroidManifest.xml" parent="/manifest"  android:excludeFromRecents="true">
+      <config-file target="AndroidManifest.xml" parent="/manifest" >
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
         	
@@ -64,14 +64,22 @@
         
 	  </config-file>
     
+    
+ 
 
     </platform>
     
     
-    
+    <config-file target="app/src/main/res/values/strings.xml" parent="/*">
+		<style name="CustomStyle" parent="@android:style/Theme.Material.Light.NoActionBar">
+			<item name="android:windowShowWallpaper">true</item>
+			<item name="android:windowBackground">@android:color/transparent</item>
+		</style>
+  	</config-file>
     
     <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
-    <activity android:configChanges="orientation|keyboardHidden|screenSize" android:windowSoftInputMode="adjustPan" android:excludeFromRecents="true"  android:launchMode="singleTask" />
+		
+    <activity android:theme="@style/CustomStyle" android:configChanges="orientation|keyboardHidden|screenSize" android:windowSoftInputMode="adjustPan" android:excludeFromRecents="true"  android:launchMode="singleTask" android:stateNotNeeded="true" />
     
     <intent-filter>
       <action android:name="android.intent.action.MAIN" />
@@ -83,8 +91,6 @@
  
     </intent-filter> 
     
-
- 
           
               
 </edit-config>

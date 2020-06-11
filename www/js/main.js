@@ -63,6 +63,9 @@ var iconpack_timer = null;
 //Das globale IconPack
 var global_icon_pack = "default";
 
+//Orientation
+var orient_mode = "";
+ 
 //These arrays are filled when a new app is installed
 var cat_1_new = [];
 var cat_2_new = [];
@@ -1320,7 +1323,7 @@ function get_current_settings()
 {
 	"use strict";
     var back = "";
-    back =  startpage  + "||" + black_white + "||" + clock + "||" + color_text + "||" + read  + "||" + lang + "||" + clock_app + "||" + date_app +"||" + statusbar_state + "||" + black_white_homescreen + "||"+nav_bar_state + "||" + nav_bar_padding + "||" + status_bar_padding + "||" + homescreen_nofitications + "||" + font_size_header + "||" + font_size_app + "||" + font_size_homescreen + "||" + appdrawer_vertical+"-"+appdrawer_horizontal +"||"+ zeilen_homescreen +"-"+spalten_homescreen+"||"+default_cats+"||"+cat_icon_size +"||" + JSON.stringify(cat_array) + "||" + global_icon_pack + "||" + appdrawer_align +"||" + swipe_mode+"||"+appdrawer_icon_size+"||"+bottom_padding_zero+"||"+appdrawer_font+"||"+homescreen_font;
+    back =  startpage  + "||" + black_white + "||" + clock + "||" + color_text + "||" + read  + "||" + lang + "||" + clock_app + "||" + date_app +"||" + statusbar_state + "||" + black_white_homescreen + "||"+nav_bar_state + "||" + nav_bar_padding + "||" + status_bar_padding + "||" + homescreen_nofitications + "||" + font_size_header + "||" + font_size_app + "||" + font_size_homescreen + "||" + appdrawer_vertical+"-"+appdrawer_horizontal +"||"+ zeilen_homescreen +"-"+spalten_homescreen+"||"+default_cats+"||"+cat_icon_size +"||" + JSON.stringify(cat_array) + "||" + global_icon_pack + "||" + appdrawer_align +"||" + swipe_mode+"||"+appdrawer_icon_size+"||"+bottom_padding_zero+"||"+appdrawer_font+"||"+homescreen_font+"||"+orient_mode;
     return back;
 }
 
@@ -1346,7 +1349,6 @@ function check_in_range(in_val,min_range,max_range)
 function applay_settings(in_string) 
 {
 	"use strict";
-
 	still_in_settings = 1; //To prevent erros when an other event occurs
 	
 	try
@@ -1644,6 +1646,16 @@ function applay_settings(in_string)
 		}
 	}catch( error ){}	
 
+	
+	orient_mode = "";
+	try{
+		if(array_s[29] != undefined)
+		{
+			orient_mode = array_s[29];
+		}
+	}catch( error ){}	
+	if(orient_mode == ""){ orient_mode = "automatic"; }
+	
 	
 	//---------------------------------------------------------------------------------------------
 				
@@ -2168,6 +2180,47 @@ function applay_settings(in_string)
 	}			
 	
 	
+	if( orient_mode == "automatic")
+	{
+		try
+		{
+			screen.orientation.lock('any');
+		}
+		catch(err) {}
+		document.getElementById("currentorientstate").textContent = orient_auto;
+		document.getElementById("orient_input_auto").checked = true;
+		document.getElementById("orient_input_horizontal").checked = false;
+		document.getElementById("orient_input_vertical").checked = false;
+	}
+	
+	if( orient_mode == "horizontal")
+	{
+		try
+		{
+			screen.orientation.lock('landscape');
+		}
+		catch(err) {}
+		document.getElementById("currentorientstate").textContent = orient_horizontal;
+		document.getElementById("orient_input_auto").checked = false;
+		document.getElementById("orient_input_horizontal").checked = true;
+		document.getElementById("orient_input_vertical").checked = false;
+	}
+	
+	if( orient_mode == "vertical")
+	{
+		try
+		{
+			screen.orientation.lock('portrait');
+		}
+		catch(err) {}
+		document.getElementById("currentorientstate").textContent = orient_vertical;
+		document.getElementById("orient_input_auto").checked = false;
+		document.getElementById("orient_input_horizontal").checked = false;
+		document.getElementById("orient_input_vertical").checked = true;
+	}
+	
+
+	
 	update_next_alarm();
 	resize();
 			
@@ -2316,35 +2369,54 @@ function start_import()
 	document.getElementById("askimport_dialog_bg").style.display = "none"; 
 	document.getElementById("askimport_dialog").style.display = "none"; 
 	
-	try
-	{	
-		androidinfo.importall( function ok(in_data)
+	//Ask for read permisson:
+	cordova.plugins.diagnostic.requestExternalStorageAuthorization(function(status)
+	{
+		if(status == cordova.plugins.diagnostic.permissionStatus.GRANTED)
 		{
-			var in_data_array = in_data.split('|_!!!_|');
-			var new_apps = in_data_array[0];
-			var new_settings = in_data_array[1];
-			
-			//First applay the settings...
-			applay_settings(new_settings);
-			update_homescreen_clock_position();
+					
+			try
+			{	
+				androidinfo.importall( function ok(in_data)
+				{
+					var in_data_array = in_data.split('|_!!!_|');
+					var new_apps = in_data_array[0];
+					var new_settings = in_data_array[1];
+					
+					//First applay the settings...
+					applay_settings(new_settings);
+					update_homescreen_clock_position();
 
-			all_apps = string_to_apps(new_apps);
-			update_app_divs();
+					all_apps = string_to_apps(new_apps);
+					update_app_divs();
+					
+					store_apps(apps_to_string(all_apps));
+					applay_icon_pack(global_icon_pack,0);
+					
+					setTimeout(function() 
+					{
+						compare_apps_with_installed_apps();
+					}, 10);
+					force_update_applist = 0; 
 			
-			store_apps(apps_to_string(all_apps));
-			applay_icon_pack(global_icon_pack,0);
+					toast_notification(msg_success, "2000", "bottom");
 			
-			setTimeout(function() 
+				}, function bad(){} );
+			}
+			catch( error )
 			{
-				compare_apps_with_installed_apps();
-			}, 10);
-			force_update_applist = 0; 
+				toast_notification("Error", "3500", "bottom");
+			}
+
+		}	
+		else
+		{
+			toast_notification("Error", "3500", "bottom");
+		}	
+	}, 
+	function(error){});
 	
-			toast_notification(msg_success, "2000", "bottom");
-	
-		}, function bad(){} );
-	}
-	catch( error ){}			
+			
 }
 
 //The import Dialog is aborted
@@ -2593,6 +2665,7 @@ function Lang_mode_change(in_c)
     var new_lang = document.querySelector('input[name="langmode"]:checked').value;
     lang = new_lang;
     
+    //Show a direct feedback to the user - do not wait for applay settings
     if(lang=="eng")
     {
 		modal_header_lang_text2 = "Select language";
@@ -2606,6 +2679,42 @@ function Lang_mode_change(in_c)
 
 }
 
+//User changes the orientation
+function orient_change()
+{
+	"use strict";	
+	if(still_in_settings == 1){return;}	
+    var new_orient_mode = document.querySelector('input[name="orientmode"]:checked').value;
+    orient_mode = new_orient_mode;
+    
+    //Show a direct feedback to the user - do not wait for applay settings
+    if( orient_mode == "automatic")
+	{
+		try 
+		{
+			screen.orientation.lock('any');
+		}
+		catch(err) {}
+	}
+	
+	if( orient_mode == "horizontal")
+	{
+		try 
+		{
+			screen.orientation.lock('landscape');
+		}
+		catch(err) {}
+	}
+	
+	if( orient_mode == "vertical")
+	{
+		try
+		{
+			screen.orientation.lock('portrait');
+		}
+		catch(err) {}
+	}
+}
 
 //Align has changed
 function align_mode_change(in_c)
@@ -2754,6 +2863,16 @@ function show_settings_lang()
 	"use strict";	
 	document.getElementById("allsettings").style.display = "none"; 
 	document.getElementById("settings_lang_div").style.display = "flex"; 
+}
+
+
+
+//Show the Orientation Settings
+function open_orient_settings()
+{
+	"use strict";	
+	document.getElementById("allsettings").style.display = "none"; 
+	document.getElementById("settings_orient_div").style.display = "flex";
 }
 
 
@@ -5073,8 +5192,15 @@ function update_app_divs()
 	update_search_div();
 	set_app_drawer_black_white();
 	
+
+
+	
 	if(should_wait_loadscreen == 0)
 	{
+		should_wait_loadscreen = -1; //Unset
+		document.getElementById("main_app_div").style.opacity = "1";
+		document.getElementById("loading_div").style.display = 'none';
+		/*
 		if( window.getComputedStyle(document.getElementById("loading_div")).display == "flex" )
 		{
 			document.getElementById("loading_div").classList.add('fade');
@@ -5084,10 +5210,25 @@ function update_app_divs()
 				document.getElementById("loading_div").classList.remove('fade');
 								
 			},500);
-		}
+		}*/
 	}
-	else
+	if(should_wait_loadscreen == 1)
 	{
+		should_wait_loadscreen = -1; //Unset
+		document.getElementById("loading_div").style.display = 'flex';
+		setTimeout(function()
+		{
+			document.getElementById("loading_div").classList.add('fade');
+			setTimeout(function()
+			{
+				document.getElementById("main_app_div").style.opacity = "1";				
+				document.getElementById("loading_div").style.display = 'none';
+				document.getElementById("loading_div").classList.remove('fade');
+			},800);
+			
+		},3800);
+		
+		/*
 		if( window.getComputedStyle(document.getElementById("loading_div")).display == "flex" )
 		{
 			setTimeout(function()
@@ -5102,6 +5243,8 @@ function update_app_divs()
 			},3800);
 			return;
 		}
+		*/
+		//document.getElementById("loading_div").style.display = 'none';
 	}
 	
 }
@@ -5728,6 +5871,8 @@ function set_date_app(in_start_name)
 
 
 //Open the wallpaper Settings in android
+//Old wallpaper method
+/*
 function force_update_wallpaper()
 {
 	"use strict";	
@@ -5736,7 +5881,7 @@ function force_update_wallpaper()
 
 	update_wallpaper()	
 }
-
+*/
 
 
 
@@ -5890,18 +6035,18 @@ function resize()
 		spalten_appdrawer = appdrawer_horizontal;
 		
 
-		document.body.style.backgroundSize = "cover"; 
+		//document.body.style.backgroundSize = "cover"; 
 		//document.body.style.backgroundPosition = "0 -43vw";
 		//document.body.style.backgroundPosition = "0 -100vh";
-		document.body.style.backgroundPosition = "0px 0px";
+		//document.body.style.backgroundPosition = "0px 0px";
 	}
 	else
 	{		
 		orientation = "v";
 		spalten_appdrawer = appdrawer_vertical;
 
-		document.body.style.backgroundSize = "cover"; 
-		document.body.style.backgroundPosition = "0px 0px";
+		//document.body.style.backgroundSize = "cover"; 
+		//document.body.style.backgroundPosition = "0px 0px";
 	}
 	
 	if(statusbar_state=="1") //Show Statusbar
@@ -5950,7 +6095,7 @@ function resize()
 		}
 		//unset_trans(); //may lead to a endless recall of redraw
 	}
-		
+	
 	update_app_divs();
 	update_homescreen_clock_position();
 	
@@ -7108,7 +7253,6 @@ function init_luke_launcher()
 	document.addEventListener("resume", onResume, false);
 	
 	
-	update_wallpaper();	
 
 	document.getElementById("padding_input_field").addEventListener('input', padding_input, false);
 	document.getElementById("padding_top_input_field").addEventListener('input', padding_top_input, false);
@@ -7929,12 +8073,12 @@ function load_settings()
 {
 	"use strict";	
 		
-	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1";
+	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic";
 	
 	//If German is avalible
 	if (navigator.language.indexOf("de") > -1)
 	{
-		 defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||de||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1";
+		 defaut_settings_string = defaut_settings_string.replace("||eng||", "||de||");
 	}
 
 	var device_manufacturer = "";
@@ -7947,7 +8091,7 @@ function load_settings()
 	if( device_manufacturer == "xiaomi")
 	{
 		//On Xiaomi Miui devices, the alarm manager is not reliable -> So showing the alarm is in default not active
-		defaut_settings_string= defaut_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
+		defaut_settings_string = defaut_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
 	}
 	
 	try 
@@ -7996,10 +8140,10 @@ function load_settings()
 	}
 	catch (error)
 	{
-		should_wait_loadscreen = 1; //Might be the first run
+		should_wait_loadscreen = 1; // 1 Might be the first run
 		applay_settings(defaut_settings_string);	
 		
-		init_swiper(0);	
+		init_swiper(0);	 //Auf 0!
 		current_view = "appdrawer";
 		
 		setTimeout(function(){ update_homescreen_clock_position();	}, 1500);//Wait for the first interval...
@@ -8222,51 +8366,65 @@ function open_info_settings()
 //Export Settings to the external Storage
 function export_all()
 {
-	"use strict";	
-	try
+	"use strict";
+	
+	//Ask for write permisson:
+	cordova.plugins.diagnostic.requestExternalStorageAuthorization(function(status)
 	{
-		cordova.plugins.diagnostic.requestRuntimePermission(function(status)
+		if(status == cordova.plugins.diagnostic.permissionStatus.GRANTED)
 		{
-			if(status == cordova.plugins.diagnostic.permissionStatus.GRANTED)
+			
+			try
 			{
-				setTimeout(function()
+				cordova.plugins.diagnostic.requestRuntimePermission(function(status)
 				{
-					var export_save_string =  apps_to_string(all_apps) + "|_!!!_|" + get_current_settings();
-					try
-					{	
-						androidinfo.exportall(export_save_string, function ok()
+					if(status == cordova.plugins.diagnostic.permissionStatus.GRANTED)
+					{
+						setTimeout(function()
 						{
-							toast_notification( export_msg_string,"3500","bottom");
-					
-						}, function bad()
-						{
-							toast_notification("Error","3500", "bottom");
-						} );
+							var export_save_string =  apps_to_string(all_apps) + "|_!!!_|" + get_current_settings();
+							try
+							{	
+								androidinfo.exportall(export_save_string, function ok()
+								{
+									toast_notification( export_msg_string,"3500","bottom");
+							
+								}, function bad()
+								{
+									toast_notification("Error","3500", "bottom");
+								} );
+							}
+							catch( error )
+							{
+								toast_notification("Error", "3500", "bottom");	
+							}
+						}, 150);
+						
 					}
-					catch( error )
+					else
 					{
 						toast_notification("Error", "3500", "bottom");	
 					}
-				}, 150);
 				
+					
+				}, function(error)
+				{
+					toast_notification("Error", "3500", "bottom");
+				}, cordova.plugins.diagnostic.permission.WRITE_EXTERNAL_STORAGE);
 			}
-			else
+			catch( error )
 			{
 				toast_notification("Error", "3500", "bottom");	
 			}
-		
-			
-		}, function(error)
+
+		}	
+		else
 		{
 			toast_notification("Error", "3500", "bottom");
-		}, cordova.plugins.diagnostic.permission.WRITE_EXTERNAL_STORAGE);
-	}
-	catch( error )
-	{
-		toast_notification("Error", "3500", "bottom");	
-	}
-				
-		
+		}	
+	}, 
+	function(error){});
+	
 }
 
 
@@ -8370,9 +8528,12 @@ function uninstall()
 }
 
 //Update the wallpaper of the Launcher
+/*
+ *Old method of displaying the wallpaper
 function update_wallpaper()
 {
-	"use strict";	
+	"use strict";
+	
 	var bg = "";
 	try {
 			window.plugins.wallpaper.setImage(" ",
@@ -8394,7 +8555,7 @@ function update_wallpaper()
 	}
 	catch(error) {}			
 }
-
+*/
 
 
 //When LukeLauncher is activated again
@@ -8404,6 +8565,8 @@ function onResume()
 	//ReInit ticken
 	ticken();
 	
+	/*
+	 *Old wallpaper method
 	setTimeout(function() //Wait some time before update the wallpaper
 	{ 		 
 		window.plugins.wallpaper.getImageID(
@@ -8420,7 +8583,8 @@ function onResume()
 		},
 		function(error){ });
 	},350);		
-			
+	*/
+	
     if(force_update_applist==1)
 	{
 		if(searching==1)
