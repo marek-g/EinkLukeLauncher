@@ -94,8 +94,13 @@ var should_wait_loadscreen = 1; //Show longer loading screen...
 var update_search_div_speed_up; //Avoid Redraws - used by update_search_div()
 var update_search_div_speed_up_zeilen = 0; //Avoid Redraws - used by update_search_div()
 
-var current_wallpaper_id = -1; //Android 24(7.0) or higher...
 
+//To recive the device padding..
+var nav_pad_tmp = -1;
+var status_pad_tmp = -1;
+
+var loading_finished = 0; //Set to 1 after all saved apps are loaded...	
+	
 var hct = null;
 var hctb = null;
 var hdt = null;
@@ -623,11 +628,12 @@ function update_homescreen_clock_position()
 	var ftmp = ((window.outerHeight/100)*33.3)/100   * (100-font_size_homescreen) ;
 
 	var max_h = parseInt( document.getElementById('homescreen_out_clock').offsetHeight - vhTOpx(4) - ftmp);
+	var max_w = (window.innerWidth/100)*75; //Max 75% width
 	
 	var c = 0;	
 	var note_break = 0;
 	var clock_height = 0;
-	
+	//Scale Faktor
 	var clock_text_factor = 2;
 	var datum_text_factor = 0.6;
 	var alarm_text_factor = 0.3;
@@ -667,9 +673,13 @@ function update_homescreen_clock_position()
 	c = c - 6;
 	if(c<0)
 	{
-		c = -1;
+		c = 5; //Minimum Clock Size
+		if(font_size_homescreen == 0)
+		{
+			c = -1;
+		}
 	}
-	
+
 	while(true)
 	{
 		c = c + 1;
@@ -685,14 +695,14 @@ function update_homescreen_clock_position()
 		if(note_break > 2000){break;}
 	}
 	
-	var gesw = (window.innerWidth/100)*75; //Max 75% width
-	note_break = 0;
 	
+	note_break = 0;
+
 	while(true)
 	{
 		var clock_width =parseInt(document.getElementById('homescreen_clock_green').offsetWidth);
 		
-		if( clock_width < gesw){break;}
+		if( clock_width < max_w){break;}
 		c = c - 1;
 		elem1.style.fontSize = (c * clock_text_factor) + "px"; 
 		elem2.style.fontSize = (c * clock_text_factor) + "px"; 
@@ -702,15 +712,8 @@ function update_homescreen_clock_position()
 		if(note_break > 2000){break;}
 	}	
 	
-	//Center the div horizontal, padding 10 vw to the sides
-	/*
-	 *Not needed..now Css...
-	var clock_width_vw = pxTOvw( document.getElementById('homescreen_clock_green').offsetWidth  );
-	var set_to = (80 - clock_width_vw) / 2;
-	set_to = set_to + 10;
-		
-	document.getElementById("homescreen_clock_green").style.left = set_to+ "vw";
-    */
+
+
     if(homescreen_tmp_vis == 1 )
 	{
 		document.getElementById("homescreen").style.display = "none";
@@ -5192,8 +5195,6 @@ function update_app_divs()
 	update_search_div();
 	set_app_drawer_black_white();
 	
-
-
 	
 	if(should_wait_loadscreen == 0)
 	{
@@ -7204,6 +7205,12 @@ function hide_icon_select()
 }
 
 
+/*will hopefully never be called - catches all errors and perform a restart*/
+function catch_all_erros()
+{
+	//Restart - hopefully it solves the problem and remains usable
+	location.reload(); 
+}
 
 
 //Init function for the lukelauncher
@@ -7211,6 +7218,8 @@ function init_luke_launcher()
 {
 	"use strict";		
 	
+	window.onerror = function(event) { catch_all_erros(); }
+
 	document.getElementById("searchicon").ontouchstart = function (event){ search_icon_click(); };
 	document.getElementById("menudialogicon").ontouchstart = function (event){ menu_icon_click(); };
 	document.getElementById("s_app_name").ontouchstart = function (event){ edit_input(); };
@@ -7245,13 +7254,17 @@ function init_luke_launcher()
 	
 	document.getElementById("add_new_cat_button").ontouchstart = function (event){ add_app_cat(); };
 	
+	document.getElementById("homescreen_clock_green").ontouchstart = function (event){ home_touch_start(event); };
+	document.getElementById("homescreen_clock_green").ontouchend = function (event){ home_touch_end(event); };
+		
 	document.getElementById("allsettings").style.display = "none";
 	document.getElementById("settings_ba").style.display = "none";
 	document.getElementById("appsettings").style.display = "none";
 
 	window.addEventListener('resize', function(event){ resize();  });
-	document.addEventListener("resume", onResume, false);
 	
+	document.addEventListener("resume", onResume, false);
+	document.addEventListener("backbutton", onBackKeyDown, false);
 	
 
 	document.getElementById("padding_input_field").addEventListener('input', padding_input, false);
@@ -7379,6 +7392,13 @@ function set_global_iconpack(set_icon_pack)
 }
 
 
+//Replace all in string...        
+String.prototype.replaceAll = function(search, replacement)
+{
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 
 
 /* 
@@ -7391,6 +7411,330 @@ function set_global_iconpack(set_icon_pack)
  * 
  * 
  */
+ 
+ 
+
+/* First function, when everything is loaded... */
+function ready_function() 
+{				
+	"use strict";
+	
+	navigator.splashscreen.show();
+	
+	window.plugins.intentShim.getIntent(function(short_cut_info)
+	{
+		//Wait for finished loading
+		setTimeout(function() 
+		{
+			 set_shortcut_after_loading(short_cut_info)
+		},100);
+		
+			function set_shortcut_after_loading(short_cut_info)
+			{	
+				if(loading_finished==0) //Still loading...
+				{
+					setTimeout(function() 
+					{
+						set_shortcut_after_loading(short_cut_info)
+					},200);
+					return;
+				}
+		
+				
+				var short_cut_info_array = short_cut_info.split("|!!|");
+				
+				var package_name = short_cut_info_array[0];
+				var disp_name = short_cut_info_array[1];
+				var icon = short_cut_info_array[2];
+				var shortcut_id = short_cut_info_array[3];
+				var user_id = short_cut_info_array[4];
+
+
+				//Add the virtualapp					
+				if( icon == "blank") //There must be an Error
+				{
+					return;
+				}
+					
+				//package_name = sanitize_input(package_name);
+					
+				var new_package_name = "virtualapp_" + package_name + "!!.!!" + shortcut_id + "!!.!!" + user_id;   //+ package_name + "!.!" + url;
+					
+				//Check if app exists...
+				if(check_if_app_exists(new_package_name) == true)
+				{
+					//Link is already present...
+					return;
+				}
+				
+					
+				var cat = guess_cat(disp_name,new_package_name);
+					
+				var tmp_app = new App(new_package_name,disp_name,icon,cat);
+				
+				all_apps.unshift(tmp_app);
+						
+				set_app_list(all_apps);	
+				
+				update_app_divs();
+				
+				new_font_size_adjust();
+
+		
+				if(cat==2)
+				{	
+					if(current_kat != 2)
+					{
+						cat_2_new.push(tmp_app.start_name);
+						set_new_cat(2);
+					}
+				}
+				else
+				{
+					if(current_kat != 1)
+					{
+						cat_1_new.push(tmp_app.start_name);
+						set_new_cat(1);	
+					}
+				}
+				
+				
+				set_app_drawer_black_white();
+		}
+	
+	}, function fail(){} );
+
+						
+	var firstbr = window.plugins.intentShim.registerBroadcastReceiver(
+	{
+			filterActions:
+			[
+				'android.intent.action.PACKAGE_ADDED',
+				'android.intent.action.PACKAGE_REMOVED'
+			],
+			filterDataSchemes:
+			[
+				'package'
+			]
+	},function(){});
+
+
+	var secondbr = window.plugins.intentShim.registerBroadcastReceiver(
+	{
+	  filterActions: 
+	  [
+		'luke.launcher.ACTION', //  Scans
+		'com.android.launcher.action.INSTALL_SHORTCUT', //  Messages from service
+	  ],
+	  filterCategories: 
+	  [
+		'com.android.intent.category.DEFAULT'
+	  ]
+	},
+	function(intent)
+	{
+		force_update_applist = 0; //Workaround for the new app installed bug
+		
+		var shortcut = ""+intent;
+		var array_s = shortcut.split("|,|");	 
+		var package_name = array_s[0];
+		package_name = package_name.replace("ComponentInfo{", "");
+		package_name = package_name.replace("}", "");
+		var disp_name = array_s[1];
+		var url = array_s[2];
+		var icon = array_s[3];        
+			
+
+		if( url == "blank") //There must be an Error
+		{
+			setTimeout(function() 
+			{
+				compare_apps_with_installed_apps();
+				update_app_divs();
+				new_font_size_adjust();
+				
+			}, 150);
+			return;
+		}
+			
+		if( url == "icon") //There must be an Error
+		{
+			return;
+		}
+			
+		url = sanitize_input(url);
+		package_name = sanitize_input(package_name);
+			
+		var new_package_name = "virtualapp_" + package_name + "!.!" + url;
+			
+		//Check if app exists...
+		if(check_if_app_exists(new_package_name) == true)
+		{
+			//Link is already present...
+			return;
+		}
+			
+		var cat = guess_cat(disp_name,new_package_name);
+			
+		var tmp_app = new App(new_package_name,disp_name,icon,cat);
+		all_apps.unshift(tmp_app);
+			
+		update_app_divs();
+		set_app_list(all_apps);
+		new_font_size_adjust();
+
+		if(cat==2)
+		{	
+			if(current_kat != 2)
+			{
+				cat_2_new.push(tmp_app.start_name);
+				set_new_cat(2);
+			}
+		}
+		else
+		{
+			if(current_kat != 1)
+			{
+				cat_1_new.push(tmp_app.start_name);
+				set_new_cat(1);	
+			}
+		}
+		
+		set_app_drawer_black_white();
+			
+		return;		
+	});
+
+
+	window.plugins.intentShim.onIntent(function (intent) //HomeScreen Button Press
+	{
+
+		if(  window.getComputedStyle(document.getElementById("settings_ba")).display == "block" ) //Hide Dropdown menu
+		{
+			back_function();
+			return;
+		}
+		
+		
+		if (app_move_mode == 1)
+		{ 
+			app_move_mode = 0;
+			if( current_view == "appdrawer")
+			{
+				document.getElementById("scrollable").style.display = 'block';
+				init_swiper(0);
+							
+				document.getElementById("scrollable").style.border = "solid";
+				document.getElementById("scrollable").style.borderColor = "red";
+				document.getElementById("scrollable").style.borderWidth = "0vw";
+
+				update_app_position();
+				update_app_divs();
+				store_apps(apps_to_string(all_apps));
+			}
+			else
+			{
+				document.getElementById("app_drawer").style.display = "block";
+				document.getElementById("table_homescreen").style.border = "solid";
+				document.getElementById("table_homescreen").style.borderColor = "red";
+				document.getElementById("table_homescreen").style.borderWidth = "0vh";
+					
+				update_app_position();
+				update_app_divs(); //Update all divs - also the homescreen div
+				init_swiper(1);
+				store_apps(apps_to_string(all_apps));
+			}
+		}
+		
+		if(mySwiper!=null)
+		{
+			if (current_view == "appdrawer" )
+			{
+				//To Show the homescreen agian
+				if(swipe_mode=="r")
+				{
+					//mySwiper.slideNext();
+					if(mySwiper!= null){mySwiper.scroll(1, true);}
+				}
+				else
+				{
+					if(mySwiper!= null){mySwiper.scroll(0, true);}
+					//mySwiper.slidePrev();
+				}
+			}
+		}
+	});
+
+
+	notificationListener.listen(function(n)
+	{ 
+		if (homescreen_nofitications == "1") 
+		{
+				
+			if(n.clear==true)
+			{
+					 
+				if(  (n.key).toLowerCase().indexOf("@") == -1  )
+				{
+					if(n.action=="del")
+					{
+						del_badges(n.package);
+					}
+					else
+					{
+						new_badges(n.package);
+					}
+				}
+			}
+			 
+		}
+			 
+	}, function(e){});
+		   
+		
+		
+		
+		
+	var successinfo = function(message) 
+	{
+		var array_s = "";
+		array_s = message.split(",");
+						
+		nav_pad_tmp = "";
+		status_pad_tmp = "";
+						
+		nav_pad_tmp = array_s[0]; 
+		status_pad_tmp = array_s[1]; 
+
+		if(nav_pad_tmp<0)
+		{
+			nav_pad_tmp = "-1";
+		}
+						
+		if(status_pad_tmp<0)
+		{
+			status_pad_tmp = "-1";
+		}
+											
+		if(nav_pad_tmp == ""){nav_pad_tmp = "-1";}
+						
+		if(status_pad_tmp == ""){status_pad_tmp = "-1";}			
+				
+		init_luke_launcher();
+	};
+			
+	var failinfo = function(message) {};
+	androidinfo.getall("getall", successinfo, failinfo); //Start
+}
+
+
+
+//Back Button is pressed
+function onBackKeyDown() 
+{
+	"use strict";
+	back_function();
+}
 
 
 //Icon from a iconpack is selected as a categorie icon
@@ -8564,27 +8908,7 @@ function onResume()
 	"use strict";	
 	//ReInit ticken
 	ticken();
-	
-	/*
-	 *Old wallpaper method
-	setTimeout(function() //Wait some time before update the wallpaper
-	{ 		 
-		window.plugins.wallpaper.getImageID(
-		function(sucess)
-		{
-			if(sucess != -1) //Old Android Version...
-			{
-				if(sucess != current_wallpaper_id)
-				{
-					current_wallpaper_id = sucess;
-					update_wallpaper();
-				}
-			}	
-		},
-		function(error){ });
-	},350);		
-	*/
-	
+
     if(force_update_applist==1)
 	{
 		if(searching==1)
