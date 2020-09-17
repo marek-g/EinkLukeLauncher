@@ -4,6 +4,8 @@
 *.so
 *.o
 *.log
+*.jar
+*.aar
 
 .DS_Store
 .DS_Store?

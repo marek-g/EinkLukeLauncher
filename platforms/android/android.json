@@ -73,6 +73,11 @@
               "xml": "<uses-permission android:name=\"com.android.alarm.permission.SET_ALARM\" />",
               "count": 1,
               "id": "config.xml"
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.EXPAND_STATUS_BAR\" />",
+              "count": 1,
+              "id": "config.xml"
             }
           ],
           "/manifest/application": [

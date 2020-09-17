@@ -1,4 +1,4 @@
-/* jshint shadow:true */
+/*jshint shadow:true */
 /*jshint funcscope:true*/
 /*jshint maxerr: 10000 */
 var all_apps = [];	//Array containing all apps of the launcher
@@ -66,6 +66,9 @@ var global_icon_pack = "default";
 //Orientation
 var orient_mode = "";
  
+//Gesture to expand the Notificationbar... 
+var expand_notification = 0;
+
 //These arrays are filled when a new app is installed
 var cat_1_new = [];
 var cat_2_new = [];
@@ -113,13 +116,12 @@ var app_stores = [
 "com.android.vending",
 "com.android.playstore",
 "com.aurora.store",
-"subreddit.android.appstore",
-];
+"subreddit.android.appstore"];
 	
 //Array with the title of every categorie    
 var kat_list = [];	
 	
-var long_click_timeout = 800; //800 Milliseconds timeout for a long click
+var long_click_timeout = 1200; //1200 Milliseconds timeout for a long click
 var type_of_touch = 0;
 var current_kat = -1; //The current categorie
 
@@ -177,7 +179,7 @@ function applay_cats(in_cat_list_arary)
 	for(var i2 = 1; i2 < cat_anz; i2++)
 	{		
 		var icon = in_cat_list_arary[i2-1][0];		
-		full_string = "<td ontouchend='cat_touch_end()' ontouchstart='open_categorie(event, document.getElementById("+i2+") );' id='"+i2+"' class='redips-trash'><div id='div_"+i2+"_item' class='cat_item'><img id='"+i2+"_png' src='"+icon+"'></div></td>";	
+		full_string = "<td ontouchend='cat_touch_end()' ontouchstart='open_categorie(event, document.getElementById("+i2+") );' id='"+i2+"' class='redips-trash'><div id='div_"+i2+"_item' class='cat_item'><img alt='"+i2+"' id='"+i2+"_png' src='"+icon+"'></div></td>";	
 
 		var new_row = table_cats.insertRow(-1);	
 		new_row.innerHTML='<tr class="child">'+full_string+'</tr>'; 
@@ -217,9 +219,7 @@ function applay_cats(in_cat_list_arary)
 					set_new_cat(cat_p);
 			}
 		}
-		catch (e)
-		{
-		}
+		catch(error){error_log(error);}
 	}	
 	
 }
@@ -277,6 +277,7 @@ function long_touch_check(in_x, in_y)
 			{
 				if(current_view=="homescreen")
 				{
+					if( app_move_mode == 1){ return; }
 					show_settings();
 					open_homescreen_settings();
 				}	
@@ -451,12 +452,12 @@ function tg_clock()
 	"use strict";
     if (document.getElementById("tg_clock").checked == true)
     {
-		document.getElementById("tg_sek_lable").style.display = 'block';
-		document.getElementById("tg_bhour_lable").style.display = 'block';
-		document.getElementById("tg_date_lable").style.display = 'block';
-		document.getElementById("datum_formats_radio").style.display = 'block';
-		document.getElementById("tg_bg_lable").style.display = 'block';
-		document.getElementById("tg_alarmclock_lable").style.display = 'block';
+		document.getElementById("tg_sek_lable").style.display = "block";
+		document.getElementById("tg_bhour_lable").style.display = "block";
+		document.getElementById("tg_date_lable").style.display = "block";
+		document.getElementById("datum_formats_radio").style.display = "block";
+		document.getElementById("tg_bg_lable").style.display = "block";
+		document.getElementById("tg_alarmclock_lable").style.display = "block";
         select_datum_format();
     } 
     else
@@ -571,7 +572,7 @@ function select_datum_format()
 	"use strict";
     if (document.getElementById("tg_date_tg").checked == true) 
     {
-        document.getElementById("datum_formats_radio").style.display = 'block';
+        document.getElementById("datum_formats_radio").style.display = "block";
 
         if( document.getElementById("datum_1").checked == false && document.getElementById("datum_2").checked == false && document.getElementById("datum_2").checked == false)
         {
@@ -606,7 +607,7 @@ function update_homescreen_clock_position()
 	if( window.getComputedStyle(document.getElementById("homescreen")).display != "block" )
 	{
 		homescreen_tmp_vis = 1;
-		document.getElementById("homescreen").style.display = 'block';
+		document.getElementById("homescreen").style.display = "block";
 	}
 
 	var elem1 = document.getElementById("homescreen_clock_text");
@@ -627,7 +628,7 @@ function update_homescreen_clock_position()
 		
 	var ftmp = ((window.outerHeight/100)*33.3)/100   * (100-font_size_homescreen) ;
 
-	var max_h = parseInt( document.getElementById('homescreen_out_clock').offsetHeight - vhTOpx(4) - ftmp);
+	var max_h = parseInt( document.getElementById("homescreen_out_clock").offsetHeight - vhTOpx(4) - ftmp);
 	var max_w = (window.innerWidth/100)*75; //Max 75% width
 	
 	var c = 0;	
@@ -638,7 +639,7 @@ function update_homescreen_clock_position()
 	var datum_text_factor = 0.6;
 	var alarm_text_factor = 0.3;
 	
-	while(true)
+	for(;;) //Used to be while(true)
 	{
 		c = c + 20;
 		note_break = note_break + 1;
@@ -648,14 +649,14 @@ function update_homescreen_clock_position()
 		elem3.style.fontSize = (c * datum_text_factor) + "px";
 		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
-		clock_height = parseInt(document.getElementById('homescreen_clock').offsetHeight);
+		clock_height = parseInt(document.getElementById("homescreen_clock").offsetHeight);
 		if( clock_height > max_h){break;}
 		if(note_break > 2000){break;}
 	}
 	
 	c = c - 21;
 	
-	while(true)
+	for(;;) //Used to be while(true)
 	{
 		c = c + 5;
 		note_break = note_break + 1;
@@ -665,7 +666,7 @@ function update_homescreen_clock_position()
 		elem3.style.fontSize = (c * datum_text_factor) + "px";
 		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
-		clock_height = parseInt(document.getElementById('homescreen_clock').offsetHeight);
+		clock_height = parseInt(document.getElementById("homescreen_clock").offsetHeight);
 		if( clock_height > max_h){break;}
 		if(note_break > 2000){break;}
 	}
@@ -680,7 +681,7 @@ function update_homescreen_clock_position()
 		}
 	}
 
-	while(true)
+	for(;;) //used to be while(true)
 	{
 		c = c + 1;
 		note_break = note_break + 1;
@@ -690,7 +691,7 @@ function update_homescreen_clock_position()
 		elem3.style.fontSize = (c * datum_text_factor) + "px";
 		elem4.style.fontSize = (c * alarm_text_factor) + "px";
 		
-		clock_height = parseInt(document.getElementById('homescreen_clock').offsetHeight);
+		clock_height = parseInt(document.getElementById("homescreen_clock").offsetHeight);
 		if( clock_height > max_h){break;}
 		if(note_break > 2000){break;}
 	}
@@ -698,9 +699,9 @@ function update_homescreen_clock_position()
 	
 	note_break = 0;
 
-	while(true)
+	for(;;) // used to be while(true)
 	{
-		var clock_width =parseInt(document.getElementById('homescreen_clock_green').offsetWidth);
+		var clock_width =parseInt(document.getElementById("homescreen_clock_green").offsetWidth);
 		
 		if( clock_width < max_w){break;}
 		c = c - 1;
@@ -759,12 +760,11 @@ function init_swiper(start)
 		swapNodes(document.getElementById("app_drawer"),document.getElementById("homescreen"));
 	}
 	
-
 	if(start == 0 && swipe_mode=="r") //Start 0 is the Appdrawer -> 1 starts at the Homescreen
 	{
-		mySwiper = new Swiper('.swiper-container',{
-	    mode:'horizontal',
-	    effect:'slide',
+		mySwiper = new Swiper(".swiper-container",{
+	    mode:"horizontal",
+	    effect:"slide",
 	    loop:false,
 	    allowSlidePrev:false,
 	    allowSlideNext:true,
@@ -776,14 +776,13 @@ function init_swiper(start)
 		excludeElements: [document.getElementById("cat")],
 		});
 		
-		
 	}
 	
 	if(start == 1 && swipe_mode=="r") //Start 0 is the Appdrawer -> 1 starts at the Homescreen
 	{
-		mySwiper = new Swiper('.swiper-container',{
-	    mode:'horizontal',
-	    effect:'slide',
+		mySwiper = new Swiper(".swiper-container",{
+	    mode:"horizontal",
+	    effect:"slide",
 	    watchSlidesProgress:true,
 	    loop:false,
 	    allowSlidePrev:true,
@@ -800,29 +799,26 @@ function init_swiper(start)
 
 	if(swipe_mode=="l")
 	{
-		mySwiper = new Swiper('.swiper-container',{
-	    mode:'horizontal',
-	    effect:'slide',
+		if(start==1){start=0;}else{start=1;}
+		mySwiper = new Swiper(".swiper-container",{
+	    mode:"horizontal",
+	    effect:"slide",
 	    watchSlidesProgress:true,
 	    loop:false,
 	    allowSlidePrev:true,
 	    allowSlideNext:false,
 	    speed:150,
-		initialSlide: 1,
+		initialSlide: start,
 		polyfill: false,
 		passiveListeners: true,
 		
 		excludeElements: [document.getElementById("cat")],
-		});
-
-
-		//mySwiper.addSlide(1,document.getElementById("app_drawer"));
-		//mySwiper.addSlide(0,document.getElementById("homescreen"));	
-		//swapNodes(document.getElementById("app_drawer"),document.getElementById("homescreen"));	
+	});
+	
 	}
 
 	
-	mySwiper.on('after-slide',function(i)
+	mySwiper.on("after-slide",function(i)
 	{
 		type_of_touch = 3; //As there is movement
 		if(i==0)
@@ -835,11 +831,9 @@ function init_swiper(start)
 			{
 				current_view = "appdrawer";
 			}
-			//current_view = "appdrawer";
 		}
 		else
 		{
-			//current_view = "homescreen";
 			
 			if(swipe_mode=="l")
 			{
@@ -853,57 +847,42 @@ function init_swiper(start)
 		
 	});
 	
-	
-	/*
-	mySwiper.on('slideChange', function () 
+	if(expand_notification == 1)
 	{
-		type_of_touch = 3; //As there is movement
-			
-		if(mySwiper.realIndex== 1)
-		{
-			mySwiper.allowSlidePrev = true;
-			mySwiper.allowSlideNext = false;
-			
-			if(swipe_mode=="l")
-			{
-				current_view = "appdrawer";
-			}
-			else
-			{
-				current_view = "homescreen";
-			}
-			mySwiper.virtualTranslate = true;
-
-		}
-
-		if(mySwiper.realIndex == 0)
-		{
-			mySwiper.allowSlidePrev = false;
-			mySwiper.allowSlideNext = true;
-
-			if(swipe_mode=="l")
-			{
-				current_view = "homescreen";
-			}
-			else
-			{
-				current_view = "appdrawer";
-			}
-		}
-		
-	});
-	*/
-	
-	if(start==0 && swipe_mode=="l" )
-	{
-		current_view 
+		document.getElementById("homescreen").addEventListener('swiped-down',expand_notifi);
 	}
-	
+	else
+	{
+		try
+		{
+			document.getElementById("homescreen").removeEventListener('swiped-down',expand_notifi);
+		}
+		catch(error){error_log(error);}
+	}
+
 
 }
 
 
 
+function expand_notifi(e)
+{
+	"use strict";
+	if(app_move_mode == 0 && expand_notification == 1) //Due to relaods expand_notification might be 0! Appmove = Editing the Homescreen icons...
+	{
+		var move_way = e.detail.yEnd  - e.detail.yStart;
+		if( move_way > vhTOpx(8) ) //Atleast 8% of the Display height must be swiped...
+		{
+			try
+			{
+				androidinfo.expandnotification(function okexpand(e){}, function badexpand(e){});
+			}
+			catch(error){error_log(error);}
+		}
+	}
+}
+			
+			
 //Function when the back Button was pressed or the BackIcon in the Settings
 function back_function()
 {
@@ -939,10 +918,10 @@ function back_function()
 	if(show_hidden==1)
 	{
 		document.getElementById("Cat_name_text").textContent = cat_array[current_kat][1];//kat_list[current_kat];
-		document.getElementById("scrollable").style.display = 'block';
+		document.getElementById("scrollable").style.display = "block";
 		document.getElementById("table_apps_cat"+current_kat).style.left = "0vw";
-		document.getElementById("table_current_apps").style.display = 'none';
-		document.getElementById("showhiddenappslielement").style.display = 'block';
+		document.getElementById("table_current_apps").style.display = "none";
+		document.getElementById("showhiddenappslielement").style.display = "block";
 		  
 		if(  window.getComputedStyle(document.getElementById("appsettings")).display == "block" ) //Hide Dropdown menu
 		{
@@ -983,7 +962,7 @@ function back_function()
 	}
 	
 	var second_setting_visble = 0;
-   	var all_second_setting_divs = document.getElementsByClassName('second_settings');
+   	var all_second_setting_divs = document.getElementsByClassName("second_settings");
 	for (var i = 0; i < all_second_setting_divs.length; i++) 
 	{
 		var style = window.getComputedStyle( all_second_setting_divs[i]).display;
@@ -994,7 +973,7 @@ function back_function()
 	}  
 	
 	var third_setting_visble = 0;
-   	var all_third_setting_divs = document.getElementsByClassName('third_settings');
+   	var all_third_setting_divs = document.getElementsByClassName("third_settings");
 	for (var i = 0; i < all_third_setting_divs.length; i++) 
 	{
 		var style = window.getComputedStyle( all_third_setting_divs[i]).display;
@@ -1007,13 +986,13 @@ function back_function()
 	if( second_setting_visble == 1 )
 	{
      
-		var all_second_setting_divs = document.getElementsByClassName('second_settings');
+		var all_second_setting_divs = document.getElementsByClassName("second_settings");
 		for (var i = 0; i < all_second_setting_divs.length; i++) 
 		{
 			all_second_setting_divs[i].style.display = "none";
 		}  
 
-		document.getElementById('allsettings').style.display = "flex";
+		document.getElementById("allsettings").style.display = "flex";
 
 		setTimeout(function()
 		{
@@ -1035,7 +1014,7 @@ function back_function()
      
 		var show_app_drawer = 0;
 		var show_extra = 0;
-		var all_third_setting_divs = document.getElementsByClassName('third_settings');
+		var all_third_setting_divs = document.getElementsByClassName("third_settings");
 		
 		for (var i = 0; i < all_third_setting_divs.length; i++) 
 		{
@@ -1061,18 +1040,18 @@ function back_function()
 
 		if(show_app_drawer == 1)
 		{
-			document.getElementById('allsettings').style.display = "none";
-			document.getElementById('settings_appdrawer_div').style.display = "flex";
+			document.getElementById("allsettings").style.display = "none";
+			document.getElementById("settings_appdrawer_div").style.display = "flex";
 		}
 		else if(show_extra == 1)
 		{
-			document.getElementById('allsettings').style.display = "none";
-			document.getElementById('settings_extra_div').style.display = "flex";
+			document.getElementById("allsettings").style.display = "none";
+			document.getElementById("settings_extra_div").style.display = "flex";
 		}
 		else
 		{
-			document.getElementById('allsettings').style.display = "none";
-			document.getElementById('homescreen_div').style.display = "flex";
+			document.getElementById("allsettings").style.display = "none";
+			document.getElementById("homescreen_div").style.display = "flex";
 		}
 		
 		setTimeout(function()
@@ -1116,13 +1095,13 @@ function back_function()
 		document.getElementById("settings_ba").style.display = "none";
 		document.getElementById("allsettings").style.display = "none";
 		document.getElementById("homescreen").style.display = "block";
-		document.getElementById("app_drawer").style.display = 'block';
+		document.getElementById("app_drawer").style.display = "block";
 		
 		var header_blank_obj =  document.getElementById("header_blank");
 		header_blank_obj.style.display = "block";
 		header_blank_obj.style.height = status_bar_padding+"px";
 		
-		document.getElementById("swiper_container").style.display = 'block';
+		document.getElementById("swiper_container").style.display = "block";
 		
 		init_swiper(0);
 		
@@ -1161,9 +1140,7 @@ function ticken()
 	{
 		clearInterval(ticken_timer_obj);
 	}
-	catch (error)
-	{
-	}
+	catch(error){error_log(error);}
 	
     if (clock != "0") //Show the clock
     {
@@ -1232,31 +1209,31 @@ function ticken()
 			datum_f = "";
 	    }
 	
-	    if (datum == "1"){ datum_f = dayjs().locale('de').format('DD.MM.YYYY');}
-		if (datum == "2"){ datum_f = dayjs().locale('de').format('DD.MM.YY');}
-		if (datum == "3"){ datum_f = dayjs().locale('de').format('DD.MM');}
-		if (datum == "8"){ datum_f = dayjs().locale('de').format('MM.DD.YYYY');}
-		if (datum == "9"){ datum_f = dayjs().locale('de').format('MM.DD.YY');}
-		if (datum == "10"){ datum_f = dayjs().locale('de').format('MM.DD');}
+	    if (datum == "1"){ datum_f = dayjs().locale("de").format("DD.MM.YYYY");}
+		if (datum == "2"){ datum_f = dayjs().locale("de").format("DD.MM.YY");}
+		if (datum == "3"){ datum_f = dayjs().locale("de").format("DD.MM");}
+		if (datum == "8"){ datum_f = dayjs().locale("de").format("MM.DD.YYYY");}
+		if (datum == "9"){ datum_f = dayjs().locale("de").format("MM.DD.YY");}
+		if (datum == "10"){ datum_f = dayjs().locale("de").format("MM.DD");}
 			
 
 	    if(lang == "eng")
 		{				
-			if (datum == "4"){datum_f = dayjs().locale('en').format('D. MMMM'); }
-			if (datum == "5"){datum_f = dayjs().locale('en').format('dddd, D. MMMM'); }
-			if (datum == "6"){datum_f = dayjs().locale('en').format('dd, DD.MM.YY'); }
-			if (datum == "7"){datum_f = dayjs().locale('en').format('dd, DD.MM'); }
-			if (datum == "11"){datum_f = dayjs().locale('en').format('dd, MM.DD'); }
-			if (datum == "12"){datum_f = dayjs().locale('en').format('dd, MM.DD.YY'); }
+			if (datum == "4"){datum_f = dayjs().locale("en").format("D. MMMM"); }
+			if (datum == "5"){datum_f = dayjs().locale("en").format("dddd, D. MMMM"); }
+			if (datum == "6"){datum_f = dayjs().locale("en").format("dd, DD.MM.YY"); }
+			if (datum == "7"){datum_f = dayjs().locale("en").format("dd, DD.MM"); }
+			if (datum == "11"){datum_f = dayjs().locale("en").format("dd, MM.DD"); }
+			if (datum == "12"){datum_f = dayjs().locale("en").format("dd, MM.DD.YY"); }
 		}
 		else
 		{
-			if (datum == "4"){datum_f = dayjs().locale('de').format('D. MMMM'); }
-			if (datum == "5"){datum_f = dayjs().locale('de').format('dddd, D. MMMM'); }
-			if (datum == "6"){datum_f = dayjs().locale('de').format('dd, DD.MM.YY'); }
-			if (datum == "7"){datum_f = dayjs().locale('de').format('dd, DD.MM'); }
-			if (datum == "11"){datum_f = dayjs().locale('de').format('dd, MM.DD'); }
-			if (datum == "12"){datum_f = dayjs().locale('de').format('dd, MM.DD.YY'); }
+			if (datum == "4"){datum_f = dayjs().locale("de").format("D. MMMM"); }
+			if (datum == "5"){datum_f = dayjs().locale("de").format("dddd, D. MMMM"); }
+			if (datum == "6"){datum_f = dayjs().locale("de").format("dd, DD.MM.YY"); }
+			if (datum == "7"){datum_f = dayjs().locale("de").format("dd, DD.MM"); }
+			if (datum == "11"){datum_f = dayjs().locale("de").format("dd, MM.DD"); }
+			if (datum == "12"){datum_f = dayjs().locale("de").format("dd, MM.DD.YY"); }
 		}
 	
 	
@@ -1266,7 +1243,7 @@ function ticken()
 		{
 			hdt.textContent = datum_f;
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 			
 		if(datum_f != old_date && old_date != "" )
 		{
@@ -1280,7 +1257,7 @@ function ticken()
 			hct.textContent = zeit;
 			hctb.textContent = stunden;
         }
-        catch (e){}
+        catch(error){error_log(error);}
 		
          if (bold_hours == "1" )
          {
@@ -1288,7 +1265,7 @@ function ticken()
 			{
 				hctb.style.fontWeight = "bolder"; 
 			}
-			catch (e){}
+			catch(error){error_log(error);}
         }
         else
         {
@@ -1296,7 +1273,7 @@ function ticken()
 			{
 				hctb.style.fontWeight = "normal"; 
 			}
-			catch (e){}
+			catch(error){error_log(error);}
 		}
         
 		update_next_alarm();
@@ -1326,7 +1303,7 @@ function get_current_settings()
 {
 	"use strict";
     var back = "";
-    back =  startpage  + "||" + black_white + "||" + clock + "||" + color_text + "||" + read  + "||" + lang + "||" + clock_app + "||" + date_app +"||" + statusbar_state + "||" + black_white_homescreen + "||"+nav_bar_state + "||" + nav_bar_padding + "||" + status_bar_padding + "||" + homescreen_nofitications + "||" + font_size_header + "||" + font_size_app + "||" + font_size_homescreen + "||" + appdrawer_vertical+"-"+appdrawer_horizontal +"||"+ zeilen_homescreen +"-"+spalten_homescreen+"||"+default_cats+"||"+cat_icon_size +"||" + JSON.stringify(cat_array) + "||" + global_icon_pack + "||" + appdrawer_align +"||" + swipe_mode+"||"+appdrawer_icon_size+"||"+bottom_padding_zero+"||"+appdrawer_font+"||"+homescreen_font+"||"+orient_mode;
+    back =  startpage  + "||" + black_white + "||" + clock + "||" + color_text + "||" + read  + "||" + lang + "||" + clock_app + "||" + date_app +"||" + statusbar_state + "||" + black_white_homescreen + "||"+nav_bar_state + "||" + nav_bar_padding + "||" + status_bar_padding + "||" + homescreen_nofitications + "||" + font_size_header + "||" + font_size_app + "||" + font_size_homescreen + "||" + appdrawer_vertical+"-"+appdrawer_horizontal +"||"+ zeilen_homescreen +"-"+spalten_homescreen+"||"+default_cats+"||"+cat_icon_size +"||" + JSON.stringify(cat_array) + "||" + global_icon_pack + "||" + appdrawer_align +"||" + swipe_mode+"||"+appdrawer_icon_size+"||"+bottom_padding_zero+"||"+appdrawer_font+"||"+homescreen_font+"||"+orient_mode+"||"+expand_notification;
     return back;
 }
 
@@ -1358,7 +1335,7 @@ function applay_settings(in_string)
 	{
 		var array_s = in_string.split("||");
 	}
-	catch( error ){}	
+	catch(error){error_log(error);}	
 		
 		
 	//The setting string is splitted
@@ -1368,7 +1345,7 @@ function applay_settings(in_string)
 		{
 			startpage = array_s[0]; 
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if(	startpage != "n" && startpage != "r") { startpage = "r"; }
 	
 		
@@ -1378,7 +1355,7 @@ function applay_settings(in_string)
 		{
 			black_white = array_s[1];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( black_white != "0" && black_white != "1" ) { black_white = "0";}
 	
 		
@@ -1388,7 +1365,7 @@ function applay_settings(in_string)
 		{
 			clock = array_s[2];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( clock == "" ) { clock = "1-0-1-#000000-1-1"; }	
 		
 		
@@ -1398,7 +1375,7 @@ function applay_settings(in_string)
 		{
 			color_text = array_s[3];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if(color_text == "") { color_text = "#ffffff"; }	
 		
 		
@@ -1408,7 +1385,7 @@ function applay_settings(in_string)
 		{
 			read = array_s[4];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(read,0,100) == false){ read = "70"; }	
 		
 		
@@ -1418,7 +1395,7 @@ function applay_settings(in_string)
 		{
 			lang = array_s[5];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( lang == "" ) { lang = "eng"; }
 		
 		
@@ -1428,7 +1405,7 @@ function applay_settings(in_string)
 		{
 			clock_app = array_s[6];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( clock_app == "" ) { clock_app = "com.android.deskclock"; }
 	
 
@@ -1438,7 +1415,7 @@ function applay_settings(in_string)
 		{
 			date_app = array_s[7];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( date_app == "" ) { date_app = "com.android.calendar"; }	
 	
 		
@@ -1448,7 +1425,7 @@ function applay_settings(in_string)
 		{
 			statusbar_state = array_s[8];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( statusbar_state != "0" && statusbar_state != "1" ) { statusbar_state = "1"; }	
 	
 		
@@ -1458,7 +1435,7 @@ function applay_settings(in_string)
 		{
 			black_white_homescreen = array_s[9];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( black_white_homescreen != "0" && black_white_homescreen != "1" ) { black_white_homescreen = "1"; }	
 		
 	
@@ -1468,7 +1445,7 @@ function applay_settings(in_string)
 		{
 			nav_bar_state = array_s[10];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( nav_bar_state != "0" && nav_bar_state != "1" ) { nav_bar_state = "1"; }	
 
 
@@ -1478,7 +1455,7 @@ function applay_settings(in_string)
 		{
 			nav_bar_padding = array_s[11];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(nav_bar_padding,-1,100) == false){ nav_bar_padding = "-1"; }
 
 
@@ -1488,7 +1465,7 @@ function applay_settings(in_string)
 		{
 			status_bar_padding = array_s[12];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(status_bar_padding,-1,100) == false){ status_bar_padding = "-1"; }	
 		
 
@@ -1498,7 +1475,7 @@ function applay_settings(in_string)
 		{
 			homescreen_nofitications =array_s[13];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( homescreen_nofitications != "0" && homescreen_nofitications != "1" ) { homescreen_nofitications = "0"; }		
 		
 
@@ -1508,7 +1485,7 @@ function applay_settings(in_string)
 		{
 			font_size_header = array_s[14];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(font_size_header,0,100) == false){ font_size_header = "40"; }	
 		
 		
@@ -1518,7 +1495,7 @@ function applay_settings(in_string)
 		{
 			font_size_app = array_s[15];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(font_size_app,0,100) == false){ font_size_app = "30"; }	
 		
 	
@@ -1528,7 +1505,7 @@ function applay_settings(in_string)
 		{
 			font_size_homescreen = array_s[16];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(font_size_homescreen,0,100) == false){ font_size_homescreen = "100"; }
 		
 		
@@ -1538,7 +1515,7 @@ function applay_settings(in_string)
 		{
 			app_drawer_vertical_horizontal = array_s[17]; //Tmp -> appdrawer_vertical,appdrawer_horizontal 
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( app_drawer_vertical_horizontal == "" ) { app_drawer_vertical_horizontal = "3-4";  }
 
 
@@ -1548,7 +1525,7 @@ function applay_settings(in_string)
 		{
 			homescreen_zeile_spalten = array_s[18]; //Tmp
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( homescreen_zeile_spalten == "" ) { homescreen_zeile_spalten = "5-5"; }	
 		
 		
@@ -1558,7 +1535,7 @@ function applay_settings(in_string)
 		{
 			default_cats = array_s[19];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( default_cats == "") { default_cats = 1; } 	
 		
 		
@@ -1568,7 +1545,7 @@ function applay_settings(in_string)
 		{
 			cat_icon_size = array_s[20];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(cat_icon_size,0,10) == false){ cat_icon_size = 5; }
 		
 		
@@ -1578,7 +1555,7 @@ function applay_settings(in_string)
 		{
 			cat_array = JSON.parse(array_s[21]);
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( cat_array == "" ) { cat_array = 1; }
 
 
@@ -1588,7 +1565,7 @@ function applay_settings(in_string)
 		{
 			global_icon_pack = array_s[22];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( global_icon_pack == "" ) { global_icon_pack = "default"; }
 	
 	
@@ -1598,7 +1575,7 @@ function applay_settings(in_string)
 		{
 			appdrawer_align = array_s[23];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( appdrawer_align != "l" && appdrawer_align != "r" ) { appdrawer_align = "l"; }
 	
 
@@ -1608,7 +1585,7 @@ function applay_settings(in_string)
 		{
 			swipe_mode = array_s[24];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( swipe_mode != "l" && swipe_mode != "r" ) { swipe_mode = "r"; }	
 
 		
@@ -1618,7 +1595,7 @@ function applay_settings(in_string)
 		{
 			appdrawer_icon_size =  array_s[25];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( check_in_range(appdrawer_icon_size,0,10) == false){ appdrawer_icon_size = 10; }	
 		
 		
@@ -1628,7 +1605,7 @@ function applay_settings(in_string)
 		{
 			bottom_padding_zero = array_s[26];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 	if( bottom_padding_zero != "0" && bottom_padding_zero != "1" ) { bottom_padding_zero = "1"; }
 	
 			
@@ -1638,7 +1615,7 @@ function applay_settings(in_string)
 		{
 			appdrawer_font = array_s[27];
 		}
-	}catch( error ){}
+	}catch(error){error_log(error);}
 
 	
 	homescreen_font = "";
@@ -1647,7 +1624,7 @@ function applay_settings(in_string)
 		{
 			homescreen_font = array_s[28];
 		}
-	}catch( error ){}	
+	}catch(error){error_log(error);}	
 
 	
 	orient_mode = "";
@@ -1656,9 +1633,17 @@ function applay_settings(in_string)
 		{
 			orient_mode = array_s[29];
 		}
-	}catch( error ){}	
+	}catch(error){error_log(error);}	
 	if(orient_mode == ""){ orient_mode = "automatic"; }
-	
+
+	expand_notification = 0;
+	try{
+		if(array_s[30] != undefined)
+		{
+			expand_notification = array_s[30];
+		}
+	}catch(error){error_log(error);}	
+	if(expand_notification == ""){ expand_notification = 0; }	
 	
 	//---------------------------------------------------------------------------------------------
 				
@@ -1681,12 +1666,12 @@ function applay_settings(in_string)
 	{
 			cat_array = [];
 			cat_array = [
-			['icons/1.png', "Chat"],
-			['icons/2.png', "Internet"],
-			['icons/3.png', "Media"],
-			['icons/4.png', "Games"],
-			['icons/5.png', "Tools"],
-			['icons/6.png', "Settings"]
+			["icons/1.png", "Chat"],
+			["icons/2.png", "Internet"],
+			["icons/3.png", "Media"],
+			["icons/4.png", "Games"],
+			["icons/5.png", "Tools"],
+			["icons/6.png", "Settings"]
 			];
 	}	
 		
@@ -1811,7 +1796,7 @@ function applay_settings(in_string)
 		{
 			array_s = clock.split("-");
         }
-        catch(error){}
+        catch(error){error_log(error);}
 		
         if (array_s[0] == "1") //Bold hours
         {
@@ -2016,10 +2001,10 @@ function applay_settings(in_string)
 		}
 	}
 	
-	document.getElementById('padding_input_field').value = nav_bar_padding;
+	document.getElementById("padding_input_field").value = nav_bar_padding;
 	document.getElementById("pad_top_input").textContent = text_pad_top_input+": "+status_bar_padding;
 	document.getElementById("padding_bottom_input").textContent = text_pad_bottom_input+": "+nav_bar_padding;
-	document.getElementById('padding_top_input_field').value =status_bar_padding;
+	document.getElementById("padding_top_input_field").value =status_bar_padding;
 		
 	
 	if(statusbar_state =="1")
@@ -2028,7 +2013,7 @@ function applay_settings(in_string)
 		{
 			StatusBar.show();
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 		document.getElementById("statusbarstate").checked = true;
 	}
 	else
@@ -2037,7 +2022,7 @@ function applay_settings(in_string)
 		{
 			StatusBar.hide();
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 		document.getElementById("statusbarstate").checked = false;
 		document.getElementById("pad_top_input").style.display = "none";
 		document.getElementById("pad_top_input_tr").style.display = "none";
@@ -2106,7 +2091,7 @@ function applay_settings(in_string)
 	{
 		array_s = app_drawer_vertical_horizontal.split("-");
 	}
-	catch( error ) {}
+	catch(error){error_log(error);}
 	
     document.getElementById("settings_appdrawer_vertical").textContent =  text_app_drawer_verti + ": "+array_s[0]; 
     document.getElementById("settings_appdrawer_hori").textContent =  text_app_drawer_hori + ": "+array_s[1]; 
@@ -2149,7 +2134,7 @@ function applay_settings(in_string)
 	{
 		array_s = homescreen_zeile_spalten.split("-");
     }
-    catch(error) {}
+    catch(error){error_log(error);}
     
 
     
@@ -2187,9 +2172,9 @@ function applay_settings(in_string)
 	{
 		try
 		{
-			screen.orientation.lock('any');
+			screen.orientation.lock("any");
 		}
-		catch(err) {}
+		catch(error){error_log(error);}
 		document.getElementById("currentorientstate").textContent = orient_auto;
 		document.getElementById("orient_input_auto").checked = true;
 		document.getElementById("orient_input_horizontal").checked = false;
@@ -2200,9 +2185,9 @@ function applay_settings(in_string)
 	{
 		try
 		{
-			screen.orientation.lock('landscape');
+			screen.orientation.lock("landscape");
 		}
-		catch(err) {}
+		catch(error){error_log(error);}
 		document.getElementById("currentorientstate").textContent = orient_horizontal;
 		document.getElementById("orient_input_auto").checked = false;
 		document.getElementById("orient_input_horizontal").checked = true;
@@ -2213,16 +2198,25 @@ function applay_settings(in_string)
 	{
 		try
 		{
-			screen.orientation.lock('portrait');
+			screen.orientation.lock("portrait");
 		}
-		catch(err) {}
+		catch(error){error_log(error);}
 		document.getElementById("currentorientstate").textContent = orient_vertical;
 		document.getElementById("orient_input_auto").checked = false;
 		document.getElementById("orient_input_horizontal").checked = false;
 		document.getElementById("orient_input_vertical").checked = true;
 	}
 	
-
+		
+	if(expand_notification=="0")
+	{
+		document.getElementById("settings_notification_expand").checked = false;
+	}
+	else
+	{
+		document.getElementById("settings_notification_expand").checked = true;
+	}
+	
 	
 	update_next_alarm();
 	resize();
@@ -2232,10 +2226,8 @@ function applay_settings(in_string)
     {
 		store_settings( get_current_settings() );
     }
-    catch (e){}
+    catch(error){error_log(error);}
     
-   
- 
    still_in_settings = 0;
 }
 
@@ -2248,12 +2240,18 @@ function update_app_cat( full_update )
 	cat_array = [];
 	
 	var table = document.getElementById("cat_custom_table");
-
-	for (var i = 0, row; row = table.rows[i]; i++) 
+	
+	
+	for (var i = 0, row; i < table.rows.length; i++) 
 	{
+		row = table.rows[i];
+
 		 var img = null;
-		 for (var j = 0, col; col = row.cells[j]; j++) 
+		 for (var j = 0, col; j < row.cells.length; j++) 
 		 {
+			
+			col = row.cells[j];
+			
 			if(j == 0)
 			{
 				img = col.getElementsByTagName("img")[0].src;
@@ -2382,7 +2380,7 @@ function start_import()
 			{	
 				androidinfo.importall( function ok(in_data)
 				{
-					var in_data_array = in_data.split('|_!!!_|');
+					var in_data_array = in_data.split("|_!!!_|");
 					var new_apps = in_data_array[0];
 					var new_settings = in_data_array[1];
 					
@@ -2406,7 +2404,7 @@ function start_import()
 			
 				}, function bad(){} );
 			}
-			catch( error )
+			catch(error)
 			{
 				toast_notification("Error", "3500", "bottom");
 			}
@@ -2417,7 +2415,7 @@ function start_import()
 			toast_notification("Error", "3500", "bottom");
 		}	
 	}, 
-	function(error){});
+	function(error){error_log(error);});
 	
 			
 }
@@ -2590,6 +2588,25 @@ function change_home_notifi(in_c)
 
 
 
+//Function for enable/disable Notifications expand
+function change_expand_notifi(in_c)
+{
+	"use strict";	
+	if(still_in_settings == 1){return;}	
+	
+    if (expand_notification == "0") 
+    {
+        expand_notification = "1";
+    }
+    else
+    {
+        expand_notification = "0";
+    }
+}
+
+
+
+
 //Function to hide/show the statusbar
 function change_statusbar(in_c)
 {
@@ -2634,7 +2651,7 @@ function font_cat_change()
 {
 	"use strict";
 	if(still_in_settings == 1){return;}
-	var new_val = document.getElementById('range_font_cat').value;
+	var new_val = document.getElementById("range_font_cat").value;
 	font_size_header = new_val;
 	document.getElementById("text_font_cat").textContent = font_cat_text +": "+ font_size_header;
 }
@@ -2644,7 +2661,7 @@ function font_app_change()
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}
-	var new_val = document.getElementById('range_font_app').value;
+	var new_val = document.getElementById("range_font_app").value;
 	font_size_app = new_val;
 	document.getElementById("text_font_appnames").textContent = font_app_text +": " + font_size_app;
 }
@@ -2654,7 +2671,7 @@ function font_home_change()
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}
-	var new_val = document.getElementById('range_font_homescreen').value;
+	var new_val = document.getElementById("range_font_homescreen").value;
 	font_size_homescreen = new_val;
 	document.getElementById("text_font_homescreen").textContent = font_homescreen_text+": "+font_size_homescreen;
 }
@@ -2695,27 +2712,27 @@ function orient_change()
 	{
 		try 
 		{
-			screen.orientation.lock('any');
+			screen.orientation.lock("any");
 		}
-		catch(err) {}
+		catch(error){error_log(error);}
 	}
 	
 	if( orient_mode == "horizontal")
 	{
 		try 
 		{
-			screen.orientation.lock('landscape');
+			screen.orientation.lock("landscape");
 		}
-		catch(err) {}
+		catch(error){error_log(error);}
 	}
 	
 	if( orient_mode == "vertical")
 	{
 		try
 		{
-			screen.orientation.lock('portrait');
+			screen.orientation.lock("portrait");
 		}
-		catch(err) {}
+		catch(error){error_log(error);}
 	}
 }
 
@@ -2784,7 +2801,7 @@ function read_change(in_c)
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_readsize = document.getElementById('range_read').value;
+    var new_readsize = document.getElementById("range_read").value;
     new_readsize = sanitize_input(new_readsize);
     read = new_readsize;
 	document.getElementById("modal_header_read").textContent = read+"% "+modal_header_read_text;
@@ -2797,7 +2814,7 @@ function appdrawericonsize_change(in_c)
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_appdrawer_icon_size = document.getElementById('appdrawericonsize_read').value;
+    var new_appdrawer_icon_size = document.getElementById("appdrawericonsize_read").value;
     new_appdrawer_icon_size = sanitize_input(new_appdrawer_icon_size);
     appdrawer_icon_size = new_appdrawer_icon_size;
 	document.getElementById("modal_header_appdrawericonsize").textContent =  settings_appdrawericonsize_string + ": "+appdrawer_icon_size;
@@ -2809,7 +2826,7 @@ function caticonsize_change(in_c)
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_iconsize = document.getElementById('iconside_range').value;
+    var new_iconsize = document.getElementById("iconside_range").value;
     new_iconsize = sanitize_input(new_iconsize);
     cat_icon_size = new_iconsize;
 	document.getElementById("modal_header_cat_icon_size").textContent = cat_icon_size_text+": "+cat_icon_size;
@@ -2821,7 +2838,7 @@ function app_drawer_change_horizontal(in_c)
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_val = document.getElementById('range_app_drawer_horizontal').value;
+    var new_val = document.getElementById("range_app_drawer_horizontal").value;
     new_val = sanitize_input(new_val);
     appdrawer_horizontal = new_val;
     document.getElementById("settings_appdrawer_hori").textContent =  text_app_drawer_hori + ": "+appdrawer_horizontal; 
@@ -2832,7 +2849,7 @@ function app_drawer_change_vertical(in_c)
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_val = document.getElementById('range_app_drawer_vertical').value;
+    var new_val = document.getElementById("range_app_drawer_vertical").value;
     new_val = sanitize_input(new_val);
     appdrawer_vertical = new_val;
     document.getElementById("settings_appdrawer_vertical").textContent =  text_app_drawer_verti + ": "+appdrawer_vertical; 
@@ -2843,7 +2860,7 @@ function homscreen_change_zeilen()
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_val = document.getElementById('range_homescreen_zeilen').value;
+    var new_val = document.getElementById("range_homescreen_zeilen").value;
     new_val = sanitize_input(new_val);
     zeilen_homescreen = new_val;
 	document.getElementById("settings_homescreen_zeilen").textContent =  text_homescreen_zeilen + ": "+zeilen_homescreen; 
@@ -2854,7 +2871,7 @@ function homescreen_change_spalten()
 {
 	"use strict";	
 	if(still_in_settings == 1){return;}	
-    var new_val = document.getElementById('range_homescreen_spalten').value;
+    var new_val = document.getElementById("range_homescreen_spalten").value;
     new_val = sanitize_input(new_val);
     spalten_homescreen = new_val;
 	document.getElementById("settings_homescreen_spalten").textContent =  text_homescreen_spalten + ": "+spalten_homescreen;
@@ -2899,7 +2916,7 @@ function show_modal_select_text_color()
 				popup: false,
 				alpha: false,
 				editor: false,
-				editorFormat: 'rgb',
+				editorFormat: "rgb",
 				color: color_text,
 				onChange: function(color)
 				{
@@ -2930,7 +2947,7 @@ function show_modal_select_homescreen_color()
             popup: false,
             alpha: false,
             editor: false,
-            editorFormat: 'rgb',
+            editorFormat: "rgb",
             color: color_text_homescreen,
      
             onChange: function(color)
@@ -2941,7 +2958,7 @@ function show_modal_select_homescreen_color()
 				
 				color_text_homescreen = new_color;
 				
-				tmp_clock = clock.split('-');
+				tmp_clock = clock.split("-");
 				clock = tmp_clock[0] + "-" + tmp_clock[1] + "-" + tmp_clock[2] + "-" + new_color + "-" + tmp_clock[4] + "-" + tmp_clock[5] ;
             },
         });
@@ -3007,13 +3024,13 @@ function padding_input()
 		padding_bottom_input_time_tmp = 1;	
 	}
 	
-	var padding_input_field_obj = document.getElementById('padding_input_field');
-	nav_bar_padding_new = padding_input_field_obj.value;//document.getElementById('padding_input_field').value;
+	var padding_input_field_obj = document.getElementById("padding_input_field");
+	nav_bar_padding_new = padding_input_field_obj.value;//document.getElementById("padding_input_field").value;
 	
 	if( parseInt(parseInt(nav_bar_padding_new)+parseInt(status_bar_padding)) > vhTOpx(70)) //To prevent to much padding...
 	{
 		padding_input_field_obj.value = nav_bar_padding;
-		document.getElementById('padding_top_input_field').value = status_bar_padding;
+		document.getElementById("padding_top_input_field").value = status_bar_padding;
 	}
 	else
 	{
@@ -3053,13 +3070,13 @@ function padding_top_input()
 		padding_top_input_time_tmp = 1;	
 	}
 	
-	var padding_top_input_field_obj = document.getElementById('padding_top_input_field');
+	var padding_top_input_field_obj = document.getElementById("padding_top_input_field");
 	status_bar_padding_new = padding_top_input_field_obj.value;
 	
 	if( parseInt(parseInt(nav_bar_padding)+parseInt(status_bar_padding_new)) > vhTOpx(70)) //To prevent to much padding
 	{
 		padding_top_input_field_obj.value = status_bar_padding;
-		document.getElementById('padding_input_field').value = nav_bar_padding;
+		document.getElementById("padding_input_field").value = nav_bar_padding;
 	}
 	else
 	{
@@ -3079,7 +3096,7 @@ function sif_input()
 	{
 		serach_for = document.getElementById("sif").value;
     }
-    catch (error){}
+    catch(error){error_log(error);}
 	
 	serach_for = sanitize_input(serach_for);
 	
@@ -3103,7 +3120,7 @@ function sif_input()
 		{
 			document.getElementById("ss").click();
         }
-        catch (error) {}
+        catch(error){error_log(error);}
     }
     else 
     {
@@ -3135,7 +3152,7 @@ function sif_input()
 function searchappselecclock_input()
 {
 	"use strict";	
-	var sf = document.getElementById('searchappselecclock').value;
+	var sf = document.getElementById("searchappselecclock").value;
 	sf = sf.toString().toLowerCase();
 	sf = sanitize_input(sf);
 	var back = []; 
@@ -3156,7 +3173,7 @@ function searchappselecclock_input()
 function searchappselecdate_input()
 {
 	"use strict";
-	var sf = document.getElementById('searchappselecdate').value;
+	var sf = document.getElementById("searchappselecdate").value;
 	sf = sf.toString().toLowerCase();
 	sf = sanitize_input(sf);
 	
@@ -3177,7 +3194,7 @@ function searchappselecdate_input()
 function show_clock_dialog()
 {
 	"use strict";	
-	document.getElementById('searchappselecclock').value = "";
+	document.getElementById("searchappselecclock").value = "";
 	set_app_list(all_apps);
 	document.getElementById("allsettings").style.display = "none";
 	document.getElementById("homescreen_div").style.display = "none"; 
@@ -3188,12 +3205,31 @@ function show_clock_dialog()
 function show_date_dialog()
 {
 	"use strict";	
-	document.getElementById('searchappselecdate').value = "";
+	document.getElementById("searchappselecdate").value = "";
 	set_app_list(all_apps);
 	document.getElementById("allsettings").style.display = "none";
 	document.getElementById("homescreen_div").style.display = "none"; 
 	document.getElementById("settings_setdateapp_div").style.display = "flex";
 }
+
+
+//Move a Element in a array
+Array.prototype.move = function(from, to) {
+	try
+	{
+		this.splice(to, 0, this.splice(from, 1)[0]);
+	}
+	catch(error){error_log(error);}
+};
+
+//Add a Element in a array
+Array.prototype.insert = function ( index, item ) {
+	try
+	{
+		this.splice( index, 0, item );
+	}
+	catch(error){error_log(error);}
+};
 
 
 //An App is added to the homescreen
@@ -3215,6 +3251,9 @@ function add_app_to_homescreen()
 	{
 		var in_a = document.getElementById("s_app_start_name").textContent;
 		
+		var from = -1;
+		var del_nope = false;
+		
 		for(var i = 0; i<all_apps.length; i++)
 		{
 			if (all_apps[i].start_name == in_a)
@@ -3222,26 +3261,59 @@ function add_app_to_homescreen()
 				if (all_apps[i].cat == 0 )
 				{
 					all_apps[i].cat = current_kat;
+					from = i;
+					del_nope = false;
 				}
 				else
 				{
 					all_apps[i].cat = "0"; //Categorie for the homescreen apps
+					from = i;
+					del_nope = true;
 				}
 				break;
 			}
 		}
 
-		var iccd = 0;
+		//Remove one blank element...
+		var to = -1;
 		for(var i = 0; i<all_apps.length; i++)
 		{
 			if (all_apps[i].cat==0 && all_apps[i].start_name == "nope") 
 			{
-				all_apps.splice(iccd, 1);
+				to = i;
 				break;
 			}  
-			iccd = iccd + 1;
 		}
-
+		
+		if(from != -1 && to != -1)
+		{
+			all_apps.move( from ,to );
+		}
+		
+		//Find the first nope element on homescreen and delete it
+		if( del_nope == true)
+		{
+			var iccd = 0;
+			for(var i = 0; i<all_apps.length; i++)
+			{
+				if (all_apps[i].cat==0 && all_apps[i].start_name == "nope") 
+				{
+					all_apps.splice(iccd, 1);
+					break;
+				}  
+				iccd = iccd + 1;
+			}
+		}
+		else
+		{
+			//Add a nope Element on the Homescreen
+			var icon = "nope";
+			var disp_name = "nope";
+			var start_name = "nope";
+			var add_app = new App(start_name, disp_name, icon, 0);
+			all_apps.insert(from , add_app );
+		}
+		
 		update_homescreen();
 		update_single_app_div(current_kat);
 		new_font_size_adjust();	
@@ -3301,7 +3373,7 @@ function adjust_delfromhomescreen_div()
 	var elemw = 0;
 	var t_height = 0;
 	
-	while(true)
+	for(;;) //used to bewhile(true)
 	{
 		c = c + 10;
 		note_break = note_break + 1;
@@ -3322,7 +3394,8 @@ function adjust_delfromhomescreen_div()
 		c=0;
 	}
 	note_break = 0;
-	while(true)
+	
+	for(;;) //used to be while(true)
 	{
 		c = c + 1;
 		note_break = note_break + 1;
@@ -3339,7 +3412,7 @@ function adjust_delfromhomescreen_div()
 	
 	note_break = 0;
 	//Adjust the height
-	while(true)
+	for(;;) // used to be while(true)
 	{
 		t_height = parseInt(elem1.offsetHeight);
 		if( t_height < max_h)
@@ -3370,25 +3443,23 @@ function update_homescreen()
     var row_blank = '<div class="home_table_icon_blank" disp_name="nope" start_name="nope"></div>';
 
 	var home_screen_apps_array = [];
-
+	
 	for(var i = 0; i<all_apps.length; i++)
 	{
         var cat = all_apps[i].cat;
         
-        if (cat == 0  )
+        if (cat == 0 )
         {  
             home_screen_apps_array.push(all_apps[i]);
         }
     }
 
-	
 	if ( home_screen_apps_array.length <= (zeilen_homescreen*spalten_homescreen))
 	{
 
 		var anz_push = (spalten_homescreen*zeilen_homescreen) - home_screen_apps_array.length;
 		for (var it = 0; it < anz_push;it++)
-		{
-					
+		{			
 			var icon = "nope";
 			var disp_name = "nope";
 			var start_name = "nope";
@@ -3480,7 +3551,7 @@ function update_homescreen()
 	}
 	
     home_screen_apps_array.reverse();
-
+	
 	var temp_array_rows = [];
 	
 	var cc = 0;
@@ -3488,7 +3559,7 @@ function update_homescreen()
 	for (i = 0; i < (zeilen_homescreen*spalten_homescreen); i++)
 	{
 		
-        if (typeof home_screen_apps_array[i] == 'undefined')
+        if (typeof home_screen_apps_array[i] == "undefined")
         {
 			//console.log("Error");
         }
@@ -3767,7 +3838,7 @@ function home_touch_start(e)
 	{
 		clearTimeout(home_touch_start_timer);
 	}
-	catch (e) {}
+	catch(error){error_log(error);}
 			
 	home_touch_start_timer = setTimeout(function()
 	{
@@ -3809,8 +3880,7 @@ function app_touch_end(e)
 		if(dist_x<0){dist_x = dist_x*-1;}
 		if(dist_y<0){dist_y = dist_y*-1;}
 	}
-	catch(ee)
-	{}
+	catch(error){error_log(error);}
 	
 	var dist_x_m = startx - e.changedTouches[0].pageX;
 	var dist_y_m = starty - e.changedTouches[0].pageY;
@@ -3891,9 +3961,9 @@ function end_app_settings()
 	{	
         end_search();
 
-		document.getElementById("header_blank").style.display = 'block';
-		document.getElementById("app_ba").style.display = 'block';
-		document.getElementById("appsettings_ba").style.display = 'none';
+		document.getElementById("header_blank").style.display = "block";
+		document.getElementById("app_ba").style.display = "block";
+		document.getElementById("appsettings_ba").style.display = "none";
 
 		if (name_field != null  ) //Still editing the App name...
 		{
@@ -3936,7 +4006,7 @@ function open_categorie(event,in_obj)//,type)
 		{
 			clearTimeout(long_press_cat_timer);
 		}
-		catch (e) {}
+		catch(error) {error_log(error);}
 			
 		long_press_cat_timer = setTimeout(function()
 		{
@@ -3956,10 +4026,10 @@ function open_categorie(event,in_obj)//,type)
 	if(show_hidden==1)
 	{
 		document.getElementById("Cat_name_text").textContent = cat_array[current_kat];//kat_list[current_kat];
-		document.getElementById("scrollable").style.display = 'block';
+		document.getElementById("scrollable").style.display = "block";
 		document.getElementById("table_apps_cat"+current_kat).style.left = "0vw";
-		document.getElementById("table_current_apps").style.display = 'none';
-		document.getElementById("showhiddenappslielement").style.display = 'block';
+		document.getElementById("table_current_apps").style.display = "none";
+		document.getElementById("showhiddenappslielement").style.display = "block";
 		show_hidden = 0;
 	}
 	
@@ -4007,7 +4077,7 @@ function open_categorie(event,in_obj)//,type)
     }
     //elem_r.style.width = new_indicator_width+"px";
     
-    elem_r.style.cssText +=';'+"top:"+ (cat_h + in_obj.offsetTop)+"px;height:"+in_obj.offsetHeight+"px;width:"+new_indicator_width+"px";
+    elem_r.style.cssText += ";"+"top:"+ (cat_h + in_obj.offsetTop)+"px;height:"+in_obj.offsetHeight+"px;width:"+new_indicator_width+"px";
     
    
 	if(cat < 0 || cat == "" || cat == null)
@@ -4119,21 +4189,21 @@ function open_categorie(event,in_obj)//,type)
 	{
 		document.getElementById("Cat_name_text").textContent = cat_array[cat-1][1];//kat_list[cat];
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 	
 	if(document.getElementById("header").style.display != "block")
 	{
-		document.getElementById("header").style.display = 'block';
+		document.getElementById("header").style.display = "block";
 	}
 	
 	if(document.getElementById("header_blank").style.display != "block")
 	{
-		document.getElementById("header_blank").style.display = 'block';
+		document.getElementById("header_blank").style.display = "block";
 	}
 	
-	if(document.getElementById("table_current_apps").style.display != 'none')
+	if(document.getElementById("table_current_apps").style.display != "none")
 	{
-		document.getElementById("table_current_apps").style.display = 'none';
+		document.getElementById("table_current_apps").style.display = "none";
 	}
 	
 	var app_setting_was_visible = 0;
@@ -4166,10 +4236,10 @@ function open_categorie(event,in_obj)//,type)
 						{
 							document.getElementById("table_apps_cat"+i).style.left = "-100vw";
 						}
-						catch (e) {}
+						catch(error){error_log(error);}
 					}
 				}
-				catch (e) {}
+				catch(error){error_log(error);}
 			}
 		}
 	}
@@ -4181,7 +4251,7 @@ function open_categorie(event,in_obj)//,type)
 			{
 				document.getElementById("table_apps_cat"+i).style.left = "-100vw";
 			}
-			catch (e) {}
+			catch(error){error_log(error);}
 		}
 		document.getElementById("table_apps_cat1").style.left = "0vw";
 	}
@@ -4287,18 +4357,17 @@ function redipsInit()
 	}
 	
     rd.shift.animation = false;
-    rd.style.borderEnabled  = 'none';
+    rd.style.borderEnabled  = "none";
     
     rd.event.moved = function() 
     {
-        //var tbl = rd.findParent('TABLE', rd.obj);
         if(current_view=="homescreen")
 		{
-			rd.dropMode = 'switch'; //'switch';
+			rd.dropMode = "switch"; //"switch";
 		}
 		else
 		{
-			rd.dropMode = 'shift'; //'shift';
+			rd.dropMode = "shift"; //"shift";
 		}
     };
 }
@@ -4332,14 +4401,14 @@ rd.event.deleted = function()
 		{	
 			start_name = regex2.exec(inner_html)[1];
 		}
-		catch (ee){}			
+		catch(error){error_log(error);}			
 		
 		try
 		{	
 			disp_name = regex3.exec(inner_html)[1];
 			disp_name = disp_name.substring( disp_name.lastIndexOf(">")+1 );
 		}
-		catch (ee){}
+		catch(error){error_log(error);}
 					  
 		var into_cat = guess_cat(disp_name,start_name);
 
@@ -4372,20 +4441,20 @@ rd.event.deleted = function()
 		{
 			icon = regex1.exec(inner_html)[1];
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 		
 		try
 		{
 			start_name = regex2.exec(inner_html)[1];
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 		
 		try
 		{
 			disp_name = regex3.exec(inner_html)[1];
 			disp_name = disp_name.substring( disp_name.lastIndexOf(">")+1 );
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 		
 		if(into_cat != current_kat)
 		{		
@@ -4446,27 +4515,27 @@ function open_app_settings(in_element)
 	{
 		icon = regex1.exec(inner_html)[1];
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 	
 	try
 	{
 		start_name = regex2.exec(inner_html)[1];
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 					
 	try
 	{
 		disp_name = regex3.exec(inner_html)[1];
 		disp_name = disp_name.substring( disp_name.lastIndexOf(">")+1 );
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 	
 	try
 	{
 		disp_name = regex3.exec(inner_html)[1];
 		disp_name = disp_name.substring( disp_name.lastIndexOf(">")+1 );
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 					
 
 	if(disp_name=="")
@@ -4622,12 +4691,14 @@ function set_current_apps(in_array,in_table)
     //Clear Table
     var table_id = document.getElementById(in_table);
    
+    var new_table = null;
+    
     if( table_id == null )
     {
 		//Create new...
-		new_table = document.createElement('table');
+		new_table = document.createElement("table");
 		new_table.setAttribute("id", in_table);
-		new_table.setAttribute('class', 'apptable');
+		new_table.setAttribute("class", "apptable");
 
 		document.getElementById("scrollable").appendChild(new_table);
 		table_id = new_table;
@@ -4663,7 +4734,7 @@ function set_current_apps(in_array,in_table)
 			var add_class = "normal_app";
 		}
   
-        var row = '<div ontouchstart="app_touch_start(event);" ontouchend="app_touch_end(event);" class="gallery redips-drag" start_name="' + start_name + '"  ><img class="'+add_class+'" src="' + icon + '"> <div class="desc" start_name="' + start_name + '">' + name + '</div></div>';
+        var row = '<div ontouchstart="app_touch_start(event);" ontouchend="app_touch_end(event);" class="gallery redips-drag" start_name="' + start_name + '"  ><img alt="'+start_name+'_img" class="'+add_class+'" src="' + icon + '"> <div class="desc" start_name="' + start_name + '">' + name + '</div></div>';
      
 		temp_array_rows.push(row);
 		
@@ -4824,7 +4895,7 @@ function end_search()
 		document.getElementById("table_current_apps").style.display = "none";
 		document.getElementById("Cat_name_text").textContent = cat_array[current_kat][1];//kat_list[current_kat]  ;
 	}
-	catch(error){}
+	catch(error){error_log(error);}
 	
     for(var i=1;i<cat_anz;i++)
     {
@@ -4839,7 +4910,7 @@ function end_search()
 		document.getElementById("table_apps_cat"+current_kat).style.left = "0vw";
 		//document.getElementById("table_apps_cat"+current_kat).style.visibility = "visible";
 	}
-	catch(error){}
+	catch(error){error_log(error);}
     
     var dropdm_popup_obj = document.getElementById("dropdm_popup");
     
@@ -5006,7 +5077,7 @@ function update_app_position()
             }
         }
 
-        var delete_array = delete_string.split(',');
+        var delete_array = delete_string.split(",");
         for (var i = delete_array.length - 1; i >= 0; i--)
         {
             if (delete_array[i] != "") 
@@ -5039,11 +5110,14 @@ function update_app_position()
 		var r=0;
 		var row=null;
 		var cell=null;
-		while(row=table.rows[r++])
+		while(table.rows[r++])
 		{
+			row=table.rows[r-1];
+			
 			var c=0;
-			while(cell=row.cells[c++])
+			while(row.cells[c++])
 			{
+				cell=row.cells[c-1];
 				var inner_html = cell.innerHTML;
 					
 				var icon = "";
@@ -5053,20 +5127,20 @@ function update_app_position()
 				{
 					icon = regex1.exec(inner_html)[1];
 				}
-				catch (e){}
+				catch(error){error_log(error);}
 						
 				try
 				{
 					start_name = regex2.exec(inner_html)[1];
 				}
-				catch (e){}
+				catch(error){error_log(error);}
 						
 				try
 				{
 					disp_name = regex3.exec(inner_html)[1];
 					disp_name = disp_name.substring( disp_name.lastIndexOf(">")+1 );
 				}
-				catch (e){}
+				catch(error){error_log(error);}
 						
 				if(inner_html=="" && current_view == "homescreen")
 				{
@@ -5103,11 +5177,11 @@ function show_settings()
 	
 	//First show the new Frame..
 	
-	document.getElementById("settings_ba").style.display = 'block';
-	document.getElementById("allsettings").style.display = 'flex';
+	document.getElementById("settings_ba").style.display = "block";
+	document.getElementById("allsettings").style.display = "flex";
 		
 	mySwiper.destroy();
-	document.getElementById("swiper_container").style.display = 'none';
+	document.getElementById("swiper_container").style.display = "none";
 		
 		
 	
@@ -5116,35 +5190,35 @@ function show_settings()
 		 document.getElementById("dropdm_popup").style.display = "none";
 	}
 	
-	document.getElementById("modal_date_1").textContent = dayjs().locale('de').format('DD.MM.YYYY');
-	document.getElementById("modal_date_2").textContent = dayjs().locale('de').format('DD.MM.YY');
-	document.getElementById("modal_date_3").textContent = dayjs().locale('de').format('DD.MM');
+	document.getElementById("modal_date_1").textContent = dayjs().locale("de").format("DD.MM.YYYY");
+	document.getElementById("modal_date_2").textContent = dayjs().locale("de").format("DD.MM.YY");
+	document.getElementById("modal_date_3").textContent = dayjs().locale("de").format("DD.MM");
 	
-	document.getElementById("modal_date_8").textContent = dayjs().locale('de').format('MM.DD.YYYY') + " (M.D)";
-	document.getElementById("modal_date_9").textContent = dayjs().locale('de').format('MM.DD.YY') + " (M.D)";
-	document.getElementById("modal_date_10").textContent = dayjs().locale('de').format('MM.DD') + " (M.D)";
+	document.getElementById("modal_date_8").textContent = dayjs().locale("de").format("MM.DD.YYYY") + " (M.D)";
+	document.getElementById("modal_date_9").textContent = dayjs().locale("de").format("MM.DD.YY") + " (M.D)";
+	document.getElementById("modal_date_10").textContent = dayjs().locale("de").format("MM.DD") + " (M.D)";
 	
 	if(lang == "eng")
 	{
-		document.getElementById("modal_date_4").textContent = dayjs().locale('en').format('D. MMMM');
-		document.getElementById("modal_date_5").textContent = dayjs().locale('en').format('dddd, D. MMMM');
+		document.getElementById("modal_date_4").textContent = dayjs().locale("en").format("D. MMMM");
+		document.getElementById("modal_date_5").textContent = dayjs().locale("en").format("dddd, D. MMMM");
 		
-		document.getElementById("modal_date_6").textContent = dayjs().locale('en').format('dd, DD.MM.YY');
-		document.getElementById("modal_date_7").textContent = dayjs().locale('en').format('dd, DD.MM');
+		document.getElementById("modal_date_6").textContent = dayjs().locale("en").format("dd, DD.MM.YY");
+		document.getElementById("modal_date_7").textContent = dayjs().locale("en").format("dd, DD.MM");
 		
-		document.getElementById("modal_date_11").textContent = dayjs().locale('en').format('dd, MM.DD')  + " (M.D)";
-		document.getElementById("modal_date_12").textContent = dayjs().locale('en').format('dd, MM.DD.YY')  + " (M.D)";
+		document.getElementById("modal_date_11").textContent = dayjs().locale("en").format("dd, MM.DD")  + " (M.D)";
+		document.getElementById("modal_date_12").textContent = dayjs().locale("en").format("dd, MM.DD.YY")  + " (M.D)";
 	}
 	else
 	{
-		document.getElementById("modal_date_4").textContent = dayjs().locale('de').format('D. MMMM');
-		document.getElementById("modal_date_5").textContent = dayjs().locale('de').format('dddd, D. MMMM');
+		document.getElementById("modal_date_4").textContent = dayjs().locale("de").format("D. MMMM");
+		document.getElementById("modal_date_5").textContent = dayjs().locale("de").format("dddd, D. MMMM");
 		
-		document.getElementById("modal_date_6").textContent = dayjs().locale('de').format('dd, DD.MM.YY');
-		document.getElementById("modal_date_7").textContent = dayjs().locale('de').format('dd, DD.MM');
+		document.getElementById("modal_date_6").textContent = dayjs().locale("de").format("dd, DD.MM.YY");
+		document.getElementById("modal_date_7").textContent = dayjs().locale("de").format("dd, DD.MM");
 		
-		document.getElementById("modal_date_11").textContent = dayjs().locale('de').format('dd, MM.DD')  + " (M.D)";
-		document.getElementById("modal_date_12").textContent = dayjs().locale('de').format('dd, MM.DD.YY')  + " (M.D)";
+		document.getElementById("modal_date_11").textContent = dayjs().locale("de").format("dd, MM.DD")  + " (M.D)";
+		document.getElementById("modal_date_12").textContent = dayjs().locale("de").format("dd, MM.DD.YY")  + " (M.D)";
 	}
 
 
@@ -5166,8 +5240,8 @@ function show_settings()
 		set_app_list(all_apps);
 	}
 
-	document.getElementById("searchappselecclock").value = '';
-	document.getElementById("searchappselecdate").value = '';
+	document.getElementById("searchappselecclock").value = "";
+	document.getElementById("searchappselecdate").value = "";
 	
 }
 
@@ -5185,8 +5259,8 @@ function update_app_divs()
 	
 	if(searching==0)
 	{
-		document.getElementById("alpha").style.display = 'none';
-		document.getElementById("search_input").style.display = 'none';
+		document.getElementById("alpha").style.display = "none";
+		document.getElementById("search_input").style.display = "none";
 	}
 	
 	update_font_family();
@@ -5200,15 +5274,15 @@ function update_app_divs()
 	{
 		should_wait_loadscreen = -1; //Unset
 		document.getElementById("main_app_div").style.opacity = "1";
-		document.getElementById("loading_div").style.display = 'none';
+		document.getElementById("loading_div").style.display = "none";
 		/*
 		if( window.getComputedStyle(document.getElementById("loading_div")).display == "flex" )
 		{
-			document.getElementById("loading_div").classList.add('fade');
+			document.getElementById("loading_div").classList.add("fade");
 			setTimeout(function()
 			{				
-				document.getElementById("loading_div").style.display = 'none';
-				document.getElementById("loading_div").classList.remove('fade');
+				document.getElementById("loading_div").style.display = "none";
+				document.getElementById("loading_div").classList.remove("fade");
 								
 			},500);
 		}*/
@@ -5216,15 +5290,15 @@ function update_app_divs()
 	if(should_wait_loadscreen == 1)
 	{
 		should_wait_loadscreen = -1; //Unset
-		document.getElementById("loading_div").style.display = 'flex';
+		document.getElementById("loading_div").style.display = "flex";
 		setTimeout(function()
 		{
-			document.getElementById("loading_div").classList.add('fade');
+			document.getElementById("loading_div").classList.add("fade");
 			setTimeout(function()
 			{
 				document.getElementById("main_app_div").style.opacity = "1";				
-				document.getElementById("loading_div").style.display = 'none';
-				document.getElementById("loading_div").classList.remove('fade');
+				document.getElementById("loading_div").style.display = "none";
+				document.getElementById("loading_div").classList.remove("fade");
 			},800);
 			
 		},3800);
@@ -5234,18 +5308,18 @@ function update_app_divs()
 		{
 			setTimeout(function()
 			{
-				document.getElementById("loading_div").classList.add('fade');
+				document.getElementById("loading_div").classList.add("fade");
 				setTimeout(function()
 				{				
-					document.getElementById("loading_div").style.display = 'none';
-					document.getElementById("loading_div").classList.remove('fade');
+					document.getElementById("loading_div").style.display = "none";
+					document.getElementById("loading_div").classList.remove("fade");
 				},800);
 			
 			},3800);
 			return;
 		}
 		*/
-		//document.getElementById("loading_div").style.display = 'none';
+		//document.getElementById("loading_div").style.display = "none";
 	}
 	
 }
@@ -5355,7 +5429,7 @@ function update_search_div()
 		
 		vertical = vertical - vhTOpx(4);
 	
-		var t_ss_e = document.getElementsByClassName('ss_e');
+		var t_ss_e = document.getElementsByClassName("ss_e");
 		for (var i = 0; i < t_ss_e.length; i++)
 		{
 			t_ss_e[i].style.width = vertical+"px";
@@ -5374,7 +5448,7 @@ function update_search_div()
 	else
 	{	
 		horizontal = horizontal - vwTOpx(4);
-		var t_ss_e = document.getElementsByClassName('ss_e');
+		var t_ss_e = document.getElementsByClassName("ss_e");
 		for (var i = 0; i < t_ss_e.length; i++)
 		{
 			t_ss_e[i].style.width = horizontal+"px";
@@ -5406,7 +5480,7 @@ function update_search_div()
 	
 	var border_size = (max / 100)*4;
 	
-	var t_ss_e = document.getElementsByClassName('ss_e');
+	var t_ss_e = document.getElementsByClassName("ss_e");
 	for (var i = 0; i < t_ss_e.length; i++)
 	{
 		t_ss_e[i].style.border = "solid";
@@ -5419,7 +5493,7 @@ function update_search_div()
 	var c = 0;
 	var note_break = 0;
 
-	while(true)
+	for(;;) //used to be while(true)
 	{
 		note_break = note_break + 1;
 		c = c + 100;
@@ -5435,7 +5509,7 @@ function update_search_div()
 	
 	//To big...
 	c = c - 101;
-	while(true)
+	for(;;) //used to be while(true)
 	{
 		c = c + 20;
 		note_break = note_break + 1;
@@ -5449,7 +5523,7 @@ function update_search_div()
 	
 	//To big...
 	c = c - 21;
-	while(true)
+	for(;;) //used to be while(true)
 	{
 		c = c + 10;
 		note_break = note_break + 1;
@@ -5468,7 +5542,7 @@ function update_search_div()
 		c=0;
 	}
 	
-	while(true)
+	for(;;) //used to be while(true)
 	{
 		c = c + 1;
 		note_break = note_break + 1;
@@ -5508,8 +5582,8 @@ function update_single_app_div(in_cat)
 	
 	if(searching==0)
 	{
-		document.getElementById("alpha").style.display = 'none';
-		document.getElementById("search_input").style.display = 'none';
+		document.getElementById("alpha").style.display = "none";
+		document.getElementById("search_input").style.display = "none";
 	}
 	
 }
@@ -5544,7 +5618,7 @@ function string_to_apps(in_string)
 {
 	"use strict";	
 	var back = [];
-	var myarray = in_string.split('||');
+	var myarray = in_string.split("||");
 	var icon;
 	var cat;
 	var disp_name;
@@ -5586,7 +5660,7 @@ function is_app_in_all_apps(in_start_name)
 function is_app_in_installed_apps( in_array , in_start_name)
 {
 	"use strict";	
-	if( in_start_name.startsWith('virtualapp_') == true)
+	if( in_start_name.startsWith("virtualapp_") == true)
 	{
 		return true;
 	}
@@ -5612,8 +5686,8 @@ function is_app_in_installed_apps( in_array , in_start_name)
 function set_app_list(in_array)
 {
 	"use strict";	
-	var element_clock_list = document.getElementById('clock_app_list');
-	var element_date_list = document.getElementById('date_app_list');
+	var element_clock_list = document.getElementById("clock_app_list");
+	var element_date_list = document.getElementById("date_app_list");
 	
 	element_date_list.innerHTML = "";
 	element_clock_list.innerHTML = "";
@@ -5643,6 +5717,9 @@ function set_app_list(in_array)
 function start_date_app()
 {
 	"use strict";	
+	
+	if( app_move_mode == 1){ return; }
+	
 	if( date_app != "" && date_app != "-" )
 	{
 		launch_app(date_app);
@@ -5656,7 +5733,7 @@ function start_date_app()
 				//toast_notification(settings_error_string,"short", "top" );
 			} );
 		}
-		catch (err){}
+		catch(error){error_log(error);}
 	}
 }
 
@@ -5710,7 +5787,7 @@ function update_next_alarm()
 					var date_diff = dateDiffInDays(current_date_obj, alarm_time);
 					
 					alarm_h = alarm_time.getHours();
-					if(alarm_h < 10){alarm_h = "0"+ alarm_h}; //Pad the leading zero
+					if(alarm_h < 10){alarm_h = "0"+ alarm_h;} //Pad the leading zero
 					
 					alarm_m = alarm_time.getMinutes();
 					if(alarm_m < 10){ alarm_m = "0" + alarm_m;}//Pad the leading zero
@@ -5730,7 +5807,7 @@ function update_next_alarm()
 					
 					if(date_diff > 1)
 					{
-						var alarm_d = alarm_time.getDate()
+						var alarm_d = alarm_time.getDate();
 						var alarm_m = alarm_time.getMonth();
 						var alarm_y = alarm_time.getFullYear();
 						
@@ -5768,7 +5845,7 @@ function update_next_alarm()
 		
 
 		}
-		catch (err)
+		catch(error)
 		{
 			document.getElementById("homescreen_alarm_text").textContent = "";
 		}
@@ -5780,7 +5857,7 @@ function update_next_alarm()
 		{
 			document.getElementById("homescreen_alarm_text").textContent = "";
 		}
-		catch (error){}
+		catch(error){error_log(error);}
 	}
 	
 }
@@ -5793,9 +5870,10 @@ function start_clock_app()
 {
 	"use strict";	
 	
+	if( app_move_mode == 1){ return; }
+	
 	update_next_alarm();
 	
-				
 	if( clock_app != "" && clock_app != "-" )
 	{
 		launch_app(clock_app);
@@ -5804,13 +5882,12 @@ function start_clock_app()
 	{
 		try
 		{
-	
 			androidinfo.start_clock( function ok(){}, function bad()
 			{
 				//toast_notification(settings_error_string,"short","top");
 			} );
 		}
-		catch (err){}
+		catch(error){error_log(error);}
 	}
 }
 
@@ -5910,13 +5987,13 @@ function new_font_size_adjust()
 		}
 	}
 	
-	var cat_name_el = document.getElementById('Cat_name_text');
+	var cat_name_el = document.getElementById("Cat_name_text");
 	
 	cat_name_el.style.fontSize = (font_size_header*0.090)+"vmax"; 
 	
 	if( fontSize_getComputedStyle_speedup == -1)
 	{
-		fontSize_getComputedStyle_speedup = window.getComputedStyle(cat_name_el, null).getPropertyValue('font-size');
+		fontSize_getComputedStyle_speedup = window.getComputedStyle(cat_name_el, null).getPropertyValue("font-size");
 	}
 
 	if( parseFloat(fontSize_getComputedStyle_speedup) > vhTOpx(9) )
@@ -6031,7 +6108,7 @@ function resize()
 		{
 			NavigationBar.backgroundColorByHexString("set_nav",true);
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 	
 		spalten_appdrawer = appdrawer_horizontal;
 		
@@ -6106,9 +6183,7 @@ function resize()
 		{
 			mySwiper.update();
 		}
-		catch(error)
-		{
-		}
+		catch(error){error_log(error);}
 	}
 	
 
@@ -6126,7 +6201,7 @@ function set_new_cat(in_cat)
 	}
 	var element = document.getElementById(in_cat+"_new");
 	
-    if(typeof(element) != 'undefined' && element != null)
+    if(typeof(element) != "undefined" && element != null)
     {
 		//Exist
 		return;
@@ -6150,7 +6225,7 @@ function set_new_cat(in_cat)
 		var src = document.getElementById("div_"+in_cat+"_item");
 		src.appendChild(img);
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 	
 	store_apps(apps_to_string(all_apps));
 }
@@ -6163,17 +6238,17 @@ function unset_new_cat(in_cat)
 	
 	try
 	{
-		var image_x = document.getElementById(in_cat+'_new');
+		var image_x = document.getElementById(in_cat+"_new");
 		image_x.parentNode.removeChild(image_x);
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 }
 
 //Animate a new installed app
 function set_new_app(in_start_name)
 {
 	"use strict";	
-	var normal_apps_t = document.getElementsByClassName('normal_app');
+	var normal_apps_t = document.getElementsByClassName("normal_app");
 
 	var puls_element = null;
 	for (var i = 0; i < normal_apps_t.length; i++) 
@@ -6211,7 +6286,7 @@ function set_trans()
 		{
 			NavigationBar.backgroundColorByHexString("set_trans1",true);
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 	}
 }
 
@@ -6224,7 +6299,7 @@ function unset_trans()
 	{
 		NavigationBar.backgroundColorByHexString("unset_trans1",true);
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 }
 
 //Set the padding (navigation- and statusbar) for the Appdrawer
@@ -6347,7 +6422,7 @@ function set_padding_appdrawer(padding_top,padding_button)
 				set_new_cat(cat_p);
 		}
 	}
-	catch (e){}
+	catch(e){error_log(error);}
     	
 }
 
@@ -6365,7 +6440,7 @@ function set_homescreen_padding(padding_top,padding_button)
 	var home_app_height = (new_ges_height / 3)*2;
 	var new_height = home_app_height;
 	
-	var home_screen_div_obj = document.getElementById('home_screen_div');
+	var home_screen_div_obj = document.getElementById("home_screen_div");
 	
 	home_screen_div_obj.style.top = (padding_top + home_clock_height )+ "vh";
 	home_screen_div_obj.style.height = new_height+"vh";
@@ -6409,21 +6484,21 @@ function set_homescreen_padding(padding_top,padding_button)
 		var full_size_70 = (full_size/100)*75;
 		var full_size_90 = (full_size/100)*90;
 		
-		var t_home_icon_read = document.getElementsByClassName('home_icon_read');
+		var t_home_icon_read = document.getElementsByClassName("home_icon_read");
 		for (var i = 0; i < t_home_icon_read.length; i++)
 		{
 			t_home_icon_read[i].style.width = full_size_90+"px";
 			t_home_icon_read[i].style.height = full_size_90+"px";
 		}  
 			
-		var t_home_screen_read = document.getElementsByClassName('homescreenicon');
+		var t_home_screen_read = document.getElementsByClassName("homescreenicon");
 		for (var i = 0; i < t_home_screen_read.length; i++)
 		{
 			t_home_screen_read[i].style.width = full_size_70+"px";
 			t_home_screen_read[i].style.height = full_size_70+"px";
 		}  
 			
-		var t_home_screen_wrapper = document.getElementsByClassName('homescreen_wrapper');
+		var t_home_screen_wrapper = document.getElementsByClassName("homescreen_wrapper");
 		for (var i = 0; i < t_home_screen_wrapper.length; i++)
 		{
 			t_home_screen_wrapper[i].style.width = full_size+"px";
@@ -6438,21 +6513,21 @@ function set_homescreen_padding(padding_top,padding_button)
 		var full_size_70 = (full_size/100)*75;
 		var full_size_90 = (full_size/100)*90;
 	
-		var t_home_icon_read = document.getElementsByClassName('home_icon_read');
+		var t_home_icon_read = document.getElementsByClassName("home_icon_read");
 		for (var i = 0; i < t_home_icon_read.length; i++)
 		{
 			t_home_icon_read[i].style.width = full_size_90+"px";
 			t_home_icon_read[i].style.height = full_size_90+"px";
 		}  
 			
-		var t_home_screen_read = document.getElementsByClassName('homescreenicon');
+		var t_home_screen_read = document.getElementsByClassName("homescreenicon");
 		for (var i = 0; i < t_home_screen_read.length; i++)
 		{
 			t_home_screen_read[i].style.width = full_size_70+"px";
 			t_home_screen_read[i].style.height = full_size_70+"px";
 		}  
 			
-		var t_home_screen_wrapper = document.getElementsByClassName('homescreen_wrapper');
+		var t_home_screen_wrapper = document.getElementsByClassName("homescreen_wrapper");
 		for (var i = 0; i < t_home_screen_wrapper.length; i++)
 		{
 			t_home_screen_wrapper[i].style.width = full_size+"px";
@@ -6468,10 +6543,10 @@ function set_homescreen_padding(padding_top,padding_button)
 		var bad_w = document.getElementsByClassName("homescreenicon")[0].offsetWidth;
 		var bad_h = document.getElementsByClassName("homescreenicon")[0].offsetHeight;
 
-		bad_w = (bad_w/100)*35//30;
-		bad_h = (bad_h/100)*35//30;
+		bad_w = (bad_w/100)*35;//30;
+		bad_h = (bad_h/100)*35;//30;
 
-		var badges_el_t = document.getElementsByClassName('badges');
+		var badges_el_t = document.getElementsByClassName("badges");
 		for (var i = 0; i < badges_el_t.length; i++) 
 		{
 			if(bad_w > bad_h)
@@ -6487,7 +6562,7 @@ function set_homescreen_padding(padding_top,padding_button)
 		}  
 	
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 
 }		
 	
@@ -6512,7 +6587,7 @@ function new_badges(in_start_name)
 		return;
 	}	
 
-	var badges_el_t = document.getElementsByClassName('home_table_icon');
+	var badges_el_t = document.getElementsByClassName("home_table_icon");
 	var badges_el = null;
 	
 	for (var i = 0; i < badges_el_t.length; i++) 
@@ -6531,9 +6606,9 @@ function new_badges(in_start_name)
 	try
 	{
 		badges_el = badges_el.getElementsByClassName("badges")[0];	
-		badges_el.setAttribute('src','icons/new_bad.png');
+		badges_el.setAttribute("src","icons/new_bad.png");
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 }
 
 //Remove a notification for a homescreen app (remove the +)
@@ -6559,7 +6634,7 @@ function del_badges(in_start_name)
 		return;
 	}	
 	
-	var badges_el_t = document.getElementsByClassName('home_table_icon');
+	var badges_el_t = document.getElementsByClassName("home_table_icon");
 	var badges_el = null;
 	
 	for (var i = 0; i < badges_el_t.length; i++) 
@@ -6581,9 +6656,9 @@ function del_badges(in_start_name)
 	try
 	{
 		badges_el_t = badges_el.getElementsByClassName("badges")[0];	
-		badges_el_t.setAttribute('src','icons/0_bad.png');
+		badges_el_t.setAttribute("src","icons/0_bad.png");
 	}
-	catch( error ) {}
+	catch(error) {error_log(error);}
 
 }
 
@@ -6621,7 +6696,7 @@ function fadeOut(el_o, ms_o,in_func_o)
 			{
 				in_func_o();
 			}
-			catch(error) {}
+			catch(error){error_log(error);}
 		}
 		el_o.style.opacity = op2;
 	}, steps2);
@@ -6646,7 +6721,7 @@ function fadeIn(el_i, ms_i ,in_func_i)
 			{
 				in_func_i();
 			}
-			catch( error ) {}
+			catch(error) {error_log(error);}
 		}
 
 		el_i.style.opacity = op;
@@ -6658,7 +6733,7 @@ function fadeIn(el_i, ms_i ,in_func_i)
 function sanitize_input(in_string)
 {
 	"use strict";	
-	var temp = document.createElement('div');
+	var temp = document.createElement("div");
 	temp.textContent = in_string;
 	return temp.innerHTML;
 }
@@ -6670,7 +6745,7 @@ function pulsate_element(in_e)
 	setTimeout(function()
 	{ 
 		var border_w = in_e.offsetWidth ;
-		in_e.setAttribute('style', 'outline: '+  (border_w / 9 )  +'px solid white !important');
+		in_e.setAttribute("style", "outline: "+  (border_w / 9 )  +"px solid white !important");
 	
 		var base = (border_w/ 3) /100 ;
 		if(black_white=="1"){in_e.style.webkitFilter = "grayscale(100%)";}
@@ -6727,8 +6802,8 @@ function update_app_rename()
 	new_name_string = new_name_string.replace("!;!","");
 	new_name_string = new_name_string.replace("||","");
 	
-	new_name_string = new_name_string.split('!;!').join('');
-	new_name_string = new_name_string.split('\|\|').join('');
+	new_name_string = new_name_string.split("!;!").join("");
+	new_name_string = new_name_string.split("\|\|").join("");
 	
 	var in_start_name = document.getElementById("s_app_start_name").textContent;
 
@@ -6759,7 +6834,7 @@ function end_input()
 	{
 		name_field.parentNode.removeChild(name_field);
 	}
-	catch(error) {}
+	catch(error){error_log(error);}
 	
 	var s_app_name_tmp = document.getElementById("s_app_name");
 	s_app_name_tmp.color = "white";
@@ -6789,7 +6864,7 @@ function edit_input()
 	
 	var sapn_element = document.getElementById("s_app_name");
 	
-	var style = window.getComputedStyle(sapn_element, null).getPropertyValue('font-size');
+	var style = window.getComputedStyle(sapn_element, null).getPropertyValue("font-size");
 	var fontSize = parseFloat(style); 
 
 	name_field.style.fontSize = fontSize + "px";
@@ -6799,7 +6874,7 @@ function edit_input()
 	
 	var old_val = in_element.textContent;
 	in_element.textContent = "";
-	name_field.value =  ''+old_val;
+	name_field.value =  ""+old_val;
 	name_field.style.color = "white";
 	name_field.fontSize = ( document.getElementById("s_app_name").offsetHeight )+"px";
 	name_field.focus(); 
@@ -6807,6 +6882,14 @@ function edit_input()
 	in_element.appendChild(name_field);
 
 	name_field.focus(); 
+	
+
+	try
+	{
+		name_field.removeEventListener("blur", end_input);
+	}
+	catch(error){error_log(error);}
+	
 	name_field.addEventListener("blur", end_input);
 	
 	return;
@@ -7052,7 +7135,7 @@ function successinfo_icon_packs(message)
 	}
 	
 	var full_string  = "";		
-	var str_array = message.split(',');
+	var str_array = message.split(",");
 
 	for(var i = 0; i < str_array.length-1; i++)
 	{
@@ -7063,7 +7146,7 @@ function successinfo_icon_packs(message)
 			full_string = "";
 		}
 				
-		var tmpa = str_array[i].split('-');
+		var tmpa = str_array[i].split("-");
 		var img_string = tmpa[0];
 		var drawable = tmpa[1];
 				
@@ -7094,7 +7177,7 @@ function successinfo_icon_packs_cat(message)
 	}
 	
 	var full_string  = "";		
-	var str_array = message.split(',');
+	var str_array = message.split(",");
 
 	for(var i = 0; i < str_array.length-1; i++)
 	{
@@ -7105,7 +7188,7 @@ function successinfo_icon_packs_cat(message)
 			full_string = "";
 		}
 				
-		var tmpa = str_array[i].split('-');
+		var tmpa = str_array[i].split("-");
 		var img_string = tmpa[0];
 		var drawable = tmpa[1];
 				
@@ -7142,7 +7225,7 @@ function search_for_icon()
 	{
 		clearTimeout(iconpack_timer);
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 	
 	iconpack_timer = setTimeout(function()
 	{
@@ -7158,7 +7241,7 @@ function search_for_icon_cat()
 	{
 		clearTimeout(iconpack_timer);
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 	
 	iconpack_timer = setTimeout(function()
 	{
@@ -7182,7 +7265,7 @@ function display_icon_select()
 	
 	if(current_app != "")
 	{
-		if(current_app.startsWith('virtualapp_') == false) //Virtualapps cant restore their icon
+		if(current_app.startsWith("virtualapp_") == false) //Virtualapps cant restore their icon
 		{
 			document.getElementById("btn_orginal_icon").style.display = "block";
 		}
@@ -7213,12 +7296,20 @@ function catch_all_erros()
 }
 
 
+function error_log(error)
+{
+	if(debug == 1)
+	{
+		console.log(error);
+	}	
+}
+
 //Init function for the lukelauncher
 function init_luke_launcher()
 {
 	"use strict";		
 	
-	window.onerror = function(event) { catch_all_erros(); }
+	window.onerror = function(event) { catch_all_erros(); };
 
 	document.getElementById("searchicon").ontouchstart = function (event){ search_icon_click(); };
 	document.getElementById("menudialogicon").ontouchstart = function (event){ menu_icon_click(); };
@@ -7261,14 +7352,14 @@ function init_luke_launcher()
 	document.getElementById("settings_ba").style.display = "none";
 	document.getElementById("appsettings").style.display = "none";
 
-	window.addEventListener('resize', function(event){ resize();  });
+	window.addEventListener("resize", function(event){ resize();  });
 	
 	document.addEventListener("resume", onResume, false);
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	
 
-	document.getElementById("padding_input_field").addEventListener('input', padding_input, false);
-	document.getElementById("padding_top_input_field").addEventListener('input', padding_top_input, false);
+	document.getElementById("padding_input_field").addEventListener("input", padding_input, false);
+	document.getElementById("padding_top_input_field").addEventListener("input", padding_top_input, false);
 	
 	load_settings();
 	
@@ -7321,7 +7412,7 @@ function oderappalpha()
 		}
      }
         
-     var delete_array = delete_string.split(',');
+     var delete_array = delete_string.split(",");
      for (var i = delete_array.length - 1; i >= 0; i--)
      {
           if (delete_array[i] != "") 
@@ -7426,7 +7517,7 @@ function ready_function()
 		//Wait for finished loading
 		setTimeout(function() 
 		{
-			 set_shortcut_after_loading(short_cut_info)
+			 set_shortcut_after_loading(short_cut_info);
 		},100);
 		
 			function set_shortcut_after_loading(short_cut_info)
@@ -7435,7 +7526,7 @@ function ready_function()
 				{
 					setTimeout(function() 
 					{
-						set_shortcut_after_loading(short_cut_info)
+						set_shortcut_after_loading(short_cut_info);
 					},200);
 					return;
 				}
@@ -7509,12 +7600,12 @@ function ready_function()
 	{
 			filterActions:
 			[
-				'android.intent.action.PACKAGE_ADDED',
-				'android.intent.action.PACKAGE_REMOVED'
+				"android.intent.action.PACKAGE_ADDED",
+				"android.intent.action.PACKAGE_REMOVED"
 			],
 			filterDataSchemes:
 			[
-				'package'
+				"package"
 			]
 	},function(){});
 
@@ -7523,12 +7614,12 @@ function ready_function()
 	{
 	  filterActions: 
 	  [
-		'luke.launcher.ACTION', //  Scans
-		'com.android.launcher.action.INSTALL_SHORTCUT', //  Messages from service
+		"luke.launcher.ACTION", //  Scans
+		"com.android.launcher.action.INSTALL_SHORTCUT", //  Messages from service
 	  ],
 	  filterCategories: 
 	  [
-		'com.android.intent.category.DEFAULT'
+		"com.android.intent.category.DEFAULT"
 	  ]
 	},
 	function(intent)
@@ -7621,7 +7712,7 @@ function ready_function()
 			app_move_mode = 0;
 			if( current_view == "appdrawer")
 			{
-				document.getElementById("scrollable").style.display = 'block';
+				document.getElementById("scrollable").style.display = "block";
 				init_swiper(0);
 							
 				document.getElementById("scrollable").style.border = "solid";
@@ -7756,7 +7847,7 @@ function icon_pack_icon_cat_selected(drawable)
 				hide_icon_select_cat();
 			} );
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 }
  
 //Displays an iconpack for selecting a new App Icons
@@ -7786,9 +7877,9 @@ function display_iconpack(in_name)
 		{	
 			androidinfo.geticons_frompack(disp_current_iconpack,"","1", successinfo_icon_packs, failinfo_icon_packs);
 		}
-		catch(error){}
+		catch(error){error_log(error);}
 	}, 10);
-	document.getElementById('searchiconinpack_input').value = '';	
+	document.getElementById("searchiconinpack_input").value = "";	
 }
  
 
@@ -7820,9 +7911,9 @@ function display_cat_iconpack(in_name)
 		{	
 			androidinfo.geticons_frompack(disp_current_iconpack,"","1", successinfo_icon_packs_cat, failinfo_icon_packs);
 		}
-		catch( error ){}
+		catch(error){error_log(error);}
 	}, 10);
-	document.getElementById('searchiconinpack_cat_input').value = '';	
+	document.getElementById("searchiconinpack_cat_input").value = "";	
 }
 
 
@@ -7844,7 +7935,7 @@ function final_search()
 	{	
 		androidinfo.geticons_frompack(disp_current_iconpack,search_icon_pack,iconpack_page_number, successinfo_icon_packs, failinfo_icon_packs);
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 }
 
 //Typing finished (after 650ms) now display the results	- For Categories Icons/iconpacks
@@ -7864,7 +7955,7 @@ function final_search_cat()
 	{	
 		androidinfo.geticons_frompack(disp_current_iconpack,search_icon_pack,iconpack_page_number, successinfo_icon_packs_cat, failinfo_icon_packs);
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 }
 
 
@@ -7896,7 +7987,7 @@ function revert_icon()
 				
 		}, function fail(){});
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 }
 
 
@@ -7908,7 +7999,7 @@ function icon_pack_icon_selected(drawable)
 	setTimeout(function()
 	{ 
 		var current_app = document.getElementById("s_app_start_name").textContent;
-		var tmp_img = document.getElementById('s_app_icon'); 
+		var tmp_img = document.getElementById("s_app_icon"); 
 		var width_tmp = tmp_img.naturalWidth;
 		var height_tmp = tmp_img.naturalHeight;
 		
@@ -7925,17 +8016,17 @@ function icon_pack_icon_selected(drawable)
 		
 		try
 		{
-			back_icon = back_icon.substring(back_icon.lastIndexOf('/')+1);
+			back_icon = back_icon.substring(back_icon.lastIndexOf("/")+1);
 		}
-		catch( error ){}	
+		catch(error){error_log(error);}	
 		
 		if(  back_icon.indexOf("?") !== -1 )
 		{
 			try
 			{
-				back_icon = back_icon.substring(0,back_icon.lastIndexOf('?'));
+				back_icon = back_icon.substring(0,back_icon.lastIndexOf("?"));
 			}
-			catch( error ){}	   
+			catch(error){error_log(error);}	   
 		}
 		
 		
@@ -7969,7 +8060,7 @@ function icon_pack_icon_selected(drawable)
 				toast_notification("Error!", "short", "bottom");
 			} );
 		}
-		catch( error ){}
+		catch(error){error_log(error);}
 		
 	}, 100);
 	
@@ -7998,7 +8089,7 @@ function open_symbol_icon()
 			return;
 		}
 		
-		var str_array = message.split(',');
+		var str_array = message.split(",");
 
 		var string_add = "";
 		var element_iconpack_list  = document.getElementById("iconpack_list");
@@ -8011,7 +8102,7 @@ function open_symbol_icon()
 		
 		for(var i = 0; i < str_array.length-1; i++)
 		{
-			sptwo = str_array[i].split('-');
+			sptwo = str_array[i].split("-");
 			package_name = sptwo[0];
 			name_pack = sptwo[1];
 			icon_pack = sptwo[2];
@@ -8037,7 +8128,7 @@ function open_symbol_icon()
 	{				
 		androidinfo.getalliconpacks("getalliconpacks", successinfo_icon_packs, failinfo_icon_packs);
 	}
-	catch(ee)
+	catch(error)
 	{
 		var string_add = "";
 		var element_iconpack_list  = document.getElementById("iconpack_list");
@@ -8067,7 +8158,7 @@ function open_symbol_icon_cat()
 			return;
 		}
 		
-		var str_array = message.split(',');
+		var str_array = message.split(",");
 
 		var string_add = "";
 		var element_iconpack_list  = document.getElementById("iconpack_cat_list");
@@ -8079,7 +8170,7 @@ function open_symbol_icon_cat()
 		var icon_pack = "";
 		for(var i = 0; i < str_array.length-1; i++)
 		{
-			sptwo = str_array[i].split('-');
+			sptwo = str_array[i].split("-");
 			package_name = sptwo[0];
 			name_pack = sptwo[1];
 			icon_pack = sptwo[2];
@@ -8097,7 +8188,7 @@ function open_symbol_icon_cat()
 	{					
 		androidinfo.getalliconpacks("getalliconpacks", successinfo_icon_packs, failinfo_icon_packs);
 	}
-	catch(ee)
+	catch(error)
 	{
 		
 		var string_add = "";
@@ -8117,7 +8208,7 @@ function open_symbol_icon_cat()
 function open_gallery_icon()
 {
 	"use strict";	
-	var tmp_img = document.getElementById('s_app_icon'); 
+	var tmp_img = document.getElementById("s_app_icon"); 
 
 	var width_tmp = tmp_img.naturalWidth;
 	var height_tmp = tmp_img.naturalHeight;
@@ -8132,121 +8223,133 @@ function open_gallery_icon()
 	{
 		size_to = height_tmp ;
 	}
-	
-	var options = 
-    {
-        targetHeight : (size_to*2),
-        targetWidth : (size_to*2),
-        destinationType: Camera.DestinationType.FILE_URI,  
-        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
-        encodingType: Camera.EncodingType.JPEG,
-        mediaType: Camera.MediaType.PICTURE,
-        allowEdit: true,
-        correctOrientation: true
-    };
- 
-	navigator.camera.getPicture(function cameraSuccess(imageUri)
+		
+	var options = null;
+
+	try
 	{
-        var current_app = document.getElementById("s_app_start_name").textContent;
-        
-		var back_icon = "";
-		for(var i = 0; i<all_apps.length; i++)	
+		options = 
 		{
-			var start_name = all_apps[i].start_name;
-			if(start_name == current_app)
+			targetHeight : size_to,
+			targetWidth :  size_to,
+			destinationType: Camera.DestinationType.FILE_URI,  
+			sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+			encodingType: Camera.EncodingType.JPEG,
+			mediaType: Camera.MediaType.PICTURE,
+			allowEdit: true,
+			correctOrientation: true
+		};
+	 
+		navigator.camera.getPicture(function cameraSuccess(imageUri)
+		{
+			var current_app = document.getElementById("s_app_start_name").textContent;
+			
+			var back_icon = "";
+			for(var i = 0; i<all_apps.length; i++)	
 			{
-				back_icon = all_apps[i].icon;
-				break;
-			}	
-		}
-		
-		try
-		{
-			back_icon = back_icon.substring(back_icon.lastIndexOf('/')+1);
-		}
-		catch( error ){}	
-		
-		if(  back_icon.indexOf("?") !== -1 )
-		{
+				var start_name = all_apps[i].start_name;
+				if(start_name == current_app)
+				{
+					back_icon = all_apps[i].icon;
+					break;
+				}	
+			}
+			
 			try
 			{
-				back_icon = back_icon.substring(0,back_icon.lastIndexOf('?'));
+				back_icon = back_icon.substring(back_icon.lastIndexOf("/")+1);
 			}
-			catch( error ){}	   
-		}
-		
-		if(back_icon=="")
-		{
-			toast_notification("Error!", "short", "bottom");
-			return;	
-		}
-            
-		try
-		{	
-			androidinfo.applay_icon(back_icon , imageUri , width_tmp ,  height_tmp , function ok()
+			catch(error){error_log(error);}	
+			
+			if(  back_icon.indexOf("?") !== -1 )
 			{
-		
-				document.getElementById("s_app_icon").src = "file:///data/data/luke.launcher/appicons/"+back_icon+"?" + new Date().getTime(); 
-				
-				for(var i = 0; i<all_apps.length; i++)
+				try
 				{
-					if (all_apps[i].start_name == current_app)
-					{
-						all_apps[i].icon ="file:///data/data/luke.launcher/appicons/"+back_icon+"?"+ new Date().getTime();
-						update_single_app_div(current_kat);
-						new_font_size_adjust();	
-						hide_icon_select();
-						break;
-					}
+					back_icon = back_icon.substring(0,back_icon.lastIndexOf("?"));
 				}
-				
-			}, 
-			function fail()
+				catch(error){error_log(error);}	   
+			}
+			
+			if(back_icon=="")
 			{
-				toast_notification( "Error!","short","top");
-			});
-		}
-		catch( error ){}
-    }, 
-    function cameraError(error){}, options);
+				toast_notification("Error!", "short", "bottom");
+				return;	
+			}
+				
+			try
+			{	
+				androidinfo.applay_icon(back_icon , imageUri , width_tmp ,  height_tmp , function ok()
+				{
+			
+					document.getElementById("s_app_icon").src = "file:///data/data/luke.launcher/appicons/"+back_icon+"?" + new Date().getTime(); 
+					
+					for(var i = 0; i<all_apps.length; i++)
+					{
+						if (all_apps[i].start_name == current_app)
+						{
+							all_apps[i].icon ="file:///data/data/luke.launcher/appicons/"+back_icon+"?"+ new Date().getTime();
+							update_single_app_div(current_kat);
+							new_font_size_adjust();	
+							hide_icon_select();
+							break;
+						}
+					}
+					
+				}, 
+				function fail()
+				{
+					toast_notification( "Error!","short","top");
+				});
+			}
+			catch(error){error_log(error);}
+		}, 
+		function cameraError(error){}, options);
+    
+    }
+	catch(error){error_log(error);}
 }
 
 //Select an icon from the gallery for a custom categorie
 function open_gallery_icon_cat()
 {
 	"use strict";	
-
-	var options = 
-    {
-        targetHeight : (size_to*2),
-        targetWidth : (size_to*2),
-        destinationType: Camera.DestinationType.FILE_URI,  
-        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
-        encodingType: Camera.EncodingType.JPEG,
-        mediaType: Camera.MediaType.PICTURE,
-        allowEdit: true,
-        correctOrientation: true
-    };
- 
-
-	navigator.camera.getPicture(function cameraSuccess(imageUri)
+		
+	var options = null;
+	var size_to = 512;
+	try
 	{
-		try
-		{	
-			androidinfo.applay_icon_cat(cat_row+".png" , imageUri , new_icon_width ,  new_icon_height , function ok()
-			{
-					cat_array[cat_row][0] = "file:///data/data/luke.launcher/customcaticons/"+cat_row+".png";
-					document.getElementById(cat_row + "_cat" ).src = "file:///data/data/luke.launcher/customcaticons/"+cat_row+".png?" + new Date().getTime();
-					hide_icon_select_cat();
-			}, 
-			function fail()
-			{
-				toast_notification("Error!","short","top");
-			});
-		}
-		catch( error ){}
-    }, 
-    function cameraError(error){}, options);
+		options = 
+		{
+			targetHeight : (size_to),
+			targetWidth : (size_to),
+			destinationType: Camera.DestinationType.FILE_URI,  
+			sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+			encodingType: Camera.EncodingType.JPEG,
+			mediaType: Camera.MediaType.PICTURE,
+			allowEdit: true,
+			correctOrientation: true
+		};
+	 
+		navigator.camera.getPicture(function cameraSuccess(imageUri)
+		{
+			try
+			{	
+				androidinfo.applay_icon_cat(cat_row+".png" , imageUri , new_icon_width ,  new_icon_height , function ok()
+				{
+						cat_array[cat_row][0] = "file:///data/data/luke.launcher/customcaticons/"+cat_row+".png";
+						document.getElementById(cat_row + "_cat" ).src = "file:///data/data/luke.launcher/customcaticons/"+cat_row+".png?" + new Date().getTime();
+						hide_icon_select_cat();
+				}, 
+				function fail()
+				{
+					toast_notification("Error!","short","top");
+				});
+			}
+			catch(error){error_log(error);}
+		}, 
+		function cameraError(error){error_log(error);}, options);
+	}
+    catch(error){error_log(error);}
 }
 
 
@@ -8274,14 +8377,14 @@ function compare_apps_with_installed_apps()
 				name = name.replace("!;!","");
 				name = name.replace("||","");
 				
-				name = name.split(';;').join('');
-				name = name.split('\|\|').join('');
+				name = name.split(";;").join("");
+				name = name.split("\|\|").join("");
 				
 				start_name = start_name.replace("!;!","");
 				start_name = start_name.replace("||","");
 
-				start_name = start_name.split('!;!').join('');
-				start_name = start_name.split('\|\|').join('');
+				start_name = start_name.split("!;!").join("");
+				start_name = start_name.split("\|\|").join("");
 		
 				start_name = sanitize_input(start_name);
 				name = sanitize_input(name);
@@ -8305,14 +8408,14 @@ function compare_apps_with_installed_apps()
 					//Guess a categorie for the app
 					
 					//Applay the current Icon Pack to the new installed app
-					if(global_icon_pack != "default" && (all_installed_apps[i].start_name.startsWith('virtualapp_')) == false)
+					if(global_icon_pack != "default" && (all_installed_apps[i].start_name.startsWith("virtualapp_")) == false)
 					{
 
 						try
 						{	
 							androidinfo.applay_icon_iconpack_app(all_installed_apps[i].start_name,global_icon_pack,new_icon_width,new_icon_height, function ok(){}, function bad(){} );
 						}
-						catch( error ){}
+						catch(error){error_log(error);}
 						
 					}
 				
@@ -8366,7 +8469,7 @@ function compare_apps_with_installed_apps()
 				}  
 			}
 
-			var myarray = del.split(',');
+			var myarray = del.split(",");
 			for (var i = myarray.length - 1; i >= 0; i--)
 			{
 				if (myarray[i] != "")
@@ -8397,13 +8500,13 @@ function compare_apps_with_installed_apps()
 
 			loading_finished = 1;
 			
-		},function(ee) 
+		},function(error) 
 		{
 			loading_finished = 1;
 		});		
 
 	}
-	catch (ee)
+	catch(error)
 	{
 			set_app_list(all_apps);
 			loading_finished = 1;
@@ -8417,7 +8520,7 @@ function load_settings()
 {
 	"use strict";	
 		
-	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic";
+	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic||0";
 	
 	//If German is avalible
 	if (navigator.language.indexOf("de") > -1)
@@ -8429,8 +8532,8 @@ function load_settings()
 	try
 	{
 		device_manufacturer = device.manufacturer;
-		device_manufacturer = device_manufacturer.toLowerCase()
-	}catch(err){}
+		device_manufacturer = device_manufacturer.toLowerCase();
+	}catch(error){error_log(error);}
 	
 	if( device_manufacturer == "xiaomi")
 	{
@@ -8482,7 +8585,7 @@ function load_settings()
 		});
 	
 	}
-	catch (error)
+	catch(error)
 	{
 		should_wait_loadscreen = 1; // 1 Might be the first run
 		applay_settings(defaut_settings_string);	
@@ -8530,7 +8633,7 @@ function load_saved_apps()
 			force_update_applist = 0; 
 		});
 	}
-	catch (eror)
+	catch(error)
 	{
 		back = "com.fdsaffdduu7d7fkkk95!;!dsafdsafsadfasdfdsaf!;!icons/app.png!;!1||!;!com.fdsaudu7df5!;!1!;!icons/app.png!;!1||!;!codffm.fdsauu7df5!;!9!;!icons/app.png!;!1||!;!co0om.fdsauu7df5!;!8!;!icons/app.png!;!1||";
 	
@@ -8548,7 +8651,7 @@ function store_apps(in_string)
 	{
 		NativeStorage.setItem("apps",""+in_string,function(){},function(){});		
 	}
-	catch (e){}
+	catch(error){error_log(error);}
 }
 
 
@@ -8560,7 +8663,7 @@ function store_settings(in_string)
 	{
 		NativeStorage.setItem("settings",""+in_string,function(){},function(){});
 	}
-	catch (e){}	
+	catch(error){error_log(error);}	
 }
 
 //Launch an App with an app name
@@ -8568,7 +8671,7 @@ function launch_app(in_app)
 {
 	"use strict";
 	//Launch a ShortCut
-	if( in_app.startsWith('virtualapp_') == true)
+	if( in_app.startsWith("virtualapp_") == true)
 	{
 		if( in_app.includes("!!.!!") == true)
 		{
@@ -8582,7 +8685,7 @@ function launch_app(in_app)
 			{	
 				androidinfo.start_shortcut(package_name,shortcut_id,user_id, function ok(){}, function bad(){} );
 			}
-			catch( error ){}
+			catch(error){error_log(error);}
 		}
 		else
 		{
@@ -8667,9 +8770,7 @@ function launch_app(in_app)
 	{
 		startApp.set({"application":in_app }).start();
 	}
-	catch (e)
-	{
-	}
+	catch(error){error_log(error);}
 }
 
 
@@ -8698,7 +8799,7 @@ function open_info_settings()
 			}
 		);
 	}
-	catch(ee)
+	catch(error)
 	{
 		document.getElementById("settings_info_text2").textContent = info_text2+ " "+ version_nr;
 	}
@@ -8738,7 +8839,7 @@ function export_all()
 									toast_notification("Error","3500", "bottom");
 								} );
 							}
-							catch( error )
+							catch(error)
 							{
 								toast_notification("Error", "3500", "bottom");	
 							}
@@ -8756,7 +8857,7 @@ function export_all()
 					toast_notification("Error", "3500", "bottom");
 				}, cordova.plugins.diagnostic.permission.WRITE_EXTERNAL_STORAGE);
 			}
-			catch( error )
+			catch(error)
 			{
 				toast_notification("Error", "3500", "bottom");	
 			}
@@ -8767,7 +8868,7 @@ function export_all()
 			toast_notification("Error", "3500", "bottom");
 		}	
 	}, 
-	function(error){});
+	function(error){error_log(error);});
 	
 }
 
@@ -8791,17 +8892,17 @@ function close_app_setting(in_app)
 		
 		try
 		{
-			back_icon = back_icon.substring(back_icon.lastIndexOf('/')+1);
+			back_icon = back_icon.substring(back_icon.lastIndexOf("/")+1);
 		}
-		catch( error ){}	
+		catch(error){error_log(error);}	
 		
 		if(  back_icon.indexOf("?") !== -1 )
 		{
 			try
 			{
-				back_icon = back_icon.substring(0,back_icon.lastIndexOf('?'));
+				back_icon = back_icon.substring(0,back_icon.lastIndexOf("?"));
 			}
-			catch( error ){}	   
+			catch(error){error_log(error);}	   
 		}
 		
 		if(back_icon !="")
@@ -8810,7 +8911,7 @@ function close_app_setting(in_app)
 			{	
 				androidinfo.remove_icon(back_icon, function ok(){}, function bad(){} );
 			}
-			catch( error ){}
+			catch(error){error_log(error);}
 		}
 
 		end_app_settings();
@@ -8828,7 +8929,7 @@ function uninstall()
     force_update_applist = 1;
 
 	
-    if( in_a.startsWith('virtualapp_') == true) //Remove Virtual APP
+    if( in_a.startsWith("virtualapp_") == true) //Remove Virtual APP
 	{
 		var del = "";	
 		for(var i = 0; i<all_apps.length; i++)
@@ -8841,7 +8942,7 @@ function uninstall()
 			}  
 		}
 
-		var myarray = del.split(',');
+		var myarray = del.split(",");
 		for (var i = myarray.length - 1; i >= 0; i--)
 		{
 			if (myarray[i] != "")
@@ -8867,7 +8968,7 @@ function uninstall()
 				compare_apps_with_installed_apps();
 			},function () {});
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 	}
 }
 
@@ -8943,7 +9044,7 @@ function home_notifi_ok()
 		{
 			window.cordova.plugins.settings.open("accessibility", function() {},function () {});
 		}
-		catch (e){}
+		catch(error){error_log(error);}
 	}, 50);		
 
 }
@@ -8956,7 +9057,7 @@ function toast_notification( in_message , in_duration , in_position)
 		{  
 			window.plugins.toast.showWithOptions({message: in_message, duration : in_duration, position: in_position});
 		}
-		catch( error ){}
+		catch(error){error_log(error);}
 		
 		if(debug == 1)
 		{
@@ -8981,7 +9082,7 @@ function start_resort()
 		for(var i = 0; i<all_apps.length; i++)
         {
             var cc = all_apps[i].start_name;
-            if ( cc.startsWith('virtualapp_') == true)
+            if ( cc.startsWith("virtualapp_") == true)
             {
 				if(cc != "nope")
 				{
@@ -9017,7 +9118,7 @@ function open_global_iconpack()
 	document.getElementById("progress_dialog").style.display = "none";
 	document.getElementById("progress_dialog_bg").style.display = "none";
 		
-	var element_iconpack_list = document.getElementById('iconpack_select_list');
+	var element_iconpack_list = document.getElementById("iconpack_select_list");
 	element_iconpack_list.innerHTML = "";
 	
 	var string_add_iconpacklist = "";
@@ -9028,7 +9129,7 @@ function open_global_iconpack()
     
 	var successinfo_icon_packs = function(message) 
 	{
-		var str_array = message.split(',');
+		var str_array = message.split(",");
 		var string_add_iconpacklist = "";
 
 		var sptwo = null;
@@ -9038,7 +9139,7 @@ function open_global_iconpack()
 		
 		for(var i = 0; i < str_array.length-1; i++)
 		{
-			sptwo = str_array[i].split('-');
+			sptwo = str_array[i].split("-");
 			package_name = sptwo[0];
 			name_pack = sptwo[1];
 			icon_pack = sptwo[2];
@@ -9057,7 +9158,7 @@ function open_global_iconpack()
 	{				
 		androidinfo.getalliconpacks("getalliconpacks", successinfo_icon_packs, failinfo_icon_packs);
 	}
-	catch( error ){}
+	catch(error){error_log(error);}
 }
 
 
@@ -9080,13 +9181,13 @@ function applay_icon_pack(in_pack,visible)
 		for(var counter1 = 0; counter1<all_apps.length; counter1++)
 		{
 			var target_app = all_apps[counter1].start_name;		
-			if(target_app != "nope" && target_app.startsWith('virtualapp_') == false )
+			if(target_app != "nope" && target_app.startsWith("virtualapp_") == false )
 			{
 				try
 				{	
 					androidinfo.revert_icon(target_app, function ok(){}, function fail(){});
 				}
-				catch( error ){}
+				catch(error){error_log(error);}
 				all_apps[counter1].icon = "file:///data/data/luke.launcher/appicons/"+target_app+".png?"+ new Date().getTime();
 			}
 		}
@@ -9104,13 +9205,13 @@ function applay_icon_pack(in_pack,visible)
 		for(var counter2 = 0; counter2<all_apps.length; counter2++)
 		{
 				var target_app = all_apps[counter2].start_name;	
-				if(target_app != "nope" && target_app.startsWith('virtualapp_') == false)
+				if(target_app != "nope" && target_app.startsWith("virtualapp_") == false)
 				{
 						try
 						{	
 							androidinfo.applay_icon_iconpack_app(target_app,in_pack,new_icon_width,new_icon_height, function ok(){}, function bad(){} );
 						}
-						catch( error ){}
+						catch(error){error_log(error);}
 						all_apps[counter2].icon = "file:///data/data/luke.launcher/appicons/"+target_app+".png?"+ new Date().getTime();
 				}
 		}

@@ -126,6 +126,7 @@ var orient_text = "";
 var orient_auto = "";
 var orient_horizontal = "";
 var orient_vertical = "";
+var expand_notification_text = "";
 
 //All element strings are changed in order to apply the current language
 function applay_lang()
@@ -261,7 +262,8 @@ function applay_lang()
 		 orient_auto = "Automatic";
 		 orient_horizontal = "Horizontal";
 		 orient_vertical = "Vertical";
-
+		 expand_notification_text = "Gesture to expand statusbar";
+		 
 		if(default_cats==1)
 		{
 			cat_array = [];
@@ -407,6 +409,7 @@ function applay_lang()
 		 orient_auto = "Automatisch";
 		 orient_horizontal = "Horizontal";
 		 orient_vertical = "Vertikal";	
+		 expand_notification_text = "Wischen um Statusbar auszuklappen";
 		 	  
 		if(default_cats==1)
 		{
@@ -573,7 +576,7 @@ function applay_lang()
 	document.getElementById("modal_header_askimport_settings").textContent = overwrite_import_string;
 	
 	
-	document.getElementById("btn_import_start").textContent = import_btn_string
+	document.getElementById("btn_import_start").textContent = import_btn_string;
 	document.getElementById("btn_import_abort").textContent = abort_btn_string;
 	
 	document.getElementById("padding_bottom_input_set_zero").textContent = btn_bottomzero_string;
@@ -594,7 +597,7 @@ function applay_lang()
 	document.getElementById("modal_orient_horizontal").textContent = orient_horizontal;
 	document.getElementById("modal_orient_vertical").textContent = orient_vertical;
 	
-		 
+	document.getElementById("settings_notification_expand_text").textContent = expand_notification_text;
 		 
 	if(current_kat!=-1)
 	{

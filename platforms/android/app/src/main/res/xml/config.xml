@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="luke.launcher" version="1.0.18" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="luke.launcher" version="1.0.19" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="IntentShim">
         <param name="android-package" value="com.darryncampbell.cordova.plugin.intent.IntentShim" />
         <param name="onload" value="true" />
@@ -114,6 +114,7 @@
         <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
         <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
         <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+        <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     </config-file>
     <preference name="loglevel" value="DEBUG" />
     <preference name="AndroidLaunchMode" value="singleTask" />
@@ -121,4 +122,5 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="SplashMaintainAspectRatio" value="false" />
+    <preference name="android-minSdkVersion" value="29" />
 </widget>

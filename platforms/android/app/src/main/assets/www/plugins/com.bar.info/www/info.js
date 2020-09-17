@@ -54,7 +54,6 @@ exports.importall = function (successCallback , errorCallback) {
     cordova.exec(successCallback, errorCallback, "Info", "importall");
 };
 
-
 exports.remove_icon = function (icon_name, successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "Info", "remove_icon", [icon_name]);
 };
@@ -73,9 +72,12 @@ exports.start_date = function ( successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "Info", "start_date");
 };
 
-
 exports.get_next_alarm = function ( successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "Info", "get_next_alarm");
+};
+
+exports.expandnotification = function (successCallback , errorCallback) {
+    cordova.exec(successCallback, errorCallback, "Info", "expandnotification");
 };
 
 

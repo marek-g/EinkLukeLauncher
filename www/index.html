@@ -12,7 +12,8 @@
 	
 	<script src="js/libs/vanilla-picker.min.js"></script>
 	<script src="js/libs/swipe.js"></script>
-	<!--<script src="js/libs/swiper.min.js"></script>-->
+	<script src="js/libs/swiped-events.min.js"></script>
+
 	
 	<script src="js/libs/redips-drag-min.js"></script>	
 	<script src="js/libs/dayjs.min.js"></script>
@@ -191,7 +192,7 @@
 
 		</div>
 
-			<div id="homescreen" class="swiper-slide">
+			<div id="homescreen" class="swiper-slide"  data-swipe-threshold="10" data-swipe-timeout="800">
 
 				<div id="homescreen_out_clock">
 					<div id="middle">
@@ -872,6 +873,19 @@
 							</form>
 						</div>
 					</td>
+					
+					</tr>
+					
+					<tr>
+						<th>
+						</th>
+						
+						<td>
+							<h3 id="settings_notification_expand_text" class="settings_text_normal" ><b>Gesture expand Notification</b></h3>
+							<input id="settings_notification_expand" type="checkbox"  class="toggle_new"  onchange='change_expand_notifi(this)'>
+						</td>
+					</tr>
+					
 					</table>
 					
 			</div>

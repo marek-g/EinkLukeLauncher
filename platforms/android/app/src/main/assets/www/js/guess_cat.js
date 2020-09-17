@@ -7448,70 +7448,69 @@ function guess_cat(in_name,in_start_name)
 	
 	
 
-	for (var i = 0; i < communication_cat_array.length; i++) {
-	    if(in_start_name == communication_cat_array[i]){
+	for (var i1 = 0; i1 < communication_cat_array.length; i1++) {
+	    if(in_start_name == communication_cat_array[i1]){
 			return	communication_cat;}    
 	}
 	
-	for (var i = 0; i < internet_cat_array.length; i++) {
-	    if(in_start_name == internet_cat_array[i]){
+	for (var i2 = 0; i2 < internet_cat_array.length; i2++) {
+	    if(in_start_name == internet_cat_array[i2]){
 			return	internet_cat;}    
 	}
 	
-	for (var i = 0; i < media_cat_array.length; i++) {
-	    if(in_start_name == media_cat_array[i]){
+	for (var i3 = 0; i3 < media_cat_array.length; i3++) {
+	    if(in_start_name == media_cat_array[i3]){
 			return	media_cat;}    
 	}
 	
-	for (var i = 0; i < game_cat_array.length; i++) {
-	    if(in_start_name == game_cat_array[i]){
+	for (var i4 = 0; i4 < game_cat_array.length; i4++) {
+	    if(in_start_name == game_cat_array[i4]){
 			return	game_cat;}    
 	}
 	
-	for (var i = 0; i < tool_cat_array.length; i++) {
-	    if(in_start_name == tool_cat_array[i]){
+	for (var i5 = 0; i5 < tool_cat_array.length; i5++) {
+	    if(in_start_name == tool_cat_array[i5]){
 			return	tool_cat;}    
 	}
 	
-	for (var i = 0; i < setting_cat_array.length; i++) {
-	    if(in_start_name == setting_cat_array[i]){
+	for (var i6 = 0; i6 < setting_cat_array.length; i6++) {
+	    if(in_start_name == setting_cat_array[i6]){
 			return	setting_cat;}    
 	}
 		
-
-	
-	for (var i = 0; i < communication_keyword_array.length; i++) {
-	    if(  in_name.toLowerCase().indexOf(communication_keyword_array[i].toLowerCase()) !== -1  ){
+	//Guess part	
+	for (var i7 = 0; i7 < communication_keyword_array.length; i7++) {
+	    if(  in_name.toLowerCase().indexOf(communication_keyword_array[i7].toLowerCase()) !== -1  ){
 			return	communication_cat;}    
 	}
 	
-	for (var i = 0; i < internet_keyword_array.length; i++) {
-		if(  in_name.toLowerCase().indexOf(internet_keyword_array[i].toLowerCase()) !== -1  ){
+	for (var i8 = 0; i8 < internet_keyword_array.length; i8++) {
+		if(  in_name.toLowerCase().indexOf(internet_keyword_array[i8].toLowerCase()) !== -1  ){
 			return	internet_cat;}    
 	}
 	
-	for (var i = 0; i < media_keyword_array.length; i++) {
-		if(  in_name.toLowerCase().indexOf(media_keyword_array[i].toLowerCase()) !== -1  ){
+	for (var i9 = 0; i9 < media_keyword_array.length; i9++) {
+		if(  in_name.toLowerCase().indexOf(media_keyword_array[i9].toLowerCase()) !== -1  ){
 			return	media_cat;}    
 	}
 	
-	for (var i = 0; i < game_keyword_array.length; i++) {
-		if(  in_name.toLowerCase().indexOf(game_keyword_array[i].toLowerCase()) !== -1  ){
+	for (var i10 = 0; i10 < game_keyword_array.length; i10++) {
+		if(  in_name.toLowerCase().indexOf(game_keyword_array[i10].toLowerCase()) !== -1  ){
 			return	game_cat;}    
 	}
 	
-	for (var i = 0; i < communication_keyword_array.length; i++) {
-		if(  in_name.toLowerCase().indexOf(communication_keyword_array[i].toLowerCase()) !== -1  ){
+	for (var i11 = 0; i11 < communication_keyword_array.length; i11++) {
+		if(  in_name.toLowerCase().indexOf(communication_keyword_array[i11].toLowerCase()) !== -1  ){
 			return	communication_cat;}    
 	}
 	
-	for (var i = 0; i < tool_keyword_array.length; i++) {
-		if(  in_name.toLowerCase().indexOf(tool_keyword_array[i].toLowerCase()) !== -1  ){
+	for (var i12 = 0; i12 < tool_keyword_array.length; i12++) {
+		if(  in_name.toLowerCase().indexOf(tool_keyword_array[i12].toLowerCase()) !== -1  ){
 			return	tool_cat;}
 	}
 
-	for (var i = 0; i < setting_keyword_array.length; i++) {
-		if(  in_name.toLowerCase().indexOf(setting_keyword_array[i].toLowerCase()) !== -1  ){
+	for (var i13 = 0; i13 < setting_keyword_array.length; i13++) {
+		if(  in_name.toLowerCase().indexOf(setting_keyword_array[i13].toLowerCase()) !== -1  ){
 			return	setting_cat;}    
 	}
 

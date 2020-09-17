@@ -180,6 +180,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;  
 import java.util.Calendar;  
 
+
+
+
 public class Info extends CordovaPlugin 
 {
 
@@ -1106,6 +1109,25 @@ public class Info extends CordovaPlugin
 		}
 				
  
+		
+		//Expand the notification/status Bar
+		if (action.equals("expandnotification")) 
+        {
+			
+		
+			try
+			{
+				Object service = cordova.getActivity().getSystemService("statusbar");
+				Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+				Method expand = statusbarManager.getMethod("expandNotificationsPanel"); //<-
+				expand.invoke(service);
+			}
+			catch (Exception e){}
+			
+            callbackContext.success("ok");
+		}
+		
+		
         return false;
     }
 }
