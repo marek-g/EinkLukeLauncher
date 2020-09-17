@@ -29,9 +29,7 @@
 	<preference name="SplashMaintainAspectRatio" value="false" />
         
     <platform name="android">
-		
-		<preference name="android-minSdkVersion" value="29" />
-		
+
 		<hook type="before_build" src="clean_build.sh" />
 		<hook type="before_compile" src="clean_compile.sh" />
 		
