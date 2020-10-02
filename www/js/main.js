@@ -7510,8 +7510,6 @@ function ready_function()
 {				
 	"use strict";
 	
-	navigator.splashscreen.show();
-	
 	window.plugins.intentShim.getIntent(function(short_cut_info)
 	{
 		//Wait for finished loading

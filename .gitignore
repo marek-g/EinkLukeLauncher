@@ -6,6 +6,8 @@
 *.log
 *.jar
 *.aar
+*.aar
+*.bplist
 
 .DS_Store
 .DS_Store?
