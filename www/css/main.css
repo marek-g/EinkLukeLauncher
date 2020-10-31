@@ -554,11 +554,11 @@ li.home
     
 body 
 { 
-	background:transparent;
+	/*background: white;*/
 	
-	/*
-    background: url('file:///data/data/luke.launcher/wallpaper.jpg') no-repeat center center fixed; 
-    
+	/*background: url('file:///data/data/luke.launcher/wallpaper.jpg') no-repeat center center fixed; */
+
+	background: url('../images/wallpaper.png') no-repeat center center fixed;   
     
     background-size: cover;
     overflow-x: hidden;
@@ -570,8 +570,6 @@ body
     margin-right: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
-    
-    */
  }
     
 #main_app_div
