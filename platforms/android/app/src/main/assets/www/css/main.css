@@ -558,7 +558,7 @@ body
 	
 	/*background: url('file:///data/data/luke.launcher/wallpaper.jpg') no-repeat center center fixed; */
 
-	background: url('../images/wallpaper.png') no-repeat center center fixed;   
+	background: url('../icons/wallpaper.png') no-repeat center center fixed;   
     
     background-size: cover;
     overflow-x: hidden;
