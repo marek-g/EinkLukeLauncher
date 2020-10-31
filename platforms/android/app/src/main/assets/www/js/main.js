@@ -432,7 +432,7 @@ function set_tranz()
 {
 	"use strict";
 	var read_tmp = read/100;
-	var read_tmp_apps = read_tmp - 0.20; //20% Diff between apps and nav...
+	var read_tmp_apps = read_tmp - 0.40; //40% Diff between apps and nav...
 	if(read_tmp_apps<0)
 	{
 		read_tmp_apps = 0;
@@ -1369,24 +1369,24 @@ function applay_settings(in_string)
 	if( clock == "" ) { clock = "1-0-1-#000000-1-1"; }	
 		
 		
-	color_text = "#ffffff";
+	color_text = "#000000";
 	try{
 		if(array_s[3] != undefined)
 		{
 			color_text = array_s[3];
 		}
 	}catch(error){error_log(error);}
-	if(color_text == "") { color_text = "#ffffff"; }	
+	if(color_text == "") { color_text = "#000000"; }	
 		
 		
-	read = "70";
+	read = "50";
 	try{
 		if(array_s[4] != undefined)
 		{
 			read = array_s[4];
 		}
 	}catch(error){error_log(error);}
-	if( check_in_range(read,0,100) == false){ read = "70"; }	
+	if( check_in_range(read,0,100) == false){ read = "50"; }	
 		
 		
 	lang = "eng";
@@ -1499,14 +1499,14 @@ function applay_settings(in_string)
 	if( check_in_range(font_size_app,0,100) == false){ font_size_app = "30"; }	
 		
 	
-	font_size_homescreen = "100";
+	font_size_homescreen = "70";
 	try{
 		if(array_s[16] != undefined)
 		{
 			font_size_homescreen = array_s[16];
 		}
 	}catch(error){error_log(error);}
-	if( check_in_range(font_size_homescreen,0,100) == false){ font_size_homescreen = "100"; }
+	if( check_in_range(font_size_homescreen,0,100) == false){ font_size_homescreen = "70"; }
 		
 		
 	var app_drawer_vertical_horizontal = "3-4";  //Tmp
@@ -1881,7 +1881,7 @@ function applay_settings(in_string)
     {
 		document.getElementById("pre_color").style.background = color_text;
 		document.getElementById("text_color_pre").style.backgroundColor = color_text;
-        document.getElementById("header").style.color = color_text;
+        document.getElementById("header").style.color = "#FFFFFF"; //color_text;
         
         var x = document.querySelectorAll(".desc");
 		for (var i = 0; i < x.length; i++)
@@ -5969,7 +5969,7 @@ function new_font_size_adjust()
 	"use strict";	
     if (color_text != "") 
     {
-        document.getElementById("header").style.color = color_text;
+        document.getElementById("header").style.color = "#FFFFFF"; //color_text;
 
         var x = document.querySelectorAll(".desc");
 		for (var i = 0; i < x.length; i++)
@@ -8518,12 +8518,12 @@ function load_settings()
 {
 	"use strict";	
 		
-	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic||0";
+	var default_settings_string = "r||0||0-0-1-#000000-1-1||#000000||50||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||40||20||70||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic||0";
 	
 	//If German is avalible
 	if (navigator.language.indexOf("de") > -1)
 	{
-		 defaut_settings_string = defaut_settings_string.replace("||eng||", "||de||");
+		 default_settings_string = default_settings_string.replace("||eng||", "||de||");
 	}
 
 	var device_manufacturer = "";
@@ -8536,7 +8536,7 @@ function load_settings()
 	if( device_manufacturer == "xiaomi")
 	{
 		//On Xiaomi Miui devices, the alarm manager is not reliable -> So showing the alarm is in default not active
-		defaut_settings_string = defaut_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
+		default_settings_string = default_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
 	}
 	
 	try 
@@ -8567,7 +8567,7 @@ function load_settings()
 		function()
 		{
 			should_wait_loadscreen = 1; //Might be the first run
-			applay_settings(defaut_settings_string);
+			applay_settings(default_settings_string);
 			
 			init_swiper(0);	
 			current_view = "appdrawer";
@@ -8586,7 +8586,7 @@ function load_settings()
 	catch(error)
 	{
 		should_wait_loadscreen = 1; // 1 Might be the first run
-		applay_settings(defaut_settings_string);	
+		applay_settings(default_settings_string);	
 		
 		init_swiper(0);	 //Auf 0!
 		current_view = "appdrawer";
