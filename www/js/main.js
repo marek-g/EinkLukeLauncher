@@ -432,7 +432,7 @@ function set_tranz()
 {
 	"use strict";
 	var read_tmp = read/100;
-	var read_tmp_apps = read_tmp - 0.20; //20% Diff between apps and nav...
+	var read_tmp_apps = read_tmp - 0.40; //40% Diff between apps and nav...
 	if(read_tmp_apps<0)
 	{
 		read_tmp_apps = 0;
@@ -1369,24 +1369,24 @@ function applay_settings(in_string)
 	if( clock == "" ) { clock = "1-0-1-#000000-1-1"; }	
 		
 		
-	color_text = "#ffffff";
+	color_text = "#000000";
 	try{
 		if(array_s[3] != undefined)
 		{
 			color_text = array_s[3];
 		}
 	}catch(error){error_log(error);}
-	if(color_text == "") { color_text = "#ffffff"; }	
+	if(color_text == "") { color_text = "#000000"; }	
 		
 		
-	read = "70";
+	read = "50";
 	try{
 		if(array_s[4] != undefined)
 		{
 			read = array_s[4];
 		}
 	}catch(error){error_log(error);}
-	if( check_in_range(read,0,100) == false){ read = "70"; }	
+	if( check_in_range(read,0,100) == false){ read = "50"; }	
 		
 		
 	lang = "eng";
@@ -1499,14 +1499,14 @@ function applay_settings(in_string)
 	if( check_in_range(font_size_app,0,100) == false){ font_size_app = "30"; }	
 		
 	
-	font_size_homescreen = "100";
+	font_size_homescreen = "70";
 	try{
 		if(array_s[16] != undefined)
 		{
 			font_size_homescreen = array_s[16];
 		}
 	}catch(error){error_log(error);}
-	if( check_in_range(font_size_homescreen,0,100) == false){ font_size_homescreen = "100"; }
+	if( check_in_range(font_size_homescreen,0,100) == false){ font_size_homescreen = "70"; }
 		
 		
 	var app_drawer_vertical_horizontal = "3-4";  //Tmp
@@ -1714,7 +1714,7 @@ function applay_settings(in_string)
 	
 
 	//The Homescreen representation of Apps (with background or not)s
-	if (startpage == "n") 
+	/*if (startpage == "n") 
     {
 		document.getElementById("startpmn").checked = true;
         var x = document.querySelectorAll("home_icon_read");
@@ -1733,7 +1733,7 @@ function applay_settings(in_string)
 			x[i].style.borderRadius = "20%";
 			x[i].style.backgroundColor = "rgba(204, 204, 204,0.4)";
 		}
-    }
+    }*/
     
     
     if( appdrawer_align == "l")
@@ -1881,7 +1881,7 @@ function applay_settings(in_string)
     {
 		document.getElementById("pre_color").style.background = color_text;
 		document.getElementById("text_color_pre").style.backgroundColor = color_text;
-        document.getElementById("header").style.color = color_text;
+        document.getElementById("header").style.color = "#FFFFFF"; //color_text;
         
         var x = document.querySelectorAll(".desc");
 		for (var i = 0; i < x.length; i++)
@@ -1997,7 +1997,7 @@ function applay_settings(in_string)
 		status_bar_padding = status_pad_tmp;
 		if(status_bar_padding == -1)
 		{
-			status_bar_padding = 24; //If there is also an error use 24 as an fallback
+			status_bar_padding = 48; //If there is also an error use 48 as an fallback
 		}
 	}
 	
@@ -2528,7 +2528,7 @@ function open_font_settings()
 }
 
 
-//Function for changeing Appdrawer icons to black/white or to color
+//Function for changeing Appdrawer icons to invert or to normal
 function change_icon_bw(in_c)
 {
 	"use strict";	
@@ -2545,7 +2545,7 @@ function change_icon_bw(in_c)
 }
 
 
-//Function for changeing homescreen icosn to black/white or to color
+//Function for changeing homescreen icons to invert or to normal
 function change_icon_bw_home(in_c)
 {
 	"use strict";	
@@ -3607,7 +3607,7 @@ function update_homescreen()
 	
 	document.getElementById("del_homescreen").style.display = "none"; 
 	
-	if (startpage == "n") 
+	/*if (startpage == "n") 
     {
 		document.getElementById("startpmn").checked = true;
 
@@ -3628,7 +3628,7 @@ function update_homescreen()
 			x[i].style.borderRadius = "20%";
 			x[i].style.backgroundColor = "rgba(204, 204, 204,0.4)";
 		}
-	}
+	}*/
 
 	update_font_family();
 	set_homescreen_black_white();
@@ -4564,11 +4564,11 @@ function open_app_settings(in_element)
     
     if(black_white == "1")
     {
-		document.getElementById("s_app_icon").style.webkitFilter = "grayscale(100%)";
+		document.getElementById("s_app_icon").style.webkitFilter = "invert(100%)";
 	}
     else
     {
-		document.getElementById("s_app_icon").style.webkitFilter = "grayscale(0%)";
+		document.getElementById("s_app_icon").style.webkitFilter = "invert(0%)";
 	}
 		
     document.getElementById("table_current_apps").style.display = "none"; 
@@ -4991,7 +4991,7 @@ function set_app_drawer_black_white()
 		var normal_apps = document.querySelectorAll(".normal_app");
 		for (var i = 0; i < normal_apps.length; i++)
 		{
-			normal_apps[i].style.webkitFilter = "grayscale(100%)";
+			normal_apps[i].style.webkitFilter = "invert(100%)";
 			normal_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			normal_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}
@@ -4999,7 +4999,7 @@ function set_app_drawer_black_white()
 		var hidden_apps = document.querySelectorAll(".hidden_app");
 		for (var i = 0; i < hidden_apps.length; i++)
 		{
-			hidden_apps[i].style.webkitFilter = "grayscale(100%)";
+			hidden_apps[i].style.webkitFilter = "invert(100%)";
 			hidden_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			hidden_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}
@@ -5010,7 +5010,7 @@ function set_app_drawer_black_white()
 	
 		for (var i = 0; i < normal_apps.length; i++)
 		{
-			normal_apps[i].style.webkitFilter = "grayscale(0%)";
+			normal_apps[i].style.webkitFilter = "invert(0%)";
 			normal_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			normal_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 						
@@ -5018,7 +5018,7 @@ function set_app_drawer_black_white()
 		var hidden_apps = document.querySelectorAll(".hidden_app");
 		for (var i = 0; i < hidden_apps.length; i++)
 		{
-			hidden_apps[i].style.webkitFilter = "grayscale(0%)";
+			hidden_apps[i].style.webkitFilter = "invert(0%)";
 			hidden_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			hidden_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}				
@@ -5035,7 +5035,7 @@ function set_homescreen_black_white()
 		var homescreen_apps = document.querySelectorAll(".homescreenicon");
 		for (var i = 0; i < homescreen_apps.length; i++)
 		{
-			homescreen_apps[i].style.webkitFilter = "grayscale(100%)";
+			homescreen_apps[i].style.webkitFilter = "invert(100%)";
 		}
 	}
 	else
@@ -5043,7 +5043,7 @@ function set_homescreen_black_white()
 		var homescreen_apps = document.querySelectorAll(".homescreenicon");
 		for (var i = 0; i < homescreen_apps.length; i++)
 		{
-			homescreen_apps[i].style.webkitFilter = "grayscale(0%)";
+			homescreen_apps[i].style.webkitFilter = "invert(0%)";
 		}
 	}
 	
@@ -5969,7 +5969,7 @@ function new_font_size_adjust()
 	"use strict";	
     if (color_text != "") 
     {
-        document.getElementById("header").style.color = color_text;
+        document.getElementById("header").style.color = "#FFFFFF"; //color_text;
 
         var x = document.querySelectorAll(".desc");
 		for (var i = 0; i < x.length; i++)
@@ -6748,7 +6748,7 @@ function pulsate_element(in_e)
 		in_e.setAttribute("style", "outline: "+  (border_w / 9 )  +"px solid white !important");
 	
 		var base = (border_w/ 3) /100 ;
-		if(black_white=="1"){in_e.style.webkitFilter = "grayscale(100%)";}
+		if(black_white=="1"){in_e.style.webkitFilter = "invert(100%)";}
 		pulsate_timer(100,in_e,3,base);
 
 	},100); //Wait 100 ms to start pulsate
@@ -6767,7 +6767,7 @@ function pulsate_timer(in_count,in_e,repeat,base)
 	if( repeat < 1)
 	{
 		in_e.style.outline = "0px solid white";
-		if(black_white=="1"){in_e.style.webkitFilter = "grayscale(100%)";}
+		if(black_white=="1"){in_e.style.webkitFilter = "invert(100%)";}
 		return;
 	}
 
@@ -8518,12 +8518,12 @@ function load_settings()
 {
 	"use strict";	
 		
-	var defaut_settings_string = "r||0||1-0-1-#000000-1-1||#ffffff||70||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||27||20||100||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic||0";
+	var default_settings_string = "r||0||0-0-1-#000000-1-1||#000000||50||eng||com.android.deskclock||com.android.calendar||1||0||1||-1||-1||0||40||20||70||3-4||5-5||1||5||null||default||l||r||10||1||||||automatic||0";
 	
 	//If German is avalible
 	if (navigator.language.indexOf("de") > -1)
 	{
-		 defaut_settings_string = defaut_settings_string.replace("||eng||", "||de||");
+		 default_settings_string = default_settings_string.replace("||eng||", "||de||");
 	}
 
 	var device_manufacturer = "";
@@ -8536,7 +8536,7 @@ function load_settings()
 	if( device_manufacturer == "xiaomi")
 	{
 		//On Xiaomi Miui devices, the alarm manager is not reliable -> So showing the alarm is in default not active
-		defaut_settings_string = defaut_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
+		default_settings_string = default_settings_string.replace("1-0-1-#000000-1-1", "1-0-1-#000000-1-0");
 	}
 	
 	try 
@@ -8567,7 +8567,7 @@ function load_settings()
 		function()
 		{
 			should_wait_loadscreen = 1; //Might be the first run
-			applay_settings(defaut_settings_string);
+			applay_settings(default_settings_string);
 			
 			init_swiper(0);	
 			current_view = "appdrawer";
@@ -8586,7 +8586,7 @@ function load_settings()
 	catch(error)
 	{
 		should_wait_loadscreen = 1; // 1 Might be the first run
-		applay_settings(defaut_settings_string);	
+		applay_settings(default_settings_string);	
 		
 		init_swiper(0);	 //Auf 0!
 		current_view = "appdrawer";
