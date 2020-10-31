@@ -594,7 +594,7 @@ public class Info extends CordovaPlugin
 			
 			
 						
-			int statusBarHeight = 24;
+			int statusBarHeight = 48;
 			/* 
 			 *Not accurate... 
 			int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");

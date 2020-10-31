@@ -1997,7 +1997,7 @@ function applay_settings(in_string)
 		status_bar_padding = status_pad_tmp;
 		if(status_bar_padding == -1)
 		{
-			status_bar_padding = 24; //If there is also an error use 24 as an fallback
+			status_bar_padding = 48; //If there is also an error use 48 as an fallback
 		}
 	}
 	
