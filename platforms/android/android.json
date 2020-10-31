@@ -9,7 +9,7 @@
         "parents": {
           "/manifest/application/activity": [
             {
-              "xml": "<intent-filter><action android:name=\"android.intent.action.MAIN\" /><category android:name=\"android.intent.category.HOME\" /><category android:name=\"android.intent.category.DEFAULT\" /><action android:name=\"com.android.launcher.action.INSTALL_SHORTCUT\" /><action android:name=\"com.android.launcher.action.UNINSTALL_SHORTCUT\" /></intent-filter>",
+              "xml": "<activity android:configChanges=\"orientation|keyboardHidden|screenSize\" android:excludeFromRecents=\"true\" android:launchMode=\"singleTask\" android:stateNotNeeded=\"true\" android:theme=\"@style/CustomStyle\" android:windowSoftInputMode=\"adjustPan\" />",
               "count": 2,
               "mode": "merge",
               "id": "config.xml",
@@ -25,7 +25,7 @@
               }
             },
             {
-              "xml": "<activity android:configChanges=\"orientation|keyboardHidden|screenSize\" android:excludeFromRecents=\"true\" android:launchMode=\"singleTask\" android:stateNotNeeded=\"true\" android:theme=\"@style/CustomStyle\" android:windowSoftInputMode=\"adjustPan\" />",
+              "xml": "<intent-filter><action android:name=\"android.intent.action.MAIN\" /><category android:name=\"android.intent.category.HOME\" /><category android:name=\"android.intent.category.DEFAULT\" /><action android:name=\"com.android.launcher.action.INSTALL_SHORTCUT\" /><action android:name=\"com.android.launcher.action.UNINSTALL_SHORTCUT\" /></intent-filter>",
               "count": 1,
               "mode": "merge",
               "id": "config.xml",
@@ -44,39 +44,39 @@
           "./application/activity": [
             {
               "xml": "<intent-filter><action android:name=\"android.intent.action.MAIN\" /><category android:name=\"android.intent.category.HOME\" /><category android:name=\"android.intent.category.DEFAULT\" /><action android:name=\"com.android.launcher.action.INSTALL_SHORTCUT\" /><action android:name=\"com.android.launcher.action.UNINSTALL_SHORTCUT\" /><action android:name=\"android.content.pm.action.CONFIRM_PIN_SHORTCUT\" /></intent-filter>",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             }
           ],
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             },
             {
               "xml": "<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\" />",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             },
             {
               "xml": "<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\" />",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             },
             {
               "xml": "<uses-permission android:name=\"com.android.alarm.permission.SET_ALARM\" />",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.EXPAND_STATUS_BAR\" />",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             }
           ],
@@ -117,7 +117,7 @@
           "/*": [
             {
               "xml": "<style name=\"CustomStyle\" parent=\"@android:style/Theme.Material.Light.NoActionBar\"><item name=\"android:windowShowWallpaper\">true</item><item name=\"android:windowBackground\">@android:color/transparent</item></style>",
-              "count": 20,
+              "count": 23,
               "id": "config.xml"
             }
           ]

@@ -1,6 +1,14 @@
 # EinkLukeLauncher
 
 Luke Launcher with changes for eink devices (tested on Likebook Mars).
+Original site: https://lukelauncher.de/
+Original code: https://gitlab.com/LukeSoftware/lukelauncher
+
+## Changes
+
+1. Added static wallpaper (icons/wallpaper.png) as a body background, because Likebook Mars doesn't support Android wallpapers.
+2. Adjusted default settings to be more eink friendly.
+3. Replaced black & white icon filters with inverted icons.
 
 ## Build
 

@@ -1714,7 +1714,7 @@ function applay_settings(in_string)
 	
 
 	//The Homescreen representation of Apps (with background or not)s
-	if (startpage == "n") 
+	/*if (startpage == "n") 
     {
 		document.getElementById("startpmn").checked = true;
         var x = document.querySelectorAll("home_icon_read");
@@ -1733,7 +1733,7 @@ function applay_settings(in_string)
 			x[i].style.borderRadius = "20%";
 			x[i].style.backgroundColor = "rgba(204, 204, 204,0.4)";
 		}
-    }
+    }*/
     
     
     if( appdrawer_align == "l")
@@ -2528,7 +2528,7 @@ function open_font_settings()
 }
 
 
-//Function for changeing Appdrawer icons to black/white or to color
+//Function for changeing Appdrawer icons to invert or to normal
 function change_icon_bw(in_c)
 {
 	"use strict";	
@@ -2545,7 +2545,7 @@ function change_icon_bw(in_c)
 }
 
 
-//Function for changeing homescreen icosn to black/white or to color
+//Function for changeing homescreen icons to invert or to normal
 function change_icon_bw_home(in_c)
 {
 	"use strict";	
@@ -3607,7 +3607,7 @@ function update_homescreen()
 	
 	document.getElementById("del_homescreen").style.display = "none"; 
 	
-	if (startpage == "n") 
+	/*if (startpage == "n") 
     {
 		document.getElementById("startpmn").checked = true;
 
@@ -3628,7 +3628,7 @@ function update_homescreen()
 			x[i].style.borderRadius = "20%";
 			x[i].style.backgroundColor = "rgba(204, 204, 204,0.4)";
 		}
-	}
+	}*/
 
 	update_font_family();
 	set_homescreen_black_white();
@@ -4564,11 +4564,11 @@ function open_app_settings(in_element)
     
     if(black_white == "1")
     {
-		document.getElementById("s_app_icon").style.webkitFilter = "grayscale(100%)";
+		document.getElementById("s_app_icon").style.webkitFilter = "invert(100%)";
 	}
     else
     {
-		document.getElementById("s_app_icon").style.webkitFilter = "grayscale(0%)";
+		document.getElementById("s_app_icon").style.webkitFilter = "invert(0%)";
 	}
 		
     document.getElementById("table_current_apps").style.display = "none"; 
@@ -4991,7 +4991,7 @@ function set_app_drawer_black_white()
 		var normal_apps = document.querySelectorAll(".normal_app");
 		for (var i = 0; i < normal_apps.length; i++)
 		{
-			normal_apps[i].style.webkitFilter = "grayscale(100%)";
+			normal_apps[i].style.webkitFilter = "invert(100%)";
 			normal_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			normal_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}
@@ -4999,7 +4999,7 @@ function set_app_drawer_black_white()
 		var hidden_apps = document.querySelectorAll(".hidden_app");
 		for (var i = 0; i < hidden_apps.length; i++)
 		{
-			hidden_apps[i].style.webkitFilter = "grayscale(100%)";
+			hidden_apps[i].style.webkitFilter = "invert(100%)";
 			hidden_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			hidden_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}
@@ -5010,7 +5010,7 @@ function set_app_drawer_black_white()
 	
 		for (var i = 0; i < normal_apps.length; i++)
 		{
-			normal_apps[i].style.webkitFilter = "grayscale(0%)";
+			normal_apps[i].style.webkitFilter = "invert(0%)";
 			normal_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			normal_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 						
@@ -5018,7 +5018,7 @@ function set_app_drawer_black_white()
 		var hidden_apps = document.querySelectorAll(".hidden_app");
 		for (var i = 0; i < hidden_apps.length; i++)
 		{
-			hidden_apps[i].style.webkitFilter = "grayscale(0%)";
+			hidden_apps[i].style.webkitFilter = "invert(0%)";
 			hidden_apps[i].style.maxHeight = appdrawer_icon_size_tmp + "vh";
 			hidden_apps[i].style.maxWidth = appdrawer_icon_size_tmp + "vw";
 		}				
@@ -5035,7 +5035,7 @@ function set_homescreen_black_white()
 		var homescreen_apps = document.querySelectorAll(".homescreenicon");
 		for (var i = 0; i < homescreen_apps.length; i++)
 		{
-			homescreen_apps[i].style.webkitFilter = "grayscale(100%)";
+			homescreen_apps[i].style.webkitFilter = "invert(100%)";
 		}
 	}
 	else
@@ -5043,7 +5043,7 @@ function set_homescreen_black_white()
 		var homescreen_apps = document.querySelectorAll(".homescreenicon");
 		for (var i = 0; i < homescreen_apps.length; i++)
 		{
-			homescreen_apps[i].style.webkitFilter = "grayscale(0%)";
+			homescreen_apps[i].style.webkitFilter = "invert(0%)";
 		}
 	}
 	
@@ -6748,7 +6748,7 @@ function pulsate_element(in_e)
 		in_e.setAttribute("style", "outline: "+  (border_w / 9 )  +"px solid white !important");
 	
 		var base = (border_w/ 3) /100 ;
-		if(black_white=="1"){in_e.style.webkitFilter = "grayscale(100%)";}
+		if(black_white=="1"){in_e.style.webkitFilter = "invert(100%)";}
 		pulsate_timer(100,in_e,3,base);
 
 	},100); //Wait 100 ms to start pulsate
@@ -6767,7 +6767,7 @@ function pulsate_timer(in_count,in_e,repeat,base)
 	if( repeat < 1)
 	{
 		in_e.style.outline = "0px solid white";
-		if(black_white=="1"){in_e.style.webkitFilter = "grayscale(100%)";}
+		if(black_white=="1"){in_e.style.webkitFilter = "invert(100%)";}
 		return;
 	}
 

@@ -163,8 +163,8 @@ function applay_lang()
 		 settings_header = "Settings";
 		 settings_homescreen_icons_text = "Homescreen icons";
 		 settings_appdrawer_text = "App-Drawer type";
-		 settings_icon_type_text = "App-Drawer icons black/white";
-		 settings_icon_type_homescreen_text = "Homescreen icons black/white";
+		 settings_icon_type_text = "App-Drawer icons negative";
+		 settings_icon_type_homescreen_text = "Homescreen icons negative";
 		 settings_homescreen_day_time_text = "Time/date homescreen";
 		 settings_text_color_text = "Text color app-drawer";
 		 settings_text_colorhome_text = "Text color homescreen";
@@ -312,8 +312,8 @@ function applay_lang()
 		 settings_header = "Einstellungen";
 		 settings_homescreen_icons_text = "Startbildschirm Icons";
 		 settings_appdrawer_text = "App-Übersicht Art";
-		 settings_icon_type_text = "App-Übersicht Icons Schwarz/Weiß";
-		 settings_icon_type_homescreen_text = "Schwarz/Weiß Startbildschirm Icons";
+		 settings_icon_type_text = "App-Übersicht Icons Invertiert";
+		 settings_icon_type_homescreen_text = "Invertiert Startbildschirm Icons";
 		 settings_homescreen_day_time_text = "Zeit/Datum Startbildschirm";
 		 settings_text_color_text = "Text Farbe App-Übersicht";
 		 settings_text_colorhome_text = "Text Farbe Startbildschirm";
