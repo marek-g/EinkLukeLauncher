@@ -4,6 +4,8 @@ Luke Launcher with changes for eink devices (tested on Likebook Mars).
 Original site: https://lukelauncher.de/
 Original code: https://gitlab.com/LukeSoftware/lukelauncher
 
+Download: https://github.com/marek-g/EinkLukeLauncher/releases
+
 ## Screenshots
 
 ![Homepage](screenshots/homepage.png)
